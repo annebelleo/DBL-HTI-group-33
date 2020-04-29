@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <style>
+        svg rect {
+            fill: white;
+            stroke: black;
+            stroke-width: 1;
+        }
+
+        svg text {
+            fill:white;
+            font: 10px sans-serif;
+            text-anchor: end;
+        }
+    </style>
+</head>
+
+<body>
+  <h1>Title</h1>
+  <button>Load file</button>
+</body>
+<script type="text/javascript">
+  var data = [5, 10, 12];
+    var width = 200,
+    scaleFactor = 10,
+    barHeight = 20;
+
+    var graph = d3.select("body")
+              .append("svg")
+              .attr("width", width)
+              .attr("height", barHeight);
+
+    var bar = graph.selectAll("g")
+              .data(data)
+              .enter()
+              .append("g")
+
+bar.append("rect")
+   .attr("width", width)
+   .attr("height", barHeight);
+
+
+</script>
