@@ -10,8 +10,8 @@ from sklearn.cluster import KMeans  # for clustering
 data_file = pd.read_csv('datasets/all_fixation_data_cleaned_up.csv', encoding='latin1', delim_whitespace=True)
 
 def get_data_map(name_map):
-    data_user = data_file.loc[data_file['StimuliName'] == name_map]
-    return data_user
+    data_map = data_file.loc[data_file['StimuliName'] == name_map]
+    return data_map
 
 
 def FindClusters(name_map, num_clusters):
@@ -20,21 +20,10 @@ def FindClusters(name_map, num_clusters):
     km = KMeans(n_clusters=num_clusters)
     km.fit(X_km)
     X_km['cluster'] = km.labels_
-    return X_km
-
-
-def FindCenters(user_name, name_map, num_clusters):
-    df = get_data_user(user_name, name_map)
-    X_km = df[['MappedFixationPointX', 'MappedFixationPointY']].copy()
-    km = KMeans(n_clusters=num_clusters)
-    km.fit(X_km)
-    centers = pd.DataFrame(km.cluster_centers_, columns=X_km.columns)
-    X_km['cluster'] = km.labels_
-    return centers
+    return X_km   
 
 
 def Find_AOIs(name_map, num_total_AOIs):
-    
     df_map = get_data_map(name_map)
     df_fixation = df_map[['FixationDuration']]
     num_clusters = math.ceil(num_total_AOIs*1.5)
