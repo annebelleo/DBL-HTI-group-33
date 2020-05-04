@@ -39,22 +39,18 @@ def Find_AOIs(name_map, num_total_AOIs):
     df_fixation = df_map[['FixationDuration']]
     num_clusters = math.ceil(num_total_AOIs*1.5)
     X_km = FindClusters(name_map, num_clusters)
-    df_clusters = X_km.join(df_fixation
-                           )
+    df_clusters = X_km.join(df_fixation)
     grouped_cluster = df_clusters.groupby('cluster')
     grouped_sum = grouped_cluster[['FixationDuration']].sum()
     nlargest = grouped_sum.nlargest(num_total_AOIs,['FixationDuration'])
     nlargest = nlargest.reset_index()
-    
     df_AOI = pd.DataFrame()
     count = 1
     for i in nlargest['cluster']:
         df_AOI = df_AOI.append(grouped_cluster.get_group(i))
         df_AOI.loc[df_AOI['cluster'] == i, 'AOI'] = count
         count += 1
-    
     df_AOI = df_AOI.astype({'AOI': int})
-   
     return df_AOI     
 
 
