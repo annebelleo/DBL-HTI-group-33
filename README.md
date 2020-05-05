@@ -6,14 +6,14 @@ If you want the run the flask server locally follow the next steps.
 
 2)Install flask if you haven't done this yet. Using the command "pip install Flask" (without quotation marks) in Command promt (windows). If this doesn't give feedback check if your pip installation is working correctly otherwise if it doesn't give errors proceed to the next step. 
 
-3)Run Flask.py using your preferred python execution method. 
+3)Run Server.py using your preferred python execution method. 
 
 4)open the webpage on http://127.0.0.1:5000/ in your preferred browser.
 
 
 File struture.  
 root:
-	Flask.py: This is the main python file.
+	Server.py: This is the main python file.
 	README.md: File you are now looking at explaing the file struture.  
 	main.css: Github file  
 	index.html: Github file  
