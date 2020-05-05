@@ -1,6 +1,15 @@
 # DBL-HTI-group-33
-If you want the run the flask server localy you need to dowload the FULL repository.
-After that run Flask.py using your preferd python execution method and open the wepage on http://127.0.0.1:5000/
+
+
+If you want the run the flask server locally follow the next steps.
+1)Download the FULL github repository.
+
+2)Install flask if you haven't done this yet. Using the command "pip install Flask" (without quotation marks) in Command promt (windows). If this doesn't give feedback check if your pip installation is working correctly otherwise if it doesn't give errors proceed to the next step. 
+
+3)Run Flask.py using your preferred python execution method. 
+
+4)open the webpage on http://127.0.0.1:5000/ in your preferred browser.
+
 
 File struture.  
 root:
@@ -12,7 +21,8 @@ root:
 
 
 Templates: Here are the HTML page stored that can be used by the flask server.  
-	home.html: Homepage of the website.  
+	home.html: Homepage of the website.
+	visX: This is the page we show the user when they want to use a visualation method.
 Static: this is where the CSS & images are stored that can be used by the server.  
 	empty  
 Datasets: This is where we will store the dataset given by the teacher.  
