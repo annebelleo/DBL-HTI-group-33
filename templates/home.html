@@ -10,13 +10,22 @@
                 </nav>
 
                 <main>
-				<H1>Home Page Eye tracking data</H1>
-				<a href="{{url_for('vis1')}}">visualization 1 </a><br>
-				<a href="{{url_for('vis2')}}">visualization 2 </a><br>
-				<a href="{{url_for('vis3')}}">visualization 3 </a><br>
-				<a href="{{url_for('vis4')}}">visualization 4 </a><br>
-				<a href="{{url_for('vis5')}}">visualization 5 </a><br>
-				
+				<H1>Home Page Eye tracking Vis</H1>
+                <a href="{{url_for('help')}}">Help</a><p>
+                <form action="" method="post">
+                   User ID:
+	               <input type="text" name="UserID" />
+                    Map ID:
+	                <input type="text" name="MapID" />
+                    Vis Method:
+	                <input type="text" name="VisID" />
+                    <input type="submit" value="submit"/>
+
+                </form>
+                {% if session %}
+                {{ session["UserID"] }} , {{ session["MapID"] }} , {{ session["VisID"] }}
+                {% endif %}
+
                 </main>
                  
                 <footer>

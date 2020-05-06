@@ -7,35 +7,41 @@ from flask import Flask, redirect, url_for, render_template, request, session
 # import matplotlib.pyplot as plt
 # import seaborn as sns
 
+# When these are ready they can be commented out.
+# from Vis_1 import Vis_1
+# from Vis_2 import Vis_2
+# from Vis_3 import Vis_3
+# from Vis_4 import Vis_4
+# from Vis_5 import Vis_5
 
 app = Flask(__name__)
 app.secret_key = "pPAQaAI4lte5d8Hwci1i"
 
-@app.route("/")
+
+@app.route("/", methods=["POST", "GET"])
 def home():
-    return render_template("home.html")
+    if request.method == "POST":
+        session["MapID"] = request.form["MapID"]
+        session["UserID"] = request.form["UserID"]
+        session["VisID"] = request.form["VisID"]
+
+        # if session["VisID"] == 1: session = VIS_1(session)
+        # if session["VisID"] == 2: session = VIS_2(session)
+        # if session["VisID"] == 3: session = VIS_3(session)
+        # if session["VisID"] == 4: session = VIS_4(session)
+        # if session["VisID"] == 5: session = VIS_5(session)
+
+        return render_template("home.html", session=session)
+    else:
+        return render_template("home.html", session=[])
 
 
-@app.route("/vis1/")
-def vis1():
-    return render_template("vis1.html")
+@app.route("/help/")
+def help():
+    return render_template("help.html")
 
 
-@app.route("/vis2/")
-def vis2():
-    return render_template("vis2.html")
-
-
-@app.route("/vis3/")
-def vis3():
-    return render_template("vis3.html")
-
-
-@app.route("/vis4/")
-def vis4():
-    return render_template("vis4.html")
-
-
+""" 
 @app.route("/vis5/", methods=["POST", "GET"])
 def vis5():
     if request.method == "POST":
@@ -53,7 +59,7 @@ def vis5result():
         return render_template("vis5_result.html", boek=boek)
     else:
         return redirect(url_for("vis5"))
-
+"""
 
 if __name__ == "__main__":
     app.run(debug=True)
