@@ -1,11 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[405]:
-
-
-#import libraries
-
 import pandas as pd
 import csv
 import matplotlib.pyplot as plt
@@ -13,25 +5,13 @@ import numpy as np
 import os
 from PIL import Image
 
-
-# In[78]:
-
-
 df = pd.read_csv("all_fixation_data_cleaned_up.csv", encoding='latin1', delim_whitespace=True)
 df
-
-
-# In[97]:
-
 
 def get_data_user(user_name, name_map):
     data_user = df.loc[df['user'] == user_name]
     data_user = data_user.loc[data_user['StimuliName'] == name_map]
     return data_user
-
-
-# In[80]:
-
 
 def get_array_fixations(user_name, name_map):
     data_user = get_data_user(user_name, name_map)
@@ -43,20 +23,12 @@ def get_array_fixations(user_name, name_map):
         array_fixations.append([array_fixations_x[l],array_fixations_y[l], array_fixation_duration[l]])
     return array_fixations
 
-
-# In[81]:
-
-
 def get_x_fixation(user_name, name_map):
     data_user = get_data_user(user_name, name_map)
     array_fixations_x = []
     for i in data_user['MappedFixationPointX']:
         array_fixations_x.append(i)
     return array_fixations_x
-
-
-# In[82]:
-
 
 def get_y_fixation(user_name, name_map):
     data_user = get_data_user(user_name, name_map)
@@ -65,10 +37,6 @@ def get_y_fixation(user_name, name_map):
         array_fixations_y.append(i)
     return array_fixations_y
 
-
-# In[83]:
-
-
 def get_duration_fixation(user_name, name_map):
     data_user = get_data_user(user_name, name_map)
     array_fixation_duration = []
@@ -76,17 +44,13 @@ def get_duration_fixation(user_name, name_map):
         array_fixation_duration.append(i)
     return array_fixation_duration
 
-
-# In[248]:
-
-
 def get_cropped_images(user_name, name_map):
     my_file = os.path.join('stimuli', name_map)
     img = plt.imread(my_file)
     img = Image.fromarray(img)
     width, height = img.size
 #     print(width, height)
-    
+
     images=[]
     for i in get_array_fixations(user_name, name_map):
         x = i[0]-100
@@ -98,12 +62,8 @@ def get_cropped_images(user_name, name_map):
         images.append(cropped_img)
     return(images)
 
-
-# In[483]:
-
-
 def draw_gaze_stripes(user_name, name_map):
-    
+
     fig = plt.figure()
     fig.set_figwidth(80)
     plt.xlim(0, sum(get_duration_fixation(user_name, name_map)))
@@ -116,26 +76,11 @@ def draw_gaze_stripes(user_name, name_map):
         plt.yticks([])
         plt.xticks([])
         plt.imshow(i)
-        n+=1 
+        n+=1
     fig.subplots_adjust(bottom=0.5)
     plt.show()
     fig.savefig('gaze stripe' + name_map)
 
+# get_cropped_images('p3', '17_Krakau_S2.jpg')
 
-# In[ ]:
-
-
-get_cropped_images('p3', '17_Krakau_S2.jpg')
-
-
-# In[484]:
-
-
-draw_gaze_stripes('p3', '17_Krakau_S2.jpg')
-
-
-# In[ ]:
-
-
-
-
+# draw_gaze_stripes('p3', '17_Krakau_S2.jpg')
