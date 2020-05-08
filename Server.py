@@ -2,13 +2,14 @@ from flask import Flask, redirect, url_for, render_template, request, session
 
 # Commented these imports when you start using them. As long as there is no code using them leave them commented out.
 # import numpy as np
-# import pandas as pd
+import pandas as pd
 # import matplotlib as mpl
 # import matplotlib.pyplot as plt
 # import seaborn as sns
 
 # When these are ready they can be commented out.
-# from Vis_1 import Vis_1
+from Heatmap import draw_heatmap
+
 # from Vis_2 import Vis_2
 # from Vis_3 import Vis_3
 # from Vis_4 import Vis_4
@@ -16,6 +17,9 @@ from flask import Flask, redirect, url_for, render_template, request, session
 
 app = Flask(__name__)
 app.secret_key = "pPAQaAI4lte5d8Hwci1i"
+
+data_file = pd.read_csv("D:/User/Documenten/GitHub/DBL-HTI-group-33/all_fixation_data_cleaned_up.csv",
+                        encoding='latin1', sep='\t')
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -25,7 +29,9 @@ def home():
         session["UserID"] = request.form["UserID"]
         session["VisID"] = request.form["VisID"]
 
-        # if session["VisID"] == 1: session = VIS_1(session)
+        if int(session["VisID"]) == 1:
+
+            session["Vis1_out"] = draw_heatmap(session["UserID"], session["MapID"], data_file)
         # if session["VisID"] == 2: session = VIS_2(session)
         # if session["VisID"] == 3: session = VIS_3(session)
         # if session["VisID"] == 4: session = VIS_4(session)

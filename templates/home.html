@@ -23,7 +23,8 @@
 
                 </form>
                 {% if session %}
-                {{ session["UserID"] }} , {{ session["MapID"] }} , {{ session["VisID"] }}
+                {{ session["UserID"] }} , {{ session["MapID"] }} , {{ session["VisID"] }} <p>
+                {{ session["Vis1_out"] }}
                 {% endif %}
 
                 </main>

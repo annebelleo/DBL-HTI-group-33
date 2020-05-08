@@ -5,7 +5,7 @@ import csv
 import matplotlib.pyplot as plt
 import numpy as np
 
-data_file = pd.read_csv('datasets/all_fixation_data_cleaned_up.csv', encoding='latin1', delim_whitespace=True)
+data_file = pd.read_csv('../all_fixation_data_cleaned_up.csv', encoding='latin1', delim_whitespace=True)
 
 #get data of one test (user, picture, color):
 def get_data_user(user_name, name_map):
