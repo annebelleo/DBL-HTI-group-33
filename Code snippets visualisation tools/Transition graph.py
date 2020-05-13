@@ -91,8 +91,15 @@ def get_cropped_image(x, y, name_map):
 # CTRL + / comments
 
 
-# In[4]:
+# In[11]:
 
+
+import networkx as nx
+
+from bokeh.io import output_file, show
+# from bokeh.plotting import figure, from_networkx
+from bokeh.plotting import figure
+from bokeh.models.graphs import from_networkx
 
 # draw a figure showing the transition graph for one map:
 def draw_transition_graph(name_map):
@@ -132,7 +139,7 @@ def draw_transition_graph(name_map):
     node_list = list(G.nodes)
     edge_list = list(G.edges(data=True)) 
     
-    pos=nx.spring_layout(G) # needs to be changed to a hierarchical algorithm
+    pos=nx.planar_layout(G) # needs to be changed to a hierarchical algorithm
     nx.draw_networkx_nodes(G,pos,node_color='blue')
  
     all_weights = []
@@ -152,10 +159,26 @@ def draw_transition_graph(name_map):
         nx.draw_networkx_edges(G,pos,edgelist=weighted_edges,width=width)
  
     #Plot the graph
-    plt.axis('off')
+#     plt.axis('off')
+    plt.tick_params(left=True, bottom=True, labelleft=True, labelbottom=True)
     plt.title('Transition graph')
     plt.savefig("TransitionGraph.png") 
-    plt.show() 
+    plt.show()
+    
+    
+    plot = figure(title="Networkx Integration Demonstration", x_range=(-1.1,1.1), y_range=(-1.1,1.1),
+                  tools="", toolbar_location=None)
+
+    graph = from_networkx(G, pos, scale=2, center=(0,0))
+    plot.renderers.append(graph)
+    
+    node_hover_tool = HoverTool(tooltips=[("AOI", "@index")])
+    plot.add_tools(node_hover_tool, BoxZoomTool(), ResetTool())
+
+    output_file("networkx_graph.html")
+    show(plot)
+
+#     return nx.planar_layout(G), edge_list
     
 draw_transition_graph('04_Köln_S1.jpg')
 
