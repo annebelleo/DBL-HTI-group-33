@@ -1,5 +1,11 @@
 <html>
         <head>
+            <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js"
+        crossorigin="anonymous"></script>
+            <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.0.2.min.js"
+        crossorigin="anonymous"></script>
+            <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.0.2.min.js"
+        crossorigin="anonymous"></script>
         </head>
          
         <body>
@@ -24,7 +30,7 @@
                 </form>
                 {% if session %}
                 {{ session["UserID"] }} , {{ session["MapID"] }} , {{ session["VisID"] }} <p>
-                {{ session["Vis1_out"] }}
+                {{ session["Vis1_out"][0]|safe}}{{ session["Vis1_out"][1]|safe}}
                 {% endif %}
 
                 </main>
