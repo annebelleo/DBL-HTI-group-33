@@ -10,6 +10,7 @@ import seaborn as sns
 from bokehtest import testscript
 from Gazeplot_bokeh import draw_gazeplot
 from Heatmap_bokeh import draw_heatmap
+from Transition_graph import draw_transition_graph
 
 
 app = Flask(__name__)
@@ -34,9 +35,13 @@ def home():
             session["Vis1_out"] = draw_heatmap('p9', '01b_Antwerpen_S2.jpg')
 
         elif int(session["VisID"]) == 3:
+            session["Vis1_out"] = draw_transition_graph('04_Köln_S1.jpg')
+
+        elif int(session["VisID"]) == 4:
             session["Vis1_out"] = testscript(pd.read_csv('D:/User/Documenten/GitHub/DBL-HTI-group-33/cars.csv'))
-        # elif int(session["VisID"]) == 4:
-        # elif int(session["VisID"]) == 5:
+
+        elif int(session["VisID"]) == 5:
+            session["Vis1_out"] = testscript(pd.read_csv('D:/User/Documenten/GitHub/DBL-HTI-group-33/cars.csv'))
         return render_template("home.html", session=session)
     else:
         return render_template("home.html", session=[])

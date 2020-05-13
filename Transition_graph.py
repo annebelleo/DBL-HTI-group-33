@@ -8,14 +8,20 @@ import pandas as pd
 from PIL import Image
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-import networkx as nx
 import numpy as np
+import networkx as nx
+from bokeh.io import output_file, show
+from bokeh.plotting import figure
+from bokeh.models.graphs import from_networkx
+from bokeh.embed import components
+from bokeh.models import HoverTool, BoxZoomTool, ResetTool
 
 
 # In[2]:
 
 
-data_file = pd.read_csv('../all_fixation_data_cleaned_up.csv', encoding='latin1', delim_whitespace=True)
+data_file = pd.read_csv("D:/User/Documenten/GitHub/DBL-HTI-group-33/all_fixation_data_cleaned_up.csv",
+                        encoding='latin1', sep='\t')
 
 #get data of one test (user, picture, color):
 def get_data_user(user_name, name_map):
@@ -94,12 +100,7 @@ def get_cropped_image(x, y, name_map):
 # In[11]:
 
 
-import networkx as nx
 
-from bokeh.io import output_file, show
-# from bokeh.plotting import figure, from_networkx
-from bokeh.plotting import figure
-from bokeh.models.graphs import from_networkx
 
 # draw a figure showing the transition graph for one map:
 def draw_transition_graph(name_map):
@@ -176,7 +177,9 @@ def draw_transition_graph(name_map):
     plot.add_tools(node_hover_tool, BoxZoomTool(), ResetTool())
 
     output_file("networkx_graph.html")
-    show(plot)
+    #show(plot)
+    script, div = components(plot)
+    return [script, div]
 
 #     return nx.planar_layout(G), edge_list
     
