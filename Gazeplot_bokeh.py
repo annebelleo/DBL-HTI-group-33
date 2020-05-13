@@ -4,9 +4,10 @@ from bokeh.models import Label
 from bokeh.plotting import figure, output_file, show
 from bokeh.embed import components
 
-data_file = pd.read_csv("D:/User/Documenten/GitHub/DBL-HTI-group-33/all_fixation_data_cleaned_up.csv", encoding = 'latin1', sep='\t')
+data_file = pd.read_csv("D:/User/Documenten/GitHub/DBL-HTI-group-33/all_fixation_data_cleaned_up.csv"
+                        , encoding = 'latin1', sep='\t')
 
-#get data of one test (user, picture, color):
+# get data of one test (user, picture, color):
 def get_data_user(user_name, name_map):
     data_user = data_file.loc[data_file['user'] == user_name]
     data_user = data_user.loc[data_user['StimuliName'] == name_map]
