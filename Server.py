@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 # When these are ready they can be commented out.
 #from Heatmap import draw_heatmap
 from bokehtest import testscript
+from Gazeplot_bokeh import draw_gazeplot
+from Heatmap_bokeh import draw_heatmap
 
 # from Vis_2 import Vis_2
 # from Vis_3 import Vis_3
@@ -32,13 +34,15 @@ def home():
         session["VisID"] = request.form["VisID"]
 
         if int(session["VisID"]) == 1:
+            session["Vis1_out"] = draw_gazeplot('p1', '04_Köln_S1.jpg')
 
+        elif int(session["VisID"]) == 2:
+            session["Vis1_out"] = draw_heatmap('p9', '01b_Antwerpen_S2.jpg')
+
+        elif int(session["VisID"]) == 3:
             session["Vis1_out"] = testscript(pd.read_csv('D:/User/Documenten/GitHub/DBL-HTI-group-33/cars.csv'))
-            print (session["Vis1_out"])
-        # if session["VisID"] == 2: session = VIS_2(session)
-        # if session["VisID"] == 3: session = VIS_3(session)
-        # if session["VisID"] == 4: session = VIS_4(session)
-        # if session["VisID"] == 5: session = VIS_5(session)
+        # elif int(session["VisID"]) == 4:
+        # elif int(session["VisID"]) == 5:
         return render_template("home.html", session=session)
     else:
         return render_template("home.html", session=[])
