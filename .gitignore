@@ -4,3 +4,8 @@
 .idea/misc.xml
 .idea/modules.xml
 .idea/vcs.xml
+__pycache__/Transition_graph.cpython-37.pyc
+__pycache__/bokehtest.cpython-37.pyc
+__pycache__/Gazeplot_bokeh.cpython-37.pyc
+__pycache__/Heatmap.cpython-37.pyc
+__pycache__/Heatmap_bokeh.cpython-37.pyc
