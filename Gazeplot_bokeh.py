@@ -1,13 +1,13 @@
 #import libraries
-
 import pandas as pd
-import csv
-import matplotlib.pyplot as plt
-import numpy as np
+from bokeh.models import Label
+from bokeh.plotting import figure, output_file, show
+from bokeh.embed import components
 
-data_file = pd.read_csv('../all_fixation_data_cleaned_up.csv', encoding='latin1', delim_whitespace=True)
+data_file = pd.read_csv("D:/User/Documenten/GitHub/DBL-HTI-group-33/all_fixation_data_cleaned_up.csv"
+                        , encoding = 'latin1', sep='\t')
 
-#get data of one test (user, picture, color):
+# get data of one test (user, picture, color):
 def get_data_user(user_name, name_map):
     data_user = data_file.loc[data_file['user'] == user_name]
     data_user = data_user.loc[data_user['StimuliName'] == name_map]
@@ -55,30 +55,25 @@ def get_duration_fixation(user_name, name_map):
 
 # draw a figure showing the gazeplot of one experiment:
 def draw_gazeplot(user_name, name_map):
-    string_folder = 'datasets/stimuli/'
-    image_source = string_folder + name_map
-    img = plt.imread(image_source)
-    fig, ax = plt.subplots()
-    ax.imshow(img)
+    ax=figure()
+    ax.image_url([name_map], 0, 1200, 1894, 1200)
 
     # draw saccades
     x = get_x_fixation(user_name, name_map)
     y = get_y_fixation(user_name, name_map)
-    ax.plot(x, y, linewidth=1, color='black', alpha=1, zorder=1)
+    ax.line(x, y, color='black', alpha=1)
     count = 1
 
     # draw each fixation
     fixation_array = get_array_fixations(user_name, name_map)
     for i in fixation_array:
-        ax.scatter(i[0], i[1], marker='o', color='cyan', s=i[2], edgecolors='black', alpha=0.6, zorder=2)
-        # can't get the numbers to look pretty :(
-        ax.annotate(str(count), (i[0], i[1]), size=6, color='black', alpha=1, horizontalalignment='center',
-                    verticalalignment='center', multialignment='center')
+        ax.circle(i[0], i[1], color='navy', size=i[2]/10, alpha=0.6)
+        label = Label(x=i[0], y=i[1], text=str(count), level="image", render_mode='canvas')
         count = count + 1
+        ax.add_layout(label)
 
-    # y axis must be reversed to match with original images
-    ax.invert_yaxis()
-    plt.show()
+    script, div = components(ax)
+    return [script, div]
 
 
 draw_gazeplot('p1', '04_Köln_S1.jpg')

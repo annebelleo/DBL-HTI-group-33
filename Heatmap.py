@@ -1,6 +1,7 @@
 import pandas as pd
 import csv
 import matplotlib.pyplot as plt
+import mpld3
 import numpy as np
 from scipy import ndimage
 #from skimage import io
@@ -8,53 +9,55 @@ from scipy import ndimage
 from scipy.interpolate import griddata
 from matplotlib.colors import BoundaryNorm
 from matplotlib.ticker import MaxNLocator
+import json
 
 
 #import data
-data_file = pd.read_csv('datasets/all_fixation_data_cleaned_up.csv', encoding = 'latin1', sep='\t')
+# data_file = pd.read_csv('all_fixation_data_cleaned_up.csv', encoding ='latin1', sep='\t')
 
 
-def get_data_user(user_name, name_map):
+def get_data_user(user_name, name_map, data_file):
     data_user = data_file.loc[data_file['user'] == user_name]
     data_user = data_user.loc[data_user['StimuliName'] == name_map]
     return data_user
 
 
-def get_x_fixation(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
+def get_x_fixation(user_name, name_map, data_file):
+    data_user = get_data_user(user_name, name_map, data_file)
     array_fixations_x = []
     for i in data_user['MappedFixationPointX']:
         array_fixations_x.append(i)
     return array_fixations_x
 
 
-def get_y_fixation(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
+def get_y_fixation(user_name, name_map, data_file):
+    data_user = get_data_user(user_name, name_map, data_file)
     array_fixations_y = []
     for i in data_user['MappedFixationPointY']:
         array_fixations_y.append(i)
     return array_fixations_y
 
 
-def get_duration_fixation(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
+def get_duration_fixation(user_name, name_map, data_file):
+    data_user = get_data_user(user_name, name_map, data_file)
     array_fixation_duration = []
     for i in data_user['FixationDuration']:
         array_fixation_duration.append(i)
     return array_fixation_duration
 
 
-def draw_heatmap(user_name, name_map):
-    string_folder = 'datasets/stimuli/'
-    image_source = string_folder + name_map
-    img = plt.imread(image_source)
+def draw_heatmap(user_name, name_map, img_map,data_file ):
+
+    img = img_map
     fig, ax = plt.subplots()
     # Comment out next line to see the plot if it's not visible
     ax.imshow(img)
 
-    X_dat = get_x_fixation(user_name, name_map)
-    Y_dat = get_y_fixation(user_name, name_map)
-    Z_dat = get_duration_fixation(user_name, name_map)
+    x_dim, y_dim, z_dim = np.shape(img)
+
+    X_dat = get_x_fixation(user_name, name_map, data_file)
+    Y_dat = get_y_fixation(user_name, name_map, data_file)
+    Z_dat = get_duration_fixation(user_name, name_map, data_file)
 
     # scale data from -0.1 to 0.1 (instead of 0 to largest fixation duration)
     # Z_max = max(Z_dat)
@@ -68,8 +71,8 @@ def draw_heatmap(user_name, name_map):
         Z = np.append(Z, (Z_dat[i]))
 
     # create x-y points to be used in heatmap
-    xi = np.linspace(0, 1650)
-    yi = np.linspace(0, 1200)
+    xi = np.linspace(0, y_dim)
+    yi = np.linspace(0, x_dim)
 
     levels = MaxNLocator(nbins=25).tick_values(0, Z.max())
     cmap = plt.get_cmap('rainbow')
@@ -78,11 +81,15 @@ def draw_heatmap(user_name, name_map):
     # Z is a matrix of x-y values
     zi = griddata((X, Y), Z, (xi[None, :], yi[:, None]), method='cubic')
 
-    # Create the heatmap
-    CS = plt.pcolormesh(xi, yi, zi, cmap=cmap, norm=norm, alpha=0.7)
-
+    plt.pcolormesh(xi, yi, zi, cmap=cmap, norm=norm, alpha=0.4)
     plt.colorbar()
-    plt.show()
+    #
+    fig = plt.figure()
+    fig_html = mpld3.fig_to_html(fig)
+    mpld3.save_html(fig, "fred.html")
+    return fig_html
+    #return x
 
 
-draw_heatmap('p9', '01b_Antwerpen_S2.jpg')
+
+#draw_heatmap('p9', '01b_Antwerpen_S2.jpg')

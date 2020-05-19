@@ -7,7 +7,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans  # for clustering
 
-data_file = pd.read_csv('datasets/all_fixation_data_cleaned_up.csv', encoding='latin1', delim_whitespace=True)
+data_file = pd.read_csv('../all_fixation_data_cleaned_up.csv', encoding='latin1', delim_whitespace=True)
 
 def get_data_map(name_map):
     data_map = data_file.loc[data_file['StimuliName'] == name_map]
