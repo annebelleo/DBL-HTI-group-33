@@ -73,6 +73,3 @@ def draw_gazeplot(user_name, name_map):
 
     script, div = components(ax)
     return [script, div]
-
-
-draw_gazeplot('p1', '04_Köln_S1.jpg')

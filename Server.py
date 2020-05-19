@@ -37,11 +37,12 @@ df_data = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding='latin
 df_cars = pd.read_csv("cars.csv", encoding='latin1', delim_whitespace=True)
 
 @app.route("/", methods=["POST", "GET"])
+
 def home():
     if request.method == "POST":
-        session["MapID"] = request.form["MapID"]
-        session["MapIMG"] = os.path.join('stimuli', request.form["MapID"] + ".jpg")
-        session["UserID"] = request.form["UserID"]
+        #session["MapID"] = request.form["MapID"] # not used rn
+        #session["MapIMG"] = os.path.join('stimuli', request.form["MapID"] + ".jpg") #not used rn
+        #session["UserID"] = request.form["UserID"] # not used rn
         session["VisID"] = request.form["VisID"]
 
         if int(session["VisID"]) == 1:
