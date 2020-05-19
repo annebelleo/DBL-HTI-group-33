@@ -20,8 +20,7 @@ from bokeh.models import HoverTool, BoxZoomTool, ResetTool
 # In[2]:
 
 
-data_file = pd.read_csv("D:/User/Documenten/GitHub/DBL-HTI-group-33/all_fixation_data_cleaned_up.csv",
-                        encoding='latin1', sep='\t')
+data_file = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding='latin1', sep='\t')
 
 #get data of one test (user, picture, color):
 def get_data_user(user_name, name_map):
@@ -183,5 +182,4 @@ def draw_transition_graph(name_map):
 
 #     return nx.planar_layout(G), edge_list
     
-draw_transition_graph('04_Köln_S1.jpg')
 

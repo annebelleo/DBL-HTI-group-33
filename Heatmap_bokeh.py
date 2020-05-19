@@ -17,7 +17,7 @@ from PIL import Image
 from bokeh.models import ColorBar, LogColorMapper, LogTicker, LinearColorMapper
 
 
-data_file = pd.read_csv("all_fixation_data_cleaned_up.csv",
+data_file = pd.read_csv('static/all_fixation_data_cleaned_up.csv',
                         encoding='latin1', sep='\t')
 
 
@@ -67,7 +67,7 @@ def draw_heatmap(user_name, name_map):
     Y_dat=get_y_fixation(user_name, name_map)
     Z_dat=get_duration_fixation(user_name,name_map)
 
-    im = Image.open('01b_Antwerpen_S2.jpg')
+    im = Image.open('static/stimuli/01b_Antwerpen_S2.jpg')
     x_dim = im.size[0]
     y_dim = im.size[1]
     
