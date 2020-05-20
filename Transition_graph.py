@@ -162,8 +162,7 @@ def draw_transition_graph(name_map):
 #     plt.axis('off')
     plt.tick_params(left=True, bottom=True, labelleft=True, labelbottom=True)
     plt.title('Transition graph')
-    plt.savefig("TransitionGraph.png") 
-    plt.show()
+    plt.savefig("TransitionGraph.png")
     
     
     plot = figure(title="Networkx Integration Demonstration", x_range=(-1.1,1.1), y_range=(-1.1,1.1),
@@ -175,8 +174,7 @@ def draw_transition_graph(name_map):
     node_hover_tool = HoverTool(tooltips=[("AOI", "@index")])
     plot.add_tools(node_hover_tool, BoxZoomTool(), ResetTool())
 
-    output_file("networkx_graph.html")
-    #show(plot)
+    #output_file("networkx_graph.html")
     script, div = components(plot)
     return [script, div]
 

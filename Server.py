@@ -1,16 +1,13 @@
 from flask import Flask, redirect, url_for, render_template, request, session
 
-import numpy as np
-import pandas as pd
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import seaborn as sns
-import os
 
-from bokehtest import testscript
+import pandas as pd
+
+# Visualation methods.
 from Gazeplot_bokeh import draw_gazeplot
 from Heatmap_bokeh import draw_heatmap
 from Transition_graph import draw_transition_graph
+from bokehtest import testscript
 
 app = Flask(__name__)
 app.secret_key = "pPAQaAI4lte5d8Hwci1i"
@@ -18,8 +15,8 @@ app.secret_key = "pPAQaAI4lte5d8Hwci1i"
 df_data = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding='latin1', delim_whitespace=True)
 df_cars = pd.read_csv("cars.csv", encoding='latin1', delim_whitespace=True)
 
-ListStimuliName = ['01b_Antwerpen_S2.jpg', '04_Köln_S1.jpg']
-ListUser = ["ALL", "p1", "p1", "p9"]
+ListStimuliName = df_data.StimuliName.unique()
+ListUser = df_data.user.unique()
 ListVISID = ["gazeplot", "heatmap", "transition_graph", "Cars"]
 LISTS = [ListUser, ListStimuliName, ListVISID]
 
@@ -34,7 +31,7 @@ def home():
                 return render_template("home.html", session=[], LISTS=LISTS)
 
         if session["VisID"] == "gazeplot":
-            session["Vis1_out"] = draw_gazeplot(session["UserID"], session["MapID"])
+            session["Vis1_out"] = draw_gazeplot(session["UserID"], session["MapID"],)
 
         elif session["VisID"] == "heatmap":
             session["Vis1_out"] = draw_heatmap(session["UserID"], session["MapID"])
