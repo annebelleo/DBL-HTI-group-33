@@ -23,27 +23,27 @@
               <div class="input-field col s12 m4">
                <select class="browser-default" name="UserID">
                  <option value="" disabled selected>Choose your option</option>
-                 <option value="1">Option 1</option>
-                 <option value="2">Option 2</option>
-                 <option value="3">Option 3</option>
+                 {% for Item in LISTS[0] %}
+                    <option value= "{{Item}}">{{Item}}</option>"
+                    {% endfor %}
                </select>
              </div>
              <label>Map</label>
                <div class="input-field col s12 m4">
                <select class="browser-default" name="MapID">
                  <option value="" disabled selected>Choose your option</option>
-                 <option value="1">Option 1</option>
-                 <option value="2">Option 2</option>
-                 <option value="3">Option 3</option>
+                 {% for Item in LISTS[1] %}
+                    <option value= "{{Item}}">{{Item}}</option>"
+                    {% endfor %}
                </select>
              </div>
              <label>Visualization</label>
                <div class="input-field col s12 m4">
                <select class="browser-default" name="VisID">
                  <option value="" disabled selected>Choose your option</option>
-                 <option value="1">1</option>
-                 <option value="2">2</option>
-                 <option value="3">3</option>
+                 {% for Item in LISTS[2] %}
+                    <option value= "{{Item}}">{{Item}}</option>"
+                    {% endfor %}
                </select>
              </div>
                 <input type="submit" value="submit"/>

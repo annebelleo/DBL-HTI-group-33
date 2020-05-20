@@ -7,61 +7,47 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-# When these are ready they can be commented out.
 from bokehtest import testscript
 from Gazeplot_bokeh import draw_gazeplot
 from Heatmap_bokeh import draw_heatmap
 from Transition_graph import draw_transition_graph
 
-
 app = Flask(__name__)
 app.secret_key = "pPAQaAI4lte5d8Hwci1i"
-
-#def readFile(filename):
-    #filehandle = open(filename)
-    #print filehandle.read()
-    #filehandle.close()
-
-#fileDir = os.path.dirname(os.path.realpath('__file__'))
-#print fileDir
-
-#For accessing the file in the same folder
-#csv_file = "all_fixation_data_cleaned_up.csv"
-#readFile(csv_file)
-
-#For accessing the file in a folder contained in the current folder
-#csv_file = os.path.join(fileDir, 'static/all_fixation_data_cleaned_up.csv')
-#readFile(filename)
 
 df_data = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding='latin1', delim_whitespace=True)
 df_cars = pd.read_csv("cars.csv", encoding='latin1', delim_whitespace=True)
 
-@app.route("/", methods=["POST", "GET"])
+ListStimuliName = ['01b_Antwerpen_S2.jpg', '04_Köln_S1.jpg']
+ListUser = ["p1", "p1", "p9"]
+ListVISID = ["gazeplot", "heatmap", "transition_graph", "Cars"]
+LISTS = [ListUser, ListStimuliName, ListVISID]
 
+
+@app.route("/", methods=["POST", "GET"])
 def home():
     if request.method == "POST":
-        #session["MapID"] = request.form["MapID"] # not used rn
-        #session["MapIMG"] = os.path.join('stimuli', request.form["MapID"] + ".jpg") #not used rn
-        #session["UserID"] = request.form["UserID"] # not used rn
-        session["VisID"] = request.form["VisID"]
+        for ID in ["MapID", "UserID", "VisID"]:
+            if request.form[ID]:
+                session[ID] = request.form[ID]
+            else:
+                return render_template("home.html", session=[], LISTS=LISTS)
 
-        if int(session["VisID"]) == 1:
+        if session["VisID"] == "gazeplot":
             session["Vis1_out"] = draw_gazeplot('p1', '04_Köln_S1.jpg')
 
-        elif int(session["VisID"]) == 2:
+        elif session["VisID"] == "heatmap":
             session["Vis1_out"] = draw_heatmap('p9', '01b_Antwerpen_S2.jpg')
 
-        elif int(session["VisID"]) == 3:
+        elif session["VisID"] == "transition_graph":
             session["Vis1_out"] = draw_transition_graph('04_Köln_S1.jpg')
 
-        elif int(session["VisID"]) == 4:
+        elif session["VisID"] == "Cars":
             session["Vis1_out"] = testscript(df_cars)
 
-        elif int(session["VisID"]) == 5:
-            session["Vis1_out"] = testscript(df_cars)
-        return render_template("home.html", session=session)
+        return render_template("home.html", session=session, LISTS=LISTS)
     else:
-        return render_template("home.html", session=[])
+        return render_template("home.html", session=[], LISTS=LISTS)
 
 
 @app.route("/help/")
