@@ -19,16 +19,7 @@
 				    <H1>Eye Movement Visualization Tool</H1>
             <a href="{{url_for('help')}}">Help</a><p>
             <form action="" method="post">
-              <label>User</label>
-              <div class="input-field col s12 m4">
-               <select class="browser-default" name="UserID">
-                 <option value="" disabled selected>Choose your option</option>
-                 {% for Item in LISTS[0] %}
-                    <option value= "{{Item}}">{{Item}}</option>"
-                    {% endfor %}
-               </select>
-             </div>
-             <label>Map</label>
+              <label>Map</label>
                <div class="input-field col s12 m4">
                <select class="browser-default" name="MapID">
                  <option value="" disabled selected>Choose your option</option>
@@ -37,6 +28,18 @@
                     {% endfor %}
                </select>
              </div>
+
+
+              <label>User</label>
+              <div class="input-field col s12 m4">
+               <select class="browser-default" name="UserID">
+                 <option value="ALL">ALL</option>
+                 {% for Item in LISTS[0] %}
+                    <option value= "{{Item}}">{{Item}}</option>"
+                    {% endfor %}
+               </select>
+             </div>
+
              <label>Visualization</label>
                <div class="input-field col s12 m4">
                <select class="browser-default" name="VisID">
