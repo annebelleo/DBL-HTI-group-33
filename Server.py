@@ -19,7 +19,7 @@ df_data = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding='latin
 df_cars = pd.read_csv("cars.csv", encoding='latin1', delim_whitespace=True)
 
 ListStimuliName = ['01b_Antwerpen_S2.jpg', '04_Köln_S1.jpg']
-ListUser = ["p1", "p1", "p9"]
+ListUser = ["ALL", "p1", "p1", "p9"]
 ListVISID = ["gazeplot", "heatmap", "transition_graph", "Cars"]
 LISTS = [ListUser, ListStimuliName, ListVISID]
 
@@ -34,13 +34,13 @@ def home():
                 return render_template("home.html", session=[], LISTS=LISTS)
 
         if session["VisID"] == "gazeplot":
-            session["Vis1_out"] = draw_gazeplot('p1', '04_Köln_S1.jpg')
+            session["Vis1_out"] = draw_gazeplot(session["UserID"], session["MapID"])
 
         elif session["VisID"] == "heatmap":
-            session["Vis1_out"] = draw_heatmap('p9', '01b_Antwerpen_S2.jpg')
+            session["Vis1_out"] = draw_heatmap(session["UserID"], session["MapID"])
 
         elif session["VisID"] == "transition_graph":
-            session["Vis1_out"] = draw_transition_graph('04_Köln_S1.jpg')
+            session["Vis1_out"] = draw_transition_graph(session["MapID"])
 
         elif session["VisID"] == "Cars":
             session["Vis1_out"] = testscript(df_cars)
