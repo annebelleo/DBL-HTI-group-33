@@ -85,19 +85,19 @@ def draw_heatmap(user_name, name_map):
     
     # create x-y points to be used in heatmap
     xi = np.linspace(0,x_dim)
-    yi = np.linspace(0,y_dim)
+    yi = np.linspace(y_dim,0)
     zi = griddata((X, Y), Z, (xi[None,:], yi[:,None]), method='cubic')
 
-    mapper = LogColorMapper(palette="Turbo11", low=0, high=max(Z_dat))
+    mapper = LogColorMapper(palette="Turbo256", low=0, high=max(Z_dat))
     
     TOOLS="hover,crosshair,wheel_zoom,zoom_in,zoom_out,box_zoom,undo,redo,reset,tap,save,box_select"
-    p = figure(plot_width=825, plot_height=600,x_range=[0, x_dim], y_range=[0, y_dim], tools=TOOLS, title='Heatmap Test')
+    p = figure(plot_width=int(x_dim/1.8), plot_height=int(y_dim/1.8),x_range=[0, x_dim], y_range=[0, y_dim], tools=TOOLS, title='Heatmap Test')
     color_bar = ColorBar(color_mapper=mapper,ticker=LogTicker(),
                          formatter=PrintfTickFormatter(),location=(50,50),background_fill_alpha=0.5)
     
     p.add_layout(color_bar, 'right')
    
-    p.image(image=[zi], x=0, y=0, dw=x_dim, dh=y_dim, palette="Turbo11",global_alpha=0.9)
+    p.image(image=[zi], x=0, y=0, dw=x_dim, dh=y_dim, palette="Turbo256",global_alpha=0.9)
     p.image_url([image_source], 0, y_dim, x_dim, y_dim, global_alpha = 0.4)
     p.grid.grid_line_width = 0
     script, div = components(p)
