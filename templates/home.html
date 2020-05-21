@@ -22,10 +22,22 @@
               <label>Map</label>
                <div class="input-field col s12 m4">
                <select class="browser-default" name="MapID">
-                 <option value="" disabled selected>Choose your option</option>
-                 {% for Item in LISTS[1] %}
-                    <option value= "{{Item}}">{{Item}}</option>"
-                    {% endfor %}
+
+                 {% if session %}
+                        {% for Item in LISTS[1] %}
+                        {% if Item ==  session["MapID"]%}
+                            <option value= "{{Item}}" selected>{{Item}}</option>"
+                        {% else %}
+                            <option value= "{{Item}}">{{Item}}</option>"
+                        {% endif %}
+                        {% endfor %}
+
+                    {% else %}
+                        <option value="" disabled selected>Choose your option</option>
+                        {% for Item in LISTS[1] %}
+                            <option value= "{{Item}}">{{Item}}</option>"
+                        {% endfor %}
+                    {% endif %}
                </select>
              </div>
 
@@ -33,27 +45,51 @@
               <label>User</label>
               <div class="input-field col s12 m4">
                <select class="browser-default" name="UserID">
-                 <option value="ALL">ALL</option>
-                 {% for Item in LISTS[0] %}
-                    <option value= "{{Item}}">{{Item}}</option>"
-                    {% endfor %}
+
+                 {% if session %}
+                        {% for Item in LISTS[0] %}
+                        {% if Item ==  session["UserID"]%}
+                            <option value= "{{Item}}" selected>{{Item}}</option>"
+                        {% else %}
+                            <option value= "{{Item}}">{{Item}}</option>"
+                        {% endif %}
+                        {% endfor %}
+
+                    {% else %}
+                        <option value="" disabled selected>Choose your option</option>
+                        {% for Item in LISTS[0] %}
+                            <option value= "{{Item}}">{{Item}}</option>"
+                        {% endfor %}
+                    {% endif %}
                </select>
              </div>
 
              <label>Visualization</label>
                <div class="input-field col s12 m4">
                <select class="browser-default" name="VisID">
-                 <option value="" disabled selected>Choose your option</option>
-                 {% for Item in LISTS[2] %}
-                    <option value= "{{Item}}">{{Item}}</option>"
-                    {% endfor %}
+                    {% if session %}
+                        {% for Item in LISTS[2] %}
+                        {% if Item ==  session["VisID"]%}
+                            <option value= "{{Item}}" selected>{{Item}}</option>"
+                        {% else %}
+                            <option value= "{{Item}}">{{Item}}</option>"
+                        {% endif %}
+                        {% endfor %}
+
+                    {% else %}
+                        <option value="" disabled selected>Choose your option</option>
+                        {% for Item in LISTS[2] %}
+                            <option value= "{{Item}}">{{Item}}</option>"
+                        {% endfor %}
+                    {% endif %}
+
+
                </select>
              </div>
                 <input type="submit" value="submit"/>
 
               </form>
                 {% if session %}
-                {{ session["UserID"] }} , {{ session["MapID"] }} , {{ session["VisID"] }} <p>
                 {{ session["Vis1_out"][0]|safe}}{{ session["Vis1_out"][1]|safe}}
                 {% endif %}
 

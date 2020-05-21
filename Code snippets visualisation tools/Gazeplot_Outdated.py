@@ -1,15 +1,15 @@
 #import libraries
 import pandas as pd
 import random
-from bokeh.models import LabelSet
-from bokeh.plotting import ColumnDataSource, figure, output_file, show
+from bokeh.models import Label
+from bokeh.plotting import figure, output_file, show
 from bokeh.embed import components
 
-data_file = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding = 'latin1', sep='\t')
+data_file = pd.read_csv('../static/all_fixation_data_cleaned_up.csv', encoding ='latin1', sep='\t')
 
 ListUser = data_file.user.unique()
 
-#get data of one test (user, picture, color):
+# get data of one test (user, picture, color):
 def get_data_user(user_name, name_map):
     data_user = data_file.loc[data_file['user'] == user_name]
     data_user = data_user.loc[data_user['StimuliName'] == name_map]
@@ -59,49 +59,41 @@ def random_color():
     random.shuffle(rgbl)
     return tuple(rgbl)
 
-
 # draw a figure showing the gazeplot of one experiment:
 def draw_gazeplot(user_name, name_map):
-    fixation_array = get_array_fixations(user_name, name_map)
-    df = pd.DataFrame(fixation_array, columns=['x_cor','y_cor','fix_time'])
-    df['fix_time_scaled']=df['fix_time']/12
-    source = ColumnDataSource(df)
-    
-    TOOLS="tap,box_zoom,box_select,reset,save"
-    TOOLTIPS = [
-    ("index", "$index"),
-    ("(x,y)", "(@x_cor, @y_cor)"),
-    ("fixation time", "@fix_time"),
-]
-    
-    ax=figure(tools=TOOLS, plot_width=710, plot_height=450, x_axis_location=None, y_axis_location=None,
-           title="Gazeplot user "+user_name[1], tooltips= TOOLTIPS)
-    name_map = name_map
+    ax=figure()
     ax.image_url([name_map], 0, 1200, 1894, 1200)
 
     if user_name == 'ALL':
         for i in ListUser:
             if i != 'ALL':
                 # draw saccades
-                ax.line('x_cor', 'y_cor', color='black', source=source, alpha=1)
+                x = get_x_fixation(i, name_map)
+                y = get_y_fixation(i, name_map)
+                ax.line(x, y, color='black', alpha=1)
+                count = 1
 
                 # draw each fixation
                 fixation_array = get_array_fixations(i, name_map)
-                df = pd.DataFrame(fixation_array, columns=['x_cor','y_cor','fix_time'])
-                df['fix_time_scaled']=df['fix_time']/12
-                source = ColumnDataSource(df)
-                ax.circle('x_cor', 'y_cor', color=random_color(), size='fix_time_scaled', source=source, alpha=0.6)
-                label = LabelSet(x='x_cor', y='y_cor', text='index', source=source, level="image", render_mode='canvas')
-                ax.add_layout(label)
+                for i in fixation_array:
+                    ax.circle(i[0], i[1], color=random_color(), size=i[2]/10, alpha=0.6)
+                    label = Label(x=i[0], y=i[1], text=str(count), level="image", render_mode='canvas')
+                    count = count + 1
+                    ax.add_layout(label)
     else:
         # draw saccades
-        ax.line('x_cor', 'y_cor', color='black', source=source, alpha=1)
+        x = get_x_fixation(user_name, name_map)
+        y = get_y_fixation(user_name, name_map)
+        ax.line(x, y, color='black', alpha=1)
+        count = 1
 
         # draw each fixation
-        ax.circle('x_cor', 'y_cor', color='navy', size='fix_time_scaled', source=source, alpha=0.6)
-        label = LabelSet(x='x_cor', y='y_cor', text='index', source=source, level="image", render_mode='canvas')
-        ax.add_layout(label)
+        fixation_array = get_array_fixations(user_name, name_map)
+        for i in fixation_array:
+            ax.circle(i[0], i[1], color='navy', size=i[2]/10, alpha=0.6)
+            label = Label(x=i[0], y=i[1], text=str(count), level="image", render_mode='canvas')
+            count = count + 1
+            ax.add_layout(label)
 
     script, div = components(ax)
     return [script, div]
-

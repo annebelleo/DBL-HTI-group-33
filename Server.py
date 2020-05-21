@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, session
 
 
 import pandas as pd
+import numpy as np
 
 # Visualation methods.
 from Gazeplot_bokeh import draw_gazeplot
@@ -14,8 +15,9 @@ app.secret_key = "pPAQaAI4lte5d8Hwci1i"
 df_data = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding='latin1', delim_whitespace=True)
 df_cars = pd.read_csv("static/cars.csv", encoding='latin1', delim_whitespace=True)
 
-ListStimuliName = df_data.StimuliName.unique()
-ListUser = df_data.user.unique()
+ListStimuliName = np.sort(df_data.StimuliName.unique())
+ListUser = np.sort(df_data.user.unique())
+ListUser = np.insert(ListUser, 0, "ALL")
 ListVISID = ["Gazeplot", "Heatmap", "Transition graph", "Cars"]
 LISTS = [ListUser, ListStimuliName, ListVISID]
 
