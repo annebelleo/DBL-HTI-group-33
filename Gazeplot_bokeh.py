@@ -2,8 +2,9 @@
 import pandas as pd
 import random
 from bokeh.models import LabelSet
-from bokeh.plotting import ColumnDataSource, figure, output_file, show
+from bokeh.plotting import ColumnDataSource, figure
 from bokeh.embed import components
+
 
 data_file = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding = 'latin1', sep='\t')
 
@@ -76,8 +77,8 @@ def draw_gazeplot(user_name, name_map):
     
     ax=figure(tools=TOOLS, plot_width=710, plot_height=450, x_axis_location=None, y_axis_location=None,
            title="Gazeplot user "+user_name[1], tooltips= TOOLTIPS)
-    name_map = name_map
-    ax.image_url([name_map], 0, 1200, 1894, 1200)
+    img_path = 'static/stimuli/' + name_map
+    ax.image_url([img_path], 0, 1200, 1894, 1200)
 
     if user_name == 'ALL':
         for i in ListUser:

@@ -10,3 +10,6 @@ __pycache__/Gazeplot_bokeh.cpython-37.pyc
 __pycache__/Heatmap.cpython-37.pyc
 __pycache__/Heatmap_bokeh.cpython-37.pyc
 TransitionGraph.png
+.idea/other.xml
+__pycache__/bokehtest.cpython-38.pyc
+__pycache__/Gazeplot_bokeh.cpython-38.pyc
