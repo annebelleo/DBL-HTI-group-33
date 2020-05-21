@@ -102,8 +102,3 @@ def draw_heatmap(user_name, name_map):
     p.grid.grid_line_width = 0
     script, div = components(p)
     return [script, div]
-
-
-
-
-#draw_heatmap('p9', '01b_Antwerpen_S2.jpg')
