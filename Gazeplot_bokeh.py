@@ -1,10 +1,11 @@
 #import libraries
 import pandas as pd
 import random
+import matplotlib.pyplot as plt
 from bokeh.models import LabelSet
 from bokeh.plotting import ColumnDataSource, figure
 from bokeh.embed import components
-import PIL
+from PIL import Image
 
 data_file = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding = 'latin1', sep='\t')
 
@@ -68,23 +69,24 @@ def draw_gazeplot(user_name, name_map):
     df['fix_time_scaled']=df['fix_time']/12
     source = ColumnDataSource(df)
     
+    string_folder='static/stimuli/'
+    image_source = string_folder+name_map
+    img = plt.imread(image_source)
+    im = Image.fromarray(img)
+    x_dim = im.size[0]
+    y_dim = im.size[1]
+    
     TOOLS="tap,box_zoom,box_select,reset,save"
     TOOLTIPS = [
     ("index", "$index"),
     ("(x,y)", "(@x_cor, @y_cor)"),
-    ("fixation time", "@fix_time"),]
+    ("fixation time", "@fix_time"),
+    ]
 
-    img_path = 'static/stimuli/' + name_map
-    with PIL.Image.open(img_path) as image:
-        IMG_width, IMG_height = image.size
-        #IMG_width, IMG_height = int(IMG_width/2), int(IMG_height/2)
+    ax = figure(tools=TOOLS, plot_width=825, plot_height=600,x_range=[0, x_dim], y_range=[0, y_dim], x_axis_location=None, y_axis_location=None,
+           title="Gazeplot user "+user_name[1:], tooltips=TOOLTIPS)
 
-    ax = figure(tools=TOOLS, frame_width=IMG_width, frame_height=IMG_height,
-                height_policy="fixed", width_policy="fixed",
-                x_range=(0, IMG_width),  y_range=(0, IMG_height),
-                title="Gazeplot user "+user_name[1:], tooltips=TOOLTIPS)
-
-    ax.image_url([img_path], 0, IMG_height, w=IMG_width, h=IMG_height)
+    ax.image_url([image_source], 0, y_dim, x_dim, y_dim)
 
     if user_name == 'ALL':
         for i in ListUser:
@@ -102,7 +104,6 @@ def draw_gazeplot(user_name, name_map):
                 ax.add_layout(label)
     else:
         # draw saccades
-
         ax.line('x_cor', 'y_cor', color='black', source=source, alpha=1)
 
         # draw each fixation
@@ -112,4 +113,3 @@ def draw_gazeplot(user_name, name_map):
 
     script, div = components(ax)
     return [script, div]
-
