@@ -73,8 +73,7 @@ def draw_gazeplot(user_name, name_map):
     image_source = string_folder+name_map
     img = plt.imread(image_source)
     im = Image.fromarray(img)
-    x_dim = im.size[0]
-    y_dim = im.size[1]
+    x_dim, y_dim = im.size
     
     TOOLS="tap,box_zoom,box_select,reset,save"
     TOOLTIPS = [
@@ -83,8 +82,11 @@ def draw_gazeplot(user_name, name_map):
     ("fixation time", "@fix_time"),
     ]
 
-    ax = figure(tools=TOOLS, plot_width=825, plot_height=600,x_range=[0, x_dim], y_range=[0, y_dim], x_axis_location=None, y_axis_location=None,
-           title="Gazeplot user "+user_name[1:], tooltips=TOOLTIPS)
+    ax = figure(tools=TOOLS, frame_width=825, frame_height=600,
+                height_policy="fixed", width_policy="fixed",
+                x_range=[0, x_dim], y_range=[0, y_dim],
+                x_axis_location=None, y_axis_location=None,
+                title="Gazeplot user "+user_name[1:], tooltips=TOOLTIPS)
 
     ax.image_url([image_source], 0, y_dim, x_dim, y_dim)
 
