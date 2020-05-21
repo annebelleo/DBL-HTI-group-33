@@ -72,16 +72,19 @@ def draw_gazeplot(user_name, name_map):
     TOOLTIPS = [
     ("index", "$index"),
     ("(x,y)", "(@x_cor, @y_cor)"),
-    ("fixation time", "@fix_time"),
-]
+    ("fixation time", "@fix_time"),]
+
     img_path = 'static/stimuli/' + name_map
     with PIL.Image.open(img_path) as image:
         IMG_width, IMG_height = image.size
+        #IMG_width, IMG_height = int(IMG_width/2), int(IMG_height/2)
 
-    ax = figure(tools=TOOLS, plot_width=710, plot_height=450, x_axis_location=None, y_axis_location=None,
-           title="Gazeplot user "+user_name[1:], tooltips=TOOLTIPS)
+    ax = figure(tools=TOOLS, frame_width=IMG_width, frame_height=IMG_height,
+                height_policy="fixed", width_policy="fixed",
+                x_range=(0, IMG_width),  y_range=(0, IMG_height),
+                title="Gazeplot user "+user_name[1:], tooltips=TOOLTIPS)
 
-    ax.image_url([img_path], 0, IMG_height)
+    ax.image_url([img_path], 0, IMG_height, w=IMG_width, h=IMG_height)
 
     if user_name == 'ALL':
         for i in ListUser:
@@ -99,6 +102,7 @@ def draw_gazeplot(user_name, name_map):
                 ax.add_layout(label)
     else:
         # draw saccades
+
         ax.line('x_cor', 'y_cor', color='black', source=source, alpha=1)
 
         # draw each fixation
