@@ -61,7 +61,6 @@ def get_cropped_images(user_name, name_map):
     width, height = img.size
 
     images=[]
-    n = 1
     for i in get_array_fixations(user_name, name_map):
         x = i[0]-100
         y = i[1]-100
@@ -69,11 +68,9 @@ def get_cropped_images(user_name, name_map):
         h = i[1]+100
         area = (x, y, w, h)
         cropped_img = img.crop(area)
-        type = n
         #cropped_img.save("{0}.jpg".format(type))
-        n+= 1
         images.append(cropped_img)
-    return images, n
+    return images, len(images)
     #return(cropped_img)
 
 def draw_gaze_stripes(user_name, name_map):
@@ -97,9 +94,11 @@ def draw_gaze_stripes(user_name, name_map):
     else:
         images, amount_images = get_cropped_images(user_name, name_map)
         #we need to work on the x axis (duration scale)
-        fig = figure(plot_width=75*amount_images, plot_height = 75, x_range=(0,amount_images), y_range=(0,1), x_axis_location=None, y_axis_location=None, title = 'Gaze stripes user '+ str(user_name[1:]))
-        #for i in range(amount_images):
-            #fig.image(images[i], i, 1, 1, 1)
+        fig = figure(plot_width=75*amount_images, plot_height=75, x_range=(0,amount_images), y_range=(0,1), x_axis_location=None, y_axis_location=None, title = 'Gaze stripes user '+ str(user_name[1:]))
+        for i in range(amount_images):
+            im = images[i].convert("RGBA")
+            imarray = np.array(im)
+            fig.image_rgba(image=[imarray], x=i, y=0, dw=1, dh=1)
 
     script, div = components(fig)
     return [script, div]
