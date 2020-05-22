@@ -21,7 +21,8 @@ from bokeh.plotting import figure
 # In[3]:
 
 
-data_file = pd.read_csv('../all_fixation_data_cleaned_up.csv', encoding='latin1', delim_whitespace=True)
+data_file = pd.read_csv('static/all_fixation_data_cleaned_up.csv',
+                        encoding='latin1', sep='\t')
 
 
 # In[11]:

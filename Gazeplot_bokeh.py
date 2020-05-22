@@ -1,6 +1,7 @@
 #import libraries
 import pandas as pd
 import random
+import numpy as np
 import matplotlib.pyplot as plt
 from bokeh.models import LabelSet
 from bokeh.plotting import ColumnDataSource, figure
@@ -57,7 +58,8 @@ def get_duration_fixation(user_name, name_map):
     return array_fixation_duration
 
 def random_color():
-    rgbl= np.random.randint(256, size=3)
+    rgbl=[255,0,0]
+    random.shuffle(rgbl)
     return tuple(rgbl)
 
 
@@ -66,6 +68,7 @@ def draw_gazeplot(user_name, name_map):
     fixation_array = get_array_fixations(user_name, name_map)
     df = pd.DataFrame(fixation_array, columns=['x_cor','y_cor','fix_time'])
     df['fix_time_scaled']=df['fix_time']/12
+    df['user']=user_name
     source = ColumnDataSource(df)
     
     string_folder='static/stimuli/'
@@ -74,11 +77,12 @@ def draw_gazeplot(user_name, name_map):
     im = Image.fromarray(img)
     x_dim, y_dim = im.size
     
-    TOOLS="tap,box_zoom,box_select,reset,save"
+    TOOLS="hover,crosshair,wheel_zoom,zoom_in,zoom_out,box_zoom,undo,redo,reset,tap,save,box_select"
     TOOLTIPS = [
     ("index", "$index"),
     ("(x,y)", "(@x_cor, @y_cor)"),
     ("fixation time", "@fix_time"),
+    ("user", "@user")
     ]
 
     ax = figure(tools=TOOLS, frame_width=825, frame_height=600,
@@ -99,17 +103,17 @@ def draw_gazeplot(user_name, name_map):
                 fixation_array = get_array_fixations(i, name_map)
                 df = pd.DataFrame(fixation_array, columns=['x_cor','y_cor','fix_time'])
                 df['fix_time_scaled']=df['fix_time']/12
+                df['user']= i
                 source = ColumnDataSource(df)
                 ax.circle('x_cor', 'y_cor', color=random_color(), size='fix_time_scaled', source=source, alpha=0.6)
-                label = LabelSet(x='x_cor', y='y_cor', text='index', source=source, level="image", render_mode='canvas')
-                ax.add_layout(label)
+                
     else:
         # draw saccades
         ax.line('x_cor', 'y_cor', color='black', source=source, alpha=1)
 
         # draw each fixation
         ax.circle('x_cor', 'y_cor', color='navy', size='fix_time_scaled', source=source, alpha=0.6)
-        label = LabelSet(x='x_cor', y='y_cor', text='index', source=source, level="image", render_mode='canvas')
+        label = LabelSet(x='x_cor', y='y_cor', text='index', source=source, text_color='black', render_mode='canvas')
         ax.add_layout(label)
 
     script, div = components(ax)

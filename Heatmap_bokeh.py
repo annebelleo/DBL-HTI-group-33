@@ -20,7 +20,6 @@ from bokeh.models import ColorBar, LogColorMapper, LogTicker, LinearColorMapper
 data_file = pd.read_csv('static/all_fixation_data_cleaned_up.csv',
                         encoding='latin1', sep='\t')
 
-#test test test test
 
 def get_data_user(user_name, name_map):
     if user_name == 'ALL':
@@ -92,7 +91,10 @@ def draw_heatmap(user_name, name_map):
     mapper = LogColorMapper(palette="Turbo256", low=0, high=max(Z_dat))
     
     TOOLS="hover,crosshair,wheel_zoom,zoom_in,zoom_out,box_zoom,undo,redo,reset,tap,save,box_select"
-    p = figure(plot_width=int(x_dim/1.8), plot_height=int(y_dim/1.8),x_range=[0, x_dim], y_range=[0, y_dim], tools=TOOLS, title='Heatmap Test')
+    TOOLTIPS = [
+    ("(x,y)", "($x, $y)")
+    ]
+    p = figure(plot_width=int(x_dim/1.8), plot_height=int(y_dim/1.8),x_range=[0, x_dim], y_range=[0, y_dim], tools=TOOLS, title='Heatmap '+str(user_name))
     color_bar = ColorBar(color_mapper=mapper,ticker=LogTicker(),
                          formatter=PrintfTickFormatter(),location=(50,50),background_fill_alpha=0.5)
     
