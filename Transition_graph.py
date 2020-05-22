@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
-
 
 import matplotlib.pyplot as plt
 # import matplotlib.image as mpimg
@@ -19,13 +17,8 @@ from bokeh.palettes import Spectral4
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, Grid, ImageURL, LinearAxis, Plot, Range1d
 from bokeh.models import Arrow, OpenHead, NormalHead, VeeHead
-# In[3]:
-
 
 data_file = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding='latin1', sep='\t')
-
-
-# In[11]:
 
 
 # draw a figure showing the transition graph for one map:
