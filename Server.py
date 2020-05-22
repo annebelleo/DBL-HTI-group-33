@@ -38,7 +38,7 @@ def home():
             session["Vis1_out"] = draw_heatmap(session["UserID"], session["MapID"])
 
         elif session["VisID"] == "Transition graph":
-            session["Vis1_out"] = draw_transition_graph(session["MapID"])
+            session["Vis1_out"] = draw_transition_graph(session["UserID"], session["MapID"])
 
         return render_template("home.html", session=session, LISTS=LISTS)
     else:
