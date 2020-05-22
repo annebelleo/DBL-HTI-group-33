@@ -9,13 +9,16 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.layouts import gridplot
 #from bokeh.io import hplot
 
-df = pd.read_csv(r"C:\Users\20182483\OneDrive - TU Eindhoven\Documents\Jaar 2\Q4\2IOA0\MetroMapsEyeTracking\MetroMapsEyeTracking\all_fixation_data_cleaned_up.csv", encoding='latin1', delim_whitespace=True)
-#df
+df = pd.read_csv(r"C:\Users\20182504\Documents\Uni\Year 2\Q4\2IOA0 DBL HTI + Webtech\Data Visualization\MetroMapsEyeTracking\data.csv", encoding = 'latin1', sep='\t')
 
 def get_data_user(user_name, name_map):
     data_user = df.loc[df['user'] == user_name]
     data_user = data_user.loc[data_user['StimuliName'] == name_map]
     return data_user
+
+def get_data_map(name_map):
+    data_map = df.loc[df['StimuliName'] == name_map]
+    return data_map
 
 def get_array_fixations(user_name, name_map):
     data_user = get_data_user(user_name, name_map)
@@ -50,12 +53,12 @@ def get_duration_fixation(user_name, name_map):
     return array_fixation_duration
 
 def get_cropped_images(user_name, name_map):
-    string_folder= r'C:\Users\20182483\OneDrive - TU Eindhoven\Documents\Jaar 2\Q4\2IOA0\MetroMapsEyeTracking\MetroMapsEyeTracking\\stimuli\\'
+    string_folder='C:\\Users\\20182504\\Documents\\Uni\\Year 2\\Q4\\2IOA0 DBL HTI + Webtech\\Data Visualization\\MetroMapsEyeTracking\\stimuli\\'
+    
     image_source = string_folder+name_map
     im = plt.imread(image_source)
     img = Image.fromarray(im)
     width, height = img.size
-#     print(width, height)
 
     images=[]
     n = 1
@@ -67,54 +70,39 @@ def get_cropped_images(user_name, name_map):
         area = (x, y, w, h)
         cropped_img = img.crop(area)
         type = n
-        cropped_img.save("{0}.jpg".format(type))
+        #cropped_img.save("{0}.jpg".format(type))
         n+= 1
         images.append(cropped_img)
-    return(images)
+    return images, n
     #return(cropped_img)
 
 def draw_gaze_stripes(user_name, name_map):
 
+    if user_name == 'ALL':
+        max_amount_images = 0
+        ListUser = get_data_map(name_map).user.unique()
 
-    fig1 = figure(plot_width = 710, plot_height = 450)
-    fig1.image_url(['1.jpg'], 0, 100, 100, 100)
-    fig2 = figure(plot_width = 710, plot_height = 450)    
-    fig2.image_url(['1.jpg'], 0, 100, 100, 100)
-    p = gridplot([[fig1, fig2]])
-    show(p)
+        for i in range(len(ListUser)):
+            images, amount_images = get_cropped_images(ListUser[i], name_map)
+            max_amount_images = max(max_amount_images, amount_images)
+        
+        fig = figure(plot_width = 25*max_amount_images, plot_height = 25*len(ListUser), x_range=(0,max_amount_images-1), y_range=(-1,len(ListUser)-1), x_axis_location=None, y_axis_location=None, title = 'Gaze stripes all users')
+        for i in range(len(ListUser)):
+            images, amount_images = get_cropped_images(ListUser[i], name_map)
+            amount_images -= 1
+            for j in range(amount_images):
+                #This must be changed
+                fig.image_url(['1.jpg'], j, i, 1, 1)
+        
+    else:
+        images, amount_images = get_cropped_images(user_name, name_map)
+        #we need to work on the x axis (duration scale)
+        fig = figure(plot_width=75*amount_images, plot_height = 75, x_range=(0,amount_images), y_range=(0,1), x_axis_location=None, y_axis_location=None, title = 'Gaze stripes user '+ str(user_name[1:]))
+        for i in range(amount_images):
+            fig.image_url(['1.jpg'], i, 1, 1, 1)
 
-    fig1 = figure(plot_width = 100, plot_height = 100)
-    fig1.image_url(['1.jpg'], 0, 80, 80, 80)
-    fig2 = figure(plot_width = 100, plot_height = 100)
-    fig2.image_url(['2.jpg'], 0, 80, 80, 80)
-    fig3 = figure(plot_width = 100, plot_height = 100)
-    fig3.image_url(['3.jpg'], 0, 80, 80, 80)
-    fig4 = figure(plot_width = 100, plot_height = 100)
-    fig4.image_url(['4.jpg'], 0, 80, 80, 80)
-    fig5 = figure(plot_width = 100, plot_height = 100)
-    fig5.image_url(['5.jpg'], 0, 80, 80, 80)
-    fig6 = figure(plot_width = 100, plot_height = 100)
-    fig6.image_url(['6.jpg'], 0, 80, 80, 80)
-    fig7 = figure(plot_width = 100, plot_height = 100)
-    fig7.image_url(['7.jpg'], 0, 80, 80, 80)
-    p = gridplot([[fig1, fig2, fig3, fig4, fig5, fig6, fig7]])
-    show(p)
-    
-##    n = 1
-##    for i in get_array_fixations(user_name, name_map):
-##        figure_name = 'fig{}'.format(n)
-##        #print(figure_name)
-##        figure_name = figure(plot_width = 710, plot_height = 450)
-##        figure_name.image_url(['{0}.jpg'.format(n)], 0, 80, 80, 80)
-##        p = gridplot([[fig1, fig2]])
-##        n+=1
-##
-##    show(p)
+    show(fig)
 
-    #show(fig)
-    #fig.savefig('gaze stripe' + name_map)
-
-#get_array_fixations('p1','01_Antwerpen_S1.jpg')
 #get_cropped_images('p1', '01_Antwerpen_S1.jpg')
 
-draw_gaze_stripes('p1', '01_Antwerpen_S1.jpg')
+draw_gaze_stripes('ALL', '01_Antwerpen_S1.jpg')
