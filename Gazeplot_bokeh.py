@@ -57,8 +57,7 @@ def get_duration_fixation(user_name, name_map):
     return array_fixation_duration
 
 def random_color():
-    rgbl=[255, 0, 0]
-    random.shuffle(rgbl)
+    rgbl= np.random.randint(256, size=3)
     return tuple(rgbl)
 
 

@@ -20,6 +20,7 @@ from bokeh.models import ColorBar, LogColorMapper, LogTicker, LinearColorMapper
 data_file = pd.read_csv('static/all_fixation_data_cleaned_up.csv',
                         encoding='latin1', sep='\t')
 
+#test test test test
 
 def get_data_user(user_name, name_map):
     if user_name == 'ALL':
