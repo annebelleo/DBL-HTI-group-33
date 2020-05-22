@@ -99,10 +99,10 @@ def draw_gaze_stripes(user_name, name_map):
         #we need to work on the x axis (duration scale)
         fig = figure(plot_width=75*amount_images, plot_height = 75, x_range=(0,amount_images), y_range=(0,1), x_axis_location=None, y_axis_location=None, title = 'Gaze stripes user '+ str(user_name[1:]))
         for i in range(amount_images):
-            fig.image_url(['1.jpg'], i, 1, 1, 1)
+            fig.image(images[i], i, 1, 1, 1)
 
     show(fig)
 
 #get_cropped_images('p1', '01_Antwerpen_S1.jpg')
 
-draw_gaze_stripes('ALL', '01_Antwerpen_S1.jpg')
+draw_gaze_stripes('p1', '01_Antwerpen_S1.jpg')
