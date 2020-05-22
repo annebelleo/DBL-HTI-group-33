@@ -7,7 +7,7 @@ import numpy as np
 # Visualation methods.
 from Gazeplot_bokeh import draw_gazeplot
 from Heatmap_bokeh import draw_heatmap
-#from Transition_graph import draw_transition_graph
+from Transition_graph import draw_transition_graph
 
 app = Flask(__name__)
 app.secret_key = "pPAQaAI4lte5d8Hwci1i"
