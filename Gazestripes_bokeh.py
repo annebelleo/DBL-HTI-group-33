@@ -7,9 +7,10 @@ from PIL import Image
 import bokeh
 from bokeh.plotting import figure, output_file, show
 from bokeh.layouts import gridplot
+from bokeh.embed import components
 #from bokeh.io import hplot
 
-df = pd.read_csv(r"C:\Users\20182504\Documents\Uni\Year 2\Q4\2IOA0 DBL HTI + Webtech\Data Visualization\MetroMapsEyeTracking\data.csv", encoding = 'latin1', sep='\t')
+df = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding = 'latin1', sep='\t')
 
 def get_data_user(user_name, name_map):
     data_user = df.loc[df['user'] == user_name]
@@ -53,8 +54,7 @@ def get_duration_fixation(user_name, name_map):
     return array_fixation_duration
 
 def get_cropped_images(user_name, name_map):
-    string_folder='C:\\Users\\20182504\\Documents\\Uni\\Year 2\\Q4\\2IOA0 DBL HTI + Webtech\\Data Visualization\\MetroMapsEyeTracking\\stimuli\\'
-    
+    string_folder='static/stimuli/'
     image_source = string_folder+name_map
     im = plt.imread(image_source)
     img = Image.fromarray(im)
@@ -98,11 +98,10 @@ def draw_gaze_stripes(user_name, name_map):
         images, amount_images = get_cropped_images(user_name, name_map)
         #we need to work on the x axis (duration scale)
         fig = figure(plot_width=75*amount_images, plot_height = 75, x_range=(0,amount_images), y_range=(0,1), x_axis_location=None, y_axis_location=None, title = 'Gaze stripes user '+ str(user_name[1:]))
-        for i in range(amount_images):
-            fig.image(images[i], i, 1, 1, 1)
+        #for i in range(amount_images):
+            #fig.image(images[i], i, 1, 1, 1)
 
-    show(fig)
+    script, div = components(fig)
+    return [script, div]
 
 #get_cropped_images('p1', '01_Antwerpen_S1.jpg')
-
-draw_gaze_stripes('p1', '01_Antwerpen_S1.jpg')

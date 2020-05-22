@@ -8,6 +8,7 @@ import numpy as np
 from Gazeplot_bokeh import draw_gazeplot
 from Heatmap_bokeh import draw_heatmap
 from Transition_graph import draw_transition_graph
+from Gazestripes_bokeh import draw_gaze_stripes
 
 app = Flask(__name__)
 app.secret_key = "pPAQaAI4lte5d8Hwci1i"
@@ -18,7 +19,7 @@ df_cars = pd.read_csv("static/cars.csv", encoding='latin1', delim_whitespace=Tru
 ListStimuliName = np.sort(df_data.StimuliName.unique())
 ListUser = np.sort(df_data.user.unique())
 ListUser = np.insert(ListUser, 0, "ALL")
-ListVISID = ["Gazeplot", "Heatmap", "Transition graph", "Cars"]
+ListVISID = ["Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes"]
 LISTS = [ListUser, ListStimuliName, ListVISID]
 
 
@@ -32,15 +33,18 @@ def home():
                 return render_template("home.html", session=[], LISTS=LISTS)
 
         if session["VisID"] == "Gazeplot":
-            session["Vis1_out"] = draw_gazeplot(session["UserID"], session["MapID"],)
+            Graph = draw_gazeplot(session["UserID"], session["MapID"],)
 
         elif session["VisID"] == "Heatmap":
-            session["Vis1_out"] = draw_heatmap(session["UserID"], session["MapID"])
+            Graph = draw_heatmap(session["UserID"], session["MapID"])
 
         elif session["VisID"] == "Transition graph":
-            session["Vis1_out"] = draw_transition_graph(session["UserID"], session["MapID"])
+            Graph = draw_transition_graph(session["UserID"], session["MapID"])
 
-        return render_template("home.html", session=session, LISTS=LISTS)
+        elif session["VisID"] == "Gaze Stripes":
+            Graph = draw_gaze_stripes(session["UserID"], session["MapID"])
+
+        return render_template("home.html", session=session, LISTS=LISTS, IMG=Graph)
     else:
         return render_template("home.html", session=[], LISTS=LISTS)
 
