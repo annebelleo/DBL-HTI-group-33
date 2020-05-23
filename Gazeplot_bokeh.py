@@ -85,13 +85,12 @@ def draw_gazeplot(user_name, name_map):
     ("user", "@user")
     ]
 
-    ax = figure(tools=TOOLS, frame_width=825, frame_height=600,
-                height_policy="fixed", width_policy="fixed",
-                x_range=[0, x_dim], y_range=[0, y_dim],
+    ax = figure(tools=TOOLS, frame_width=int(x_dim/1.8), frame_height=int(y_dim/1.8),
+                x_range=[0, x_dim], y_range=[y_dim,0],
                 x_axis_location=None, y_axis_location=None,
                 title="Gazeplot user "+user_name[1:], tooltips=TOOLTIPS)
 
-    ax.image_url([image_source], 0, y_dim, x_dim, y_dim)
+    ax.image_url([image_source], 0, 0, x_dim, y_dim)
 
     if user_name == 'ALL':
         for i in ListUser:
@@ -112,7 +111,7 @@ def draw_gazeplot(user_name, name_map):
         ax.line('x_cor', 'y_cor', color='black', source=source, alpha=1)
 
         # draw each fixation
-        ax.circle('x_cor', 'y_cor', color='navy', size='fix_time_scaled', source=source, alpha=0.6)
+        ax.circle('x_cor', 'y_cor', color='magenta', size='fix_time_scaled', source=source, alpha=0.6)
         label = LabelSet(x='x_cor', y='y_cor', text='index', source=source, text_color='black', render_mode='canvas')
         ax.add_layout(label)
 
