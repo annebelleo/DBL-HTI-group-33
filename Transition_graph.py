@@ -1,31 +1,22 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-
-import matplotlib.pyplot as plt
-# import matplotlib.image as mpimg
 import networkx as nx
 import numpy as np
 import pandas as pd
-from PIL import Image
 from bokeh.embed import components
-from bokeh.io import output_file, show, output_notebook, reset_output
-from bokeh.models import MultiLine, Circle, HoverTool, BoxZoomTool, ResetTool, TapTool, BoxSelectTool, PointDrawTool, \
+from bokeh.models import HoverTool, BoxZoomTool, ResetTool, TapTool, BoxSelectTool, PointDrawTool, \
     SaveTool
-from bokeh.models.graphs import from_networkx, NodesAndLinkedEdges, EdgesAndLinkedNodes
-from bokeh.palettes import Spectral4
+from bokeh.models.graphs import from_networkx
 from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, Grid, ImageURL, LinearAxis, Plot, Range1d
-from bokeh.models import Arrow, OpenHead, NormalHead, VeeHead
+from bokeh.models import ImageURL
+from bokeh.models import Arrow, VeeHead
 
-data_file = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding='latin1', sep='\t')
+df_data = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding='latin1', sep='\t')
 
 
 # draw a figure showing the transition graph for one map:
 def draw_transition_graph(user_name, name_map):
     # filter out all data that belongs to name_map
 
-    data = data_file[data_file['StimuliName'] == name_map]
+    data = df_data[df_data['StimuliName'] == name_map]
 
     # read in user input of desired top AOI's to be displayed in transition graph
     # run AOI algorithm (with a high AOI number?? gives more accurate cropped images)

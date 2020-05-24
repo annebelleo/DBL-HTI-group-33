@@ -1,57 +1,15 @@
 import pandas as pd
-import csv
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 from PIL import Image
-import bokeh
-from bokeh.plotting import figure, output_file, show
-from bokeh.layouts import gridplot
+from bokeh.plotting import figure
 from bokeh.embed import components
-#from bokeh.io import hplot
+from HelperFunctions import get_data_user, get_data_map, get_array_fixations, get_x_fixation, get_y_fixation, get_duration_fixation, random_color
 
-df = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding = 'latin1', sep='\t')
 
-def get_data_user(user_name, name_map):
-    data_user = df.loc[df['user'] == user_name]
-    data_user = data_user.loc[data_user['StimuliName'] == name_map]
-    return data_user
+FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
+df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
-def get_data_map(name_map):
-    data_map = df.loc[df['StimuliName'] == name_map]
-    return data_map
-
-def get_array_fixations(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
-    array_fixations_x = get_x_fixation(user_name, name_map)
-    array_fixations_y = get_y_fixation(user_name, name_map)
-    array_fixation_duration = get_duration_fixation(user_name, name_map)
-    array_fixations = []
-    for l in range(len(array_fixations_x)):
-        array_fixations.append([array_fixations_x[l],array_fixations_y[l], array_fixation_duration[l]])
-    #print(array_fixations)
-    return array_fixations
-
-def get_x_fixation(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
-    array_fixations_x = []
-    for i in data_user['MappedFixationPointX']:
-        array_fixations_x.append(i)
-    return array_fixations_x
-
-def get_y_fixation(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
-    array_fixations_y = []
-    for i in data_user['MappedFixationPointY']:
-        array_fixations_y.append(i)
-    return array_fixations_y
-
-def get_duration_fixation(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
-    array_fixation_duration = []
-    for i in data_user['FixationDuration']:
-        array_fixation_duration.append(i)
-    return array_fixation_duration
 
 def get_cropped_images(user_name, name_map):
     string_folder='static/stimuli/'

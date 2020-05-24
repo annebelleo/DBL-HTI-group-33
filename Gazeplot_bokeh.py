@@ -1,66 +1,18 @@
 #import libraries
 import pandas as pd
-import random
-import numpy as np
 import matplotlib.pyplot as plt
+from PIL import Image
 from bokeh.models import LabelSet
 from bokeh.plotting import ColumnDataSource, figure
 from bokeh.embed import components
-from PIL import Image
-
-data_file = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding = 'latin1', sep='\t')
-
-ListUser = data_file.user.unique()
-
-#get data of one test (user, picture, color):
-def get_data_user(user_name, name_map):
-    data_user = data_file.loc[data_file['user'] == user_name]
-    data_user = data_user.loc[data_user['StimuliName'] == name_map]
-    return data_user
 
 
-#get array of all fixations with fixation duration in order from one experiment:
-def get_array_fixations(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
-    array_fixations_x = get_x_fixation(user_name, name_map)
-    array_fixations_y = get_y_fixation(user_name, name_map)
-    array_fixation_duration = get_duration_fixation(user_name, name_map)
-    array_fixations = []
-    for l in range(len(array_fixations_x)):
-        array_fixations.append([array_fixations_x[l],array_fixations_y[l], array_fixation_duration[l]])
-    return array_fixations
+from HelperFunctions import get_data_user, get_data_map, get_array_fixations, get_x_fixation, get_y_fixation, get_duration_fixation, random_color
 
+FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
+df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
-#get array of all x_coordinate fixations from one experiment:
-def get_x_fixation(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
-    array_fixations_x = []
-    for i in data_user['MappedFixationPointX']:
-        array_fixations_x.append(i)
-    return array_fixations_x
-
-
-#get array of all y_coordinate fixations from one experiment:
-def get_y_fixation(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
-    array_fixations_y = []
-    for i in data_user['MappedFixationPointY']:
-        array_fixations_y.append(i)
-    return array_fixations_y
-
-
-#get array of all fixation durations from one experiment:
-def get_duration_fixation(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
-    array_fixation_duration = []
-    for i in data_user['FixationDuration']:
-        array_fixation_duration.append(i)
-    return array_fixation_duration
-
-def random_color():
-    rgbl=[255,0,0]
-    random.shuffle(rgbl)
-    return tuple(rgbl)
+ListUser = df_data.user.unique()
 
 
 # draw a figure showing the gazeplot of one experiment:
