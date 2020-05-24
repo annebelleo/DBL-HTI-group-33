@@ -50,7 +50,8 @@ def home():
 
         return render_template("home.html", session=session, LISTS=lists, Graph=Graph)
     else:
-        return render_template("home.html", session=[], LISTS=lists)
+        return render_template("home.html", session=[]
+                               , LISTS=lists)
 
 
 @app.route("/help/")

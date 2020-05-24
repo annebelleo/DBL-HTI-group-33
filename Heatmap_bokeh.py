@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 from scipy.interpolate import griddata
-from bokeh.plotting import figure
+from bokeh.plotting import figure, show
 from bokeh.models import PrintfTickFormatter
 from bokeh.embed import components
-from bokeh.models import ColorBar, LogColorMapper, LogTicker
+from bokeh.models import ColorBar, LinearColorMapper
 
 # 'library' created by the team to help with he processing of the data
 from HelperFunctions import get_x_fixation, get_y_fixation, get_duration_fixation
@@ -38,21 +38,31 @@ def draw_heatmap(user_name, name_map):
     xi = np.linspace(0,x_dim)
     yi = np.linspace(y_dim,0)
     zi = griddata((X, Y), Z, (xi[None,:], yi[:,None]), method='cubic')
+    for x in range(len(zi)):
+        for y in range(len(zi[0])):
+            if np.isnan(zi[x][y]):
+                zi[x][y] = 0
 
-    mapper = LogColorMapper(palette="Turbo256", low=0, high=max(Z_dat))
+    mapper = LinearColorMapper(palette="Turbo256", low=0, high=max(Z_dat)+50)
     
     TOOLS="hover,wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"
     TOOLTIPS = [
     ("(x,y)", "($x, $y)")
-    ("average fixation time", "")]
-    p = figure(plot_width=int(x_dim/1.8), plot_height=int(y_dim/1.8),x_range=[0, x_dim], y_range=[0, y_dim], tools=TOOLS, title='Heatmap '+str(user_name))
-    color_bar = ColorBar(color_mapper=mapper,ticker=LogTicker(),
-                         formatter=PrintfTickFormatter(),location=(50,50),background_fill_alpha=0.5)
+    ]
+    
+    p = figure(plot_width=int(x_dim/1.8), plot_height=int(y_dim/1.8),x_range=[0, x_dim],
+               y_range=[0, y_dim], tools=TOOLS, tooltips=TOOLTIPS,
+               title='Heatmap ' + user_name + " map " + name_map)
+    
+    color_bar = ColorBar(color_mapper=mapper, formatter=PrintfTickFormatter(),
+                         location=(0,0),background_fill_alpha=0.5)
     
     p.add_layout(color_bar, 'right')
    
-    p.image(image=[zi], x=0, y=0, dw=x_dim, dh=y_dim, palette="Turbo256",global_alpha=0.9)
-    p.image_url([image_source], 0, y_dim, x_dim, y_dim, global_alpha = 0.4)
+    p.image_url([image_source], 0, y_dim, x_dim, y_dim)
+    p.image(image=[zi], x=0, y=0, dw=x_dim, dh=y_dim, color_mapper=mapper, global_alpha=0.7)
     p.grid.grid_line_width = 0
+
+
     script, div = components(p)
     return [script, div]

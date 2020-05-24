@@ -26,12 +26,10 @@ def get_cropped_images(user_name, name_map):
         y = i[1]-100
         w = i[0]+100
         h = i[1]+100
-        area = (x, y, w, h)
+        area = (x, y, width, height)
         cropped_img = img.crop(area)
-        #cropped_img.save("{0}.jpg".format(type))
         images.append(cropped_img)
     return images, len(images)
-    #return(cropped_img)
 
 def draw_gaze_stripes(user_name, name_map):
     TOOLS = "hover,wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"
@@ -48,7 +46,7 @@ def draw_gaze_stripes(user_name, name_map):
         fig = figure(plot_width = 25*max_amount_images, plot_height = 25*len(ListUser),
                      x_range=(0,max_amount_images), y_range=(0,len(ListUser)),
                      x_axis_label = "Time (order of fixations)", y_axis_label = "User",
-                     title = 'Gaze stripes all users', tools=TOOLS)
+                     title = 'Gaze stripes all users map '+ name_map, tools=TOOLS)
         fig.xgrid.visible = False
         fig.ygrid.visible = False
         
@@ -69,15 +67,12 @@ def draw_gaze_stripes(user_name, name_map):
         images, amount_images = get_cropped_images(user_name, name_map)
         fig = figure(plot_width=75*amount_images, plot_height=75, x_range=(0,amount_images),
                      y_range=(0,1), x_axis_label = "Time (order of fixations)",
-                     y_axis_label = "User", title = 'Gaze stripes user '+ str(user_name[1:]),
+                     y_axis_label = "User", title = 'Gaze stripes user '+ user_name + ' map ' + name_map,
                      tools=TOOLS)
         for i in range(amount_images):
             im = images[i].convert("RGBA")
             imarray = np.array(im)
             fig.image_rgba(image=[imarray], x=i, y=0, dw=1, dh=1)
-
-    show(fig)
+            
     script, div = components(fig)
     return [script, div]
-
-draw_gaze_stripes("ALL", "01_Antwerpen_S1.jpg")
