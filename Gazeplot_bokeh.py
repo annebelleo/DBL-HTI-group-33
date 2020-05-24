@@ -29,7 +29,7 @@ def draw_gazeplot(user_name, name_map):
     im = Image.fromarray(img)
     x_dim, y_dim = im.size
 
-    TOOLS = "hover,crosshair,wheel_zoom,zoom_in,zoom_out,box_zoom,undo,redo,reset,tap,save,box_select"
+    TOOLS = "hover,wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"
     TOOLTIPS = [
         ("index", "$index"),
         ("(x,y)", "(@x_cor, @y_cor)"),
@@ -40,7 +40,7 @@ def draw_gazeplot(user_name, name_map):
     ax = figure(tools=TOOLS, frame_width=int(x_dim / 1.8), frame_height=int(y_dim / 1.8),
                 x_range=[0, x_dim], y_range=[y_dim, 0],
                 x_axis_location=None, y_axis_location=None,
-                title="Gazeplot user " + user_name[1:], tooltips=TOOLTIPS)
+                title="Gazeplot user " + user_name, tooltips=TOOLTIPS)
 
     ax.image_url([image_source], 0, 0, x_dim, y_dim)
 

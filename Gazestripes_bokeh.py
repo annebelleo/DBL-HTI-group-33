@@ -2,8 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
-from bokeh.plotting import figure
+from bokeh.plotting import figure,show
 from bokeh.embed import components
+from bokeh.models.tickers import FixedTicker
 
 # 'library' created by the team to help with he processing of the data
 from HelperFunctions import get_data_map, get_array_fixations
@@ -33,33 +34,50 @@ def get_cropped_images(user_name, name_map):
     #return(cropped_img)
 
 def draw_gaze_stripes(user_name, name_map):
+    TOOLS = "hover,wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"
 
     if user_name == 'ALL':
         max_amount_images = 0
         ListUser = get_data_map(name_map).user.unique()
+        ListUser = list(ListUser)
 
         for i in range(len(ListUser)):
             images, amount_images = get_cropped_images(ListUser[i], name_map)
             max_amount_images = max(max_amount_images, amount_images)
         
-        fig = figure(plot_width = 25*max_amount_images, plot_height = 25*len(ListUser), x_range=(0,max_amount_images-1), y_range=(-1,len(ListUser)-1), x_axis_location=None, y_axis_location=None, title = 'Gaze stripes all users')
-        for i in range(len(ListUser)):
-            images, amount_images = get_cropped_images(ListUser[i], name_map)
-            amount_images -= 1
-            for j in range(amount_images):
-                #This must be changed
-                fig.image_url(['1.jpg'], j, i, 1, 1)
+        fig = figure(plot_width = 25*max_amount_images, plot_height = 25*len(ListUser),
+                     x_range=(0,max_amount_images), y_range=(0,len(ListUser)),
+                     x_axis_label = "Time (order of fixations)", y_axis_label = "User",
+                     title = 'Gaze stripes all users', tools=TOOLS)
+        fig.xgrid.visible = False
+        fig.ygrid.visible = False
         
+        ticks = [g/2 for g in range(len(ListUser)*2)]
+        ticks_labels = {h+0.5:ListUser[h] for h in range(len(ListUser))}
+        fig.yaxis.ticker = ticks
+        fig.yaxis.major_label_overrides = ticks_labels
+        fig.yaxis.major_label_orientation = 3.14/4
+        
+        for j in range(len(ListUser)):
+            images, amount_images = get_cropped_images(ListUser[j], name_map)
+            for k in range(amount_images):
+                im = images[k].convert("RGBA")
+                imarray = np.array(im)
+                fig.image_rgba(image=[imarray], x=k, y=j, dw=1, dh=0.9)
+            
     else:
         images, amount_images = get_cropped_images(user_name, name_map)
-        #we need to work on the x axis (duration scale)
-        fig = figure(plot_width=75*amount_images, plot_height=75, x_range=(0,amount_images), y_range=(0,1), x_axis_location=None, y_axis_location=None, title = 'Gaze stripes user '+ str(user_name[1:]))
+        fig = figure(plot_width=75*amount_images, plot_height=75, x_range=(0,amount_images),
+                     y_range=(0,1), x_axis_label = "Time (order of fixations)",
+                     y_axis_label = "User", title = 'Gaze stripes user '+ str(user_name[1:]),
+                     tools=TOOLS)
         for i in range(amount_images):
             im = images[i].convert("RGBA")
             imarray = np.array(im)
             fig.image_rgba(image=[imarray], x=i, y=0, dw=1, dh=1)
 
+    show(fig)
     script, div = components(fig)
     return [script, div]
 
-#get_cropped_images('p1', '01_Antwerpen_S1.jpg')
+draw_gaze_stripes("ALL", "01_Antwerpen_S1.jpg")
