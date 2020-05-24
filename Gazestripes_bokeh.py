@@ -4,8 +4,9 @@ import numpy as np
 from PIL import Image
 from bokeh.plotting import figure
 from bokeh.embed import components
-from HelperFunctions import get_data_user, get_data_map, get_array_fixations, get_x_fixation, get_y_fixation, get_duration_fixation, random_color
 
+# 'library' created by the team to help with he processing of the data
+from HelperFunctions import get_data_map, get_array_fixations
 
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)

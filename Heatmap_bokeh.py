@@ -7,7 +7,9 @@ from bokeh.plotting import figure
 from bokeh.models import PrintfTickFormatter
 from bokeh.embed import components
 from bokeh.models import ColorBar, LogColorMapper, LogTicker
-from HelperFunctions import get_data_user, get_data_map, get_array_fixations, get_x_fixation, get_y_fixation, get_duration_fixation, random_color
+
+# 'library' created by the team to help with he processing of the data
+from HelperFunctions import get_x_fixation, get_y_fixation, get_duration_fixation
 
 
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'

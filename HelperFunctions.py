@@ -1,62 +1,123 @@
 import pandas as pd
+import numpy as np
 import random
 
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
 
-def get_data_user(user_name, name_map):
+def drop_down_info(vis_methode: list, df: pd.DataFrame = df_data) -> list:
+    """
+    Gives all items to de displayed on the dropdown menus.
+    :param vis_methode:
+    :param df:
+    :return:
+    """
+    all_maps = np.sort(df.StimuliName.unique())
+    all_users = np.sort(df.user.unique())
+    all_users = np.insert(all_users, 0, "ALL")
+    return [all_users, all_maps, vis_methode]
+
+
+def get_data_user(user_name: str, map_name: str, df: pd.DataFrame = df_data) -> pd.DataFrame:
+    """
+    When given a pd.dataframe it will return all rows were the user_name & map_name match.
+    :param user_name: expected to be a sting string
+    :param map_name: expected to be a sting string
+    :param df: pd.dataframe to filter
+    :return: pd.dataframe
+    """
     if user_name == 'ALL':
-        data_user = df_data.loc[df_data['StimuliName'] == name_map]
+        user_data = df.loc[df['StimuliName'] == user_name]
     else:
-        data_user = df_data.loc[df_data['user'] == user_name]
-        data_user = data_user.loc[data_user['StimuliName'] == name_map]
-    return data_user
-
-def get_data_map(name_map):
-    data_map = df_data.loc[df_data['StimuliName'] == name_map]
-    return data_map
+        user_data = df.loc[df['user'] == user_name]
+        user_data = user_data.loc[user_data['StimuliName'] == map_name]
+    return user_data
 
 
-#get array of all fixations with fixation duration in order from one experiment:
-def get_array_fixations(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
-    array_fixations_x = get_x_fixation(user_name, name_map)
-    array_fixations_y = get_y_fixation(user_name, name_map)
-    array_fixation_duration = get_duration_fixation(user_name, name_map)
-    array_fixations = []
-    for l in range(len(array_fixations_x)):
-        array_fixations.append([array_fixations_x[l],array_fixations_y[l], array_fixation_duration[l]])
-    return array_fixations
+def get_data_map(map_name, df: pd.DataFrame = df_data) -> pd.DataFrame:
+    """
+    When given a pd.dataframe it will return all rows were the map_name match.
+    :param map_name: expected to be string
+    :param df: pd.dataframe to filter
+    :return:
+    """
+    map_data = df.loc[df['StimuliName'] == map_name]
+    return map_data
 
 
-#get array of all x_coordinate fixations from one experiment:
-def get_x_fixation(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
+def get_x_fixation(user_name: str, map_name: str, df: pd.DataFrame = df_data) -> list:
+    """
+    get array of all x_coordinate fixations from one experiment:
+    :param user_name: expected to be a string
+    :param map_name: expected to be a string
+    :param df: pd.dataframe to filter
+    :return:
+    """
+    user_data = get_data_user(user_name, map_name, df)
     array_fixations_x = []
-    for i in data_user['MappedFixationPointX']:
+    for i in user_data['MappedFixationPointX']:
         array_fixations_x.append(i)
     return array_fixations_x
 
 
-#get array of all y_coordinate fixations from one experiment:
-def get_y_fixation(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
+def get_y_fixation(user_name: str, map_name: str, df: pd.DataFrame = df_data) -> list:
+    """
+    get array of all y_coordinate fixations from one experiment:
+    :param user_name: expected to be a string
+    :param map_name: expected to be a string
+    :param df: pd.dataframe to filter
+    :return:
+    """
+    user_data = get_data_user(user_name, map_name, df)
     array_fixations_y = []
-    for i in data_user['MappedFixationPointY']:
+    for i in user_data['MappedFixationPointY']:
         array_fixations_y.append(i)
     return array_fixations_y
 
 
-#get array of all fixation durations from one experiment:
-def get_duration_fixation(user_name, name_map):
-    data_user = get_data_user(user_name, name_map)
+def get_duration_fixation(user_name: str, map_name: str, df: pd.DataFrame = df_data) -> list:
+    """
+    Get array of all fixation durations from one experiment
+    :param user_name:
+    :param map_name:
+    :param df:
+    :return:
+    """
+
+    user_data = get_data_user(user_name, map_name, df)
     array_fixation_duration = []
-    for i in data_user['FixationDuration']:
+    for i in user_data['FixationDuration']:
         array_fixation_duration.append(i)
     return array_fixation_duration
 
-def random_color():
-    rgbl=[255,0,0]
-    random.shuffle(rgbl)
-    return tuple(rgbl)
+
+def get_array_fixations(user_name: str, map_name: str, df: pd.DataFrame = df_data):
+    """
+    get array of all fixations with fixation duration in order from one experiment
+    :param user_name:
+    :param map_name:
+    :param df:
+    :return:
+    """
+    array_fixations_x = get_x_fixation(user_name, map_name, df)
+    array_fixations_y = get_y_fixation(user_name, map_name, df)
+    array_fixation_duration = get_duration_fixation(user_name, map_name, df)
+    array_fixations = []
+    for l in range(len(array_fixations_x)):
+        array_fixations.append([array_fixations_x[l], array_fixations_y[l], array_fixation_duration[l]])
+    return array_fixations
+
+
+def random_color() -> list:
+    """
+    Generates a random RGB color and returns it in a tuple.
+    >>> type(random_color()) == tuple
+    True
+    >>> type(random_color()[1]) == int
+    True
+    """
+    r = random.randrange(0, 255, 16)
+    g = random.randrange(0, 255, 16)
+    b = random.randrange(0, 255, 16)
+    return r, g, b
