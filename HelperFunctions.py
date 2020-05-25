@@ -164,7 +164,7 @@ def get_cropped_images_gazestripe(user_name, name_map):
     return images
 
 # Returns dataframe with coordinates put in clusters
-def FindClusters(map_name, num_clusters):
+def findClusters(map_name, num_clusters):
 	
     df = get_data_map(map_name)
     X_km = df[['MappedFixationPointX', 'MappedFixationPointY']].copy()
@@ -174,7 +174,7 @@ def FindClusters(map_name, num_clusters):
     return X_km   
 
 # Returns dataframe with column identifying specific AOI for each fixation 
-def Find_AOIs(map_name, num_AOIs):
+def find_AOIs(map_name, num_AOIs):
 
     df_map = get_data_map(map_name)
     df_fixation = df_map[['FixationDuration', 'Timestamp', 'user', 'StimuliName',]]
