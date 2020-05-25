@@ -30,7 +30,7 @@ def get_data_user(user_name: str, map_name: str, df: pd.DataFrame = df_data) -> 
     :return: pd.dataframe
     """
     if user_name == 'ALL':
-        user_data = df.loc[df['StimuliName'] == user_name]
+        user_data = df.loc[df['StimuliName'] == map_name]
     else:
         user_data = df.loc[df['user'] == user_name]
         user_data = user_data.loc[user_data['StimuliName'] == map_name]
