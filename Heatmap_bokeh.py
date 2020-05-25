@@ -16,10 +16,12 @@ from HelperFunctions import get_x_fixation, get_y_fixation, get_duration_fixatio
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
-def draw_heatmap(user_name, name_map):
+def draw_heatmap(user_name: str, name_map: str):
     """
     This function creates a heatmap, based on the input data, from either one or all users and from one map.
-    It returns the components of the figure, such that they can be displayed through HTML code.
+    :param user_name:
+    :param name_map:
+    :return:
     """
     
     #separately get the data from the fixation coordinates and duration
