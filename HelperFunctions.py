@@ -141,3 +141,24 @@ def get_cropped_images(user_name, name_map):
         cropped_img = img.crop(area)
         images.append(cropped_img)
     return images, len(images)
+
+def get_cropped_images_gazestripe(user_name, name_map):
+    string_folder = 'static/stimuli/'
+    image_source = string_folder+name_map
+    img = Image.open(image_source)
+    width, height = img.size
+
+    list_fixations = get_array_fixations(user_name, name_map)
+    images=Image.new('RGB', (200*len(list_fixations), 200))
+    count = 0
+    for i in list_fixations:
+        x = i[0]-100
+        y = i[1]-100
+        w = i[0]+100
+        h = i[1]+100
+        area = (x, y, w, h)
+        cropped_img = img.crop(area)
+        images.paste(cropped_img, (count*200,0))
+        count+=1
+    return images
+

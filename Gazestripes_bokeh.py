@@ -7,7 +7,7 @@ from bokeh.embed import components
 from bokeh.models.tickers import FixedTicker
 
 # 'library' created by the team to help with he processing of the data
-from HelperFunctions import get_data_map, get_array_fixations, get_cropped_images
+from HelperFunctions import get_data_map, get_array_fixations, get_cropped_images, get_cropped_images_gazestripe
 
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
@@ -16,13 +16,16 @@ def draw_gaze_stripes(user_name, name_map):
     TOOLS = "hover,wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"
 
     if user_name == 'ALL':
-        max_amount_images = 0
         ListUser = get_data_map(name_map).user.unique()
         ListUser = list(ListUser)
 
-        for i in range(len(ListUser)):
-            images, amount_images = get_cropped_images(ListUser[i], name_map)
-            max_amount_images = max(max_amount_images, amount_images)
+        amount_fixations = []
+        for i in ListUser:
+            fixations = get_array_fixations(i, name_map)
+            amount_fixations.append(len(fixations))
+
+        max_amount_images = max(amount_fixations)
+        
         
         fig = figure(plot_width = 25*max_amount_images, plot_height = 25*len(ListUser),
                      x_range=(0,max_amount_images), y_range=(0,len(ListUser)),
@@ -38,11 +41,11 @@ def draw_gaze_stripes(user_name, name_map):
         fig.yaxis.major_label_orientation = 3.14/4
         
         for j in range(len(ListUser)):
-            images, amount_images = get_cropped_images(ListUser[j], name_map)
-            for k in range(amount_images):
-                im = images[k].convert("RGBA")
-                imarray = np.array(im)
-                fig.image_rgba(image=[imarray], x=k, y=j, dw=1, dh=0.9)
+            gazestripe = get_cropped_images_gazestripe(ListUser[j], name_map)
+            im = gazestripe.convert("RGBA")
+            imarray = np.array(im)
+            #dw should be the amount of images of the gazestripe
+            fig.image_rgba(image=[imarray], x=0, y=j, dw=amount_fixations[j], dh=0.9)
             
     else:
         images, amount_images = get_cropped_images(user_name, name_map)
