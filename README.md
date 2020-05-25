@@ -6,11 +6,11 @@ Welcome to our visualization tool! If you want the run the Flask server locally,
 3. Open the webpage on http://127.0.0.1:5000/ in your preferred browser.
 
 ## File structure:
-**root:**
-`Server.py`: This is the main python file. It links the HTML files in templates to the python files.
-`README.md`: File you are looking at now, containing information about the entire repository.
-files with "bokeh": The visualization methods that utilize the Bokeh library, making them interactive. Also applies for Transition_graph.py.
-`HelperFunctions.py`: allows the visualization methods to use functions that make the production of the visualization more efficient.
+**root:**  
+`Server.py`: This is the main python file. It links the HTML files in templates to the python files.  
+`README.md`: File you are looking at now, containing information about the entire repository.  
+files with "bokeh": The visualization methods that utilize the Bokeh library, making them interactive. Also applies for Transition_graph.py.  
+`HelperFunctions.py`: allows the visualization methods to use functions that make the production of the visualization more efficient.  
 
 **Templates:** Here are the HTML pages stored that can be used by the flask server.  
 `home.html`: Homepage of the website.  
