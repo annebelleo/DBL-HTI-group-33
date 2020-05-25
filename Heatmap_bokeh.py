@@ -28,7 +28,8 @@ def draw_heatmap(user_name: str, name_map: str):
     X_dat = get_x_fixation(user_name, name_map)
     Y_dat = get_y_fixation(user_name, name_map)
     Z_dat = get_duration_fixation(user_name, name_map)
-
+    if X_dat == []:
+            return ["No user data found",""]
     #import the image the user has chosen
     string_folder = 'static/stimuli/'
     image_source = string_folder+name_map
@@ -43,7 +44,7 @@ def draw_heatmap(user_name: str, name_map: str):
         X = np.append(X, X_dat[i])
         Y = np.append(Y, Y_dat[i])
         Z = np.append(Z, (Z_dat[i]))
-    
+
     #create a grid with all the fixation durations together in a grid
     xi = np.linspace(0,x_dim)
     yi = np.linspace(y_dim,0)
