@@ -1,29 +1,32 @@
 <html>
-        <head>
-        </head>
-         
+    <head>
+      <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" crossorigin="anonymous"></script>
+      <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.0.2.min.js" crossorigin="anonymous"></script>
+      <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.0.2.min.js"crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <title>Help Page</title>
+    </head>
+
         <body>
+          <div class="container">
                 <header>
                 </header>
-                 
-                <nav>
-                </nav>
 
                 <main>
-				<H1>Help Page</H1>
+				<h1>Help Page</h1>
                 The tool in this stage is not very user friendly. It is still posible to make "wrong" choices. <br>
                 The only data that is able to be used is our fixation dataset. The option to upload your own datasets is not yet supported.<br>
                 The usage of the site itself is you have 3 dropdown menus where you can pick a map, user and tool from.<br>
                 There are user and map combination that won't show anything this means that there is no user data for that map.<br>
                 After hitting the submit button it may take a few seconds before you get a response please be patent and do not close the tab in that time.<br>
 
-
-
                 <br>
                 <a href="{{url_for('home')}}">Home</a><br>
                 </main>
-                 
+
                 <footer>
                 </footer>
+          </div>
         </body>
 </html>
