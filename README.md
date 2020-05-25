@@ -1,12 +1,9 @@
 # Eye Movement Visualization Tool
 
 Welcome to our visualization tool! If you want the run the Flask server locally, follow the next steps.
-<br>
-1) Download the FULL GitHub repository using the green "clone or download" button.
-<br>
-2) If you have already installed pip and Flask, open the command prompt/terminal on your computer and navigate to the folder where the tool is located (it should have the same name as this repository.) Then, run Server.py using "python Server.py" or other Python execution method.
-<br>
-3) Open the webpage on http://127.0.0.1:5000/ in your preferred browser.
+Download the FULL GitHub repository using the green "clone or download" button.
+If you have already installed pip and Flask, open the command prompt/terminal on your computer and navigate to the folder where the tool is located (it should have the same name as this repository.) Then, run Server.py using "python Server.py" or other Python execution method.
+Open the webpage on http://127.0.0.1:5000/ in your preferred browser.
 
 ## File structure:
 root:
