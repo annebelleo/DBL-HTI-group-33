@@ -27,8 +27,6 @@ def draw_transition_graph(user_name, name_map):
     if user_name != "ALL":
         data = data[data['user'] == user_name]
         
-    data = data.sort_values(['user','Timestamp'], ascending = [1,1]).reset_index()
-
     if data.size != 0:
 
         # create empty matrix
