@@ -5,10 +5,10 @@ from bokeh.embed import components
 from bokeh.models import HoverTool, BoxZoomTool, ResetTool, TapTool, BoxSelectTool, PointDrawTool, \
     SaveTool
 from bokeh.models.graphs import from_networkx
+from bokeh.models import Arrow, VeeHead, Circle
 from bokeh.plotting import figure
-from bokeh.models import ImageURL
-from bokeh.models import Arrow, VeeHead
-from HelperFunctions import get_adjacency_matrix, find_AOIs
+from bokeh.palettes import Spectral4
+from HelperFunctions import get_adjacency_matrix, find_AOIs, get_cropped_image_AOI
 
 df_data = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding='latin1', sep='\t')
 
@@ -58,30 +58,25 @@ def draw_transition_graph(user_name, name_map):
         # convert networkx graph representation to bokeh graph renderer
         graph_renderer = from_networkx(G, pos, scale=2, center=(0, 0))
 
-        # show image when mouse hovers over node
-        TOOLTIPS = """
-        <div>
-            <div>
-                <img
-                    src="@imgs" height="100" alt="@imgs" width="100"
-                ></img>
-            </div>
-        </div>
-        """
 
         # define plot features
         plot = figure(title="Transition Graph Demonstration", x_range=(-1.1, 1.1), y_range=(-1.1, 1.1),
                       tools=[HoverTool(tooltips=[("AOI", "@index")]), BoxZoomTool(), ResetTool(),
                              TapTool(), BoxSelectTool(), PointDrawTool(), SaveTool()],
-                      tooltips=TOOLTIPS,
-                      toolbar_location="below", toolbar_sticky=False)
+                              toolbar_location="below", toolbar_sticky=False)
 
         # customise nodes with images
-        string_folder = 'static/stimuli/'
-        image_source = string_folder+name_map
+##        string_folder = 'static/stimuli/AOIs'
+##        image_source = string_folder+name_map
 
-        graph_renderer.node_renderer.glyph = ImageURL(url=[image_source], w=0.1, h=0.1)
-        graph_renderer.node_renderer.selection_glyph = ImageURL(url=[image_source], w=0.15, h=0.15)
+        img = get_cropped_image_AOI(data, 1, name_map)
+
+        graph_renderer.node_renderer.glyph = Circle(size=15, fill_color=Spectral4[0])
+        graph_renderer.node_renderer.selection_glyph = Circle(size=15, fill_color=Spectral4[2])
+        graph_renderer.node_renderer.hover_glyph = Circle(size=15, fill_color=Spectral4[1])
+
+##        graph_renderer.node_renderer.glyph = ImageURL(url=[image_source], w=0.1, h=0.1)
+##        graph_renderer.node_renderer.selection_glyph = ImageURL(url=[image_source], w=0.15, h=0.15)
         
         # draw an arrow for each edge
         for S, E, W in edge_list:
