@@ -44,7 +44,7 @@ def draw_gaze_stripes(user_name, name_map):
             gazestripe = get_cropped_images_gazestripe(ListUser[j], name_map)
             im = gazestripe.convert("RGBA")
             imarray = np.array(im)
-            #dw should be the amount of images of the gazestripe
+            np.flip(imarray)
             fig.image_rgba(image=[imarray], x=0, y=j, dw=amount_fixations[j], dh=0.9)
             
     else:
