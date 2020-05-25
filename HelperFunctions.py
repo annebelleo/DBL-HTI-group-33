@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from PIL import Image
+from PIL import Image, ImageOps
 import random
 
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
@@ -146,6 +146,8 @@ def get_cropped_images_gazestripe(user_name, name_map):
     string_folder = 'static/stimuli/'
     image_source = string_folder+name_map
     img = Image.open(image_source)
+    ImageOps.flip(img)
+    img.save("image_cropped_function.jpg")
     width, height = img.size
 
     list_fixations = get_array_fixations(user_name, name_map)
