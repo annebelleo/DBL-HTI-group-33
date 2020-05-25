@@ -60,8 +60,14 @@ def draw_heatmap(user_name: str, name_map: str):
     else:
         zi = gaussian_filter(zi_old,sigma=2.5)
 
+    max_matrix = 0
+
+    for x in range(len(zi)):
+        for y in range(len(zi[0])):
+            max_matrix = max(max_matrix, zi[x][y])
+
     #define a mapper that can assign colors from a certain palette to a range of integers
-    mapper = LinearColorMapper(palette="Turbo256", low=0, high=max(Z_dat)+50)
+    mapper = LinearColorMapper(palette="Turbo256", low=0, high=max_matrix)
 
     #Tools and tooltips that define the extra interactions
     TOOLS="hover,wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"
@@ -90,3 +96,5 @@ def draw_heatmap(user_name: str, name_map: str):
 
     script, div = components(p)
     return [script, div]
+
+draw_heatmap('p23', '04_Köln_S2.jpg')
