@@ -53,6 +53,9 @@ def draw_heatmap(user_name, name_map):
     p = figure(plot_width=int(x_dim/1.8), plot_height=int(y_dim/1.8),x_range=[0, x_dim],
                y_range=[0, y_dim], tools=TOOLS, tooltips=TOOLTIPS,
                title='Heatmap ' + user_name + " map " + name_map)
+
+    p.xaxis.visible = False
+    p.yaxis.visible = False
     
     color_bar = ColorBar(color_mapper=mapper, formatter=PrintfTickFormatter(),
                          location=(0,0),background_fill_alpha=0.5)
