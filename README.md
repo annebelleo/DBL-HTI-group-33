@@ -14,8 +14,7 @@ files with "bokeh": The visualization methods that utilize the Bokeh library, ma
 
 **Templates:** Here are the HTML pages stored that can be used by the flask server.  
 `home.html`: Homepage of the website.  
-`help.html`: Page containing usage instructions for the web interface of the tool.  
-`vis5_result.html`: This is the page we show the user when they want to use a visualization method.
+`help.html`: Page containing usage instructions for the web interface of the tool. 
 
 **Static:** this is where the CSS & images are stored that can be used by the server.  
 `stimuli`: all the subway maps provided by the course  
