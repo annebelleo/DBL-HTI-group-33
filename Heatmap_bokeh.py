@@ -29,7 +29,7 @@ def draw_heatmap(user_name: str, name_map: str):
     Y_dat = get_y_fixation(user_name, name_map)
     Z_dat = get_duration_fixation(user_name, name_map)
     if X_dat == []:
-            return ["No user data found",""]
+            return ["<B>No user data found</B>", ""]
     #import the image the user has chosen
     string_folder = 'static/stimuli/'
     image_source = string_folder+name_map

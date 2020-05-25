@@ -49,6 +49,8 @@ def draw_gaze_stripes(user_name, name_map):
             
     else:
         images, amount_images = get_cropped_images(user_name, name_map)
+        if amount_images == 0:
+            return ["<B>No user data found</B>", ""]
         fig = figure(plot_width=75*amount_images, plot_height=75, x_range=(0,amount_images),
                      y_range=(0,1), x_axis_label = "Time (order of fixations)",
                      y_axis_label = "User", title = 'Gaze stripes user '+ user_name + ' map ' + name_map,
