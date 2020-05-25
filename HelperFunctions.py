@@ -222,3 +222,35 @@ def get_adjacency_matrix(data, num_AOIs):
 		else:i+=1
 
 	return grid
+
+def get_cropped_image_AOI(data, AOI, name_map):
+    data = data[data["AOI"] == AOI]
+    
+    string_folder = 'static/stimuli/'
+    image_source = string_folder+name_map
+    im = plt.imread(image_source)
+    img = Image.fromarray(im)
+    width, height = img.size
+    img.save("image.jpg")
+    
+    minX = data["MappedFixationPointX"].min()
+    maxX = data["MappedFixationPointX"].max()
+    minY = data["MappedFixationPointY"].min()
+    maxY = data["MappedFixationPointY"].max()
+    
+    diffX = maxX - minX
+    diffY = maxY - minY
+    
+    img_size = 200
+    
+    midX = minX + (diffX/2)
+    midY = minY + (diffY/2)
+    
+    x = minX + (diffX/2) - (img_size/2)
+    y = minY + (diffY/2) - (img_size/2)
+    w = x + img_size
+    h = y + img_size
+    
+    area = (x, y, w, h)
+    cropped_img = img.crop(area)
+    return cropped_img
