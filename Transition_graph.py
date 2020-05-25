@@ -83,6 +83,7 @@ def draw_transition_graph(user_name, name_map):
             plot.add_layout(Arrow(end=VeeHead(line_color="firebrick", line_width=W['weight']),
                                   x_start=pos[S][0], y_start=pos[S][1], x_end=pos[E][0], y_end=pos[E][1]))
 
+        plot.axis.visible = False
         plot.renderers.append(graph_renderer) # append graph renderer to the plot
 
         # display graph on web page
