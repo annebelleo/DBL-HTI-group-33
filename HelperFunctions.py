@@ -181,7 +181,7 @@ def find_AOIs(map_name, num_AOIs):
     df_map = get_data_map(map_name)
     df_fixation = df_map[['FixationDuration', 'Timestamp', 'user', 'StimuliName',]]
     num_clusters = math.ceil(num_AOIs*1.5)
-    X_km = FindClusters(map_name, num_clusters)
+    X_km = findClusters(map_name, num_clusters)
     df_clusters = X_km.join(df_fixation)
 	
     grouped_cluster = df_clusters.groupby('cluster')
