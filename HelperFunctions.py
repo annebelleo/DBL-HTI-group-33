@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+from PIL import Image
 import random
 
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
@@ -121,3 +123,21 @@ def random_color() -> list:
     g = random.randrange(0, 255, 16)
     b = random.randrange(0, 255, 16)
     return r, g, b
+
+def get_cropped_images(user_name, name_map):
+    string_folder = 'static/stimuli/'
+    image_source = string_folder+name_map
+    im = plt.imread(image_source)
+    img = Image.fromarray(im)
+    width, height = img.size
+
+    images=[]
+    for i in get_array_fixations(user_name, name_map):
+        x = i[0]-100
+        y = i[1]-100
+        w = i[0]+100
+        h = i[1]+100
+        area = (x, y, width, height)
+        cropped_img = img.crop(area)
+        images.append(cropped_img)
+    return images, len(images)

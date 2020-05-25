@@ -17,11 +17,11 @@ df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
 
 def draw_heatmap(user_name, name_map):
-    X_dat=get_x_fixation(user_name, name_map)
-    Y_dat=get_y_fixation(user_name, name_map)
-    Z_dat=get_duration_fixation(user_name,name_map)
+    X_dat = get_x_fixation(user_name, name_map)
+    Y_dat = get_y_fixation(user_name, name_map)
+    Z_dat = get_duration_fixation(user_name, name_map)
 
-    string_folder='static/stimuli/'
+    string_folder = 'static/stimuli/'
     image_source = string_folder+name_map
     img = plt.imread(image_source)
     im = Image.fromarray(img)

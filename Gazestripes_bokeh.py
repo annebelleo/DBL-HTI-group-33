@@ -7,29 +7,10 @@ from bokeh.embed import components
 from bokeh.models.tickers import FixedTicker
 
 # 'library' created by the team to help with he processing of the data
-from HelperFunctions import get_data_map, get_array_fixations
+from HelperFunctions import get_data_map, get_array_fixations, get_cropped_images
 
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
-
-
-def get_cropped_images(user_name, name_map):
-    string_folder='static/stimuli/'
-    image_source = string_folder+name_map
-    im = plt.imread(image_source)
-    img = Image.fromarray(im)
-    width, height = img.size
-
-    images=[]
-    for i in get_array_fixations(user_name, name_map):
-        x = i[0]-100
-        y = i[1]-100
-        w = i[0]+100
-        h = i[1]+100
-        area = (x, y, width, height)
-        cropped_img = img.crop(area)
-        images.append(cropped_img)
-    return images, len(images)
 
 def draw_gaze_stripes(user_name, name_map):
     TOOLS = "hover,wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, session
 import pandas as pd
 
-# Visualation methods.
+# visualization methods.
 from Gazeplot_bokeh import draw_gazeplot
 from Heatmap_bokeh import draw_heatmap
 from Transition_graph import draw_transition_graph
@@ -10,7 +10,7 @@ from Gazestripes_bokeh import draw_gaze_stripes
 # 'library' created by the team to help with he processing of the data
 from HelperFunctions import drop_down_info
 
-# Initlize the flask server and the encryption key for session data.
+# Initialize the flask server and the encryption key for session data.
 app = Flask(__name__)
 app.secret_key = "pPAQaAI4lte5d8Hwci1i"
 
@@ -18,7 +18,7 @@ app.secret_key = "pPAQaAI4lte5d8Hwci1i"
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
-# The visualzation methodes we support in this app.
+# The visualization methods we support in this app.
 LIST_VIS_ID = ["Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes"]
 
 
@@ -50,8 +50,7 @@ def home():
 
         return render_template("home.html", session=session, LISTS=lists, Graph=Graph)
     else:
-        return render_template("home.html", session=[]
-                               , LISTS=lists)
+        return render_template("home.html", session=[], LISTS=lists)
 
 
 @app.route("/help/")
