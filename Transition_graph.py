@@ -65,12 +65,7 @@ def draw_transition_graph(user_name, name_map):
                              TapTool(), BoxSelectTool(), PointDrawTool(), SaveTool()],
                               toolbar_location="below", toolbar_sticky=False)
 
-        # customise nodes with images
-##        string_folder = 'static/stimuli/AOIs'
-##        image_source = string_folder+name_map
-
-        img = get_cropped_image_AOI(data, 1, name_map)
-
+        # customise nodes
         graph_renderer.node_renderer.glyph = Circle(size=15, fill_color=Spectral4[0])
         graph_renderer.node_renderer.selection_glyph = Circle(size=15, fill_color=Spectral4[2])
         graph_renderer.node_renderer.hover_glyph = Circle(size=15, fill_color=Spectral4[1])

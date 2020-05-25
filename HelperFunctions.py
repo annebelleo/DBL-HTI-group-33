@@ -231,8 +231,7 @@ def get_cropped_image_AOI(data, AOI, name_map):
     im = plt.imread(image_source)
     img = Image.fromarray(im)
     width, height = img.size
-    img.save("image.jpg")
-    
+
     minX = data["MappedFixationPointX"].min()
     maxX = data["MappedFixationPointX"].max()
     minY = data["MappedFixationPointY"].min()
