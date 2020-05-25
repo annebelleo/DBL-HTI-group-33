@@ -17,7 +17,7 @@ FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
 def draw_heatmap(user_name, name_map):
-    ListUser = get_data_map.user.unique()
+    ListUser = get_data_map(name_map).user.unique()
     
     X_dat = get_x_fixation(user_name, name_map)
     Y_dat = get_y_fixation(user_name, name_map)
@@ -44,10 +44,11 @@ def draw_heatmap(user_name, name_map):
         for y in range(len(zi_old[0])):
             if np.isnan(zi_old[x][y]):
                 zi_old[x][y] = 0
-            else:
-                zi_old[x][y]=zi_old[x][y]/len(ListUser)
 
-    zi = gaussian_filter(zi_old,sigma=1)
+    if user_name == 'ALL':
+        zi = gaussian_filter(zi_old,sigma=1)
+    else:
+        zi = gaussian_filter(zi_old,sigma=2.5)
 
     mapper = LinearColorMapper(palette="Turbo256", low=0, high=max(Z_dat)+50)
     
