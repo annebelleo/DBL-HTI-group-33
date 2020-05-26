@@ -16,7 +16,7 @@ from HelperFunctions import get_x_fixation, get_y_fixation, get_duration_fixatio
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
-def draw_heatmap(user_name: str, name_map: str):
+def draw_heatmap(user_name: str, name_map: str, multiple = False):
     """
     This function creates a heatmap, based on the input data, from either one or all users and from one map.
     :param user_name:
@@ -97,7 +97,8 @@ def draw_heatmap(user_name: str, name_map: str):
     p.image_url([image_source], 0, y_dim, x_dim, y_dim)
     p.image(image=[zi], x=0, y=0, dw=x_dim, dh=y_dim, color_mapper=mapper, global_alpha=0.7)
 
-    script, div = components(p)
-    return [script, div]
-
-draw_heatmap('p23', '04_Köln_S2.jpg')
+    if not multiple:
+        script, div = components(p)
+        return [script, div]
+    else:
+        return p
