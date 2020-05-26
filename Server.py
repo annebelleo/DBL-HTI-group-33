@@ -6,6 +6,7 @@ from Gazeplot_bokeh import draw_gazeplot
 from Heatmap_bokeh import draw_heatmap
 from Transition_graph import draw_transition_graph
 from Gazestripes_bokeh import draw_gaze_stripes
+from AllPlots_bokeh import draw_all_plots
 
 # 'library' created by the team to help with he processing of the data
 from HelperFunctions import drop_down_info
@@ -19,7 +20,7 @@ FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
 # The visualization methods we support in this app.
-LIST_VIS_ID = ["Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes"]
+LIST_VIS_ID = ["Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes", "All tools"]
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -48,6 +49,9 @@ def home():
         elif session["VisID"] == "Gaze Stripes":
             Graph = draw_gaze_stripes(session["UserID"], session["MapID"])
 
+        elif session["VisID"] == "All tools":
+            Graph = draw_all_plots(session["UserID"], session["MapID"])
+
         return render_template("home.html", session=session, LISTS=lists, Graph=Graph)
     else:
         return render_template("home.html", session=[], LISTS=lists)
@@ -62,4 +66,4 @@ def help():
     return render_template("help.html")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
