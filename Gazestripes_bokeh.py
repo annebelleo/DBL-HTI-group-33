@@ -12,7 +12,7 @@ from HelperFunctions import get_data_map, get_array_fixations, get_cropped_image
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
-def draw_gaze_stripes(user_name, name_map):
+def draw_gaze_stripes(user_name: str, name_map: str, multiple = False):
     TOOLS = "hover,wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"
 
     if user_name == 'ALL':
@@ -49,9 +49,11 @@ def draw_gaze_stripes(user_name, name_map):
             
     else:
         images, amount_images = get_cropped_images(user_name, name_map)
+        
         if amount_images == 0:
-            return ["<B>No user data found</B>", ""]
-        fig = figure(plot_width=75*amount_images, plot_height=75, x_range=(0,amount_images),
+            return ["No user data found",""]
+        
+        fig = figure(plot_width=150*amount_images, plot_height=150, x_range=(0,amount_images),
                      y_range=(0,1), x_axis_label = "Time (order of fixations)",
                      y_axis_label = "User", title = 'Gaze stripes user '+ user_name + ' map ' + name_map,
                      tools=TOOLS)
@@ -60,5 +62,8 @@ def draw_gaze_stripes(user_name, name_map):
             imarray = np.array(im)
             fig.image_rgba(image=[imarray], x=i, y=0, dw=1, dh=1)
             
-    script, div = components(fig)
-    return [script, div]
+    if not multiple:
+        script, div = components(fig)
+        return [script, div]
+    else:
+        return fig

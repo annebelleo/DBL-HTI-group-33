@@ -9,7 +9,6 @@ from sklearn.cluster import KMeans
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
-
 def drop_down_info(vis_methode: list, df: pd.DataFrame = df_data) -> list:
     """
     Gives all items to de displayed on the dropdown menus.
@@ -167,7 +166,7 @@ def get_cropped_images_gazestripe(user_name, name_map):
     return images
 
 # Returns dataframe with coordinates put in clusters
-def FindClusters(map_name, num_clusters):
+def findClusters(map_name, num_clusters):
 	
     df = get_data_map(map_name)
     X_km = df[['MappedFixationPointX', 'MappedFixationPointY']].copy()
@@ -177,12 +176,12 @@ def FindClusters(map_name, num_clusters):
     return X_km   
 
 # Returns dataframe with column identifying specific AOI for each fixation 
-def Find_AOIs(map_name, num_AOIs):
+def find_AOIs(map_name, num_AOIs):
 
     df_map = get_data_map(map_name)
-    df_fixation = df_map[['FixationDuration', 'Timestamp', 'user']]
+    df_fixation = df_map[['FixationDuration', 'Timestamp', 'user', 'StimuliName',]]
     num_clusters = math.ceil(num_AOIs*1.5)
-    X_km = FindClusters(map_name, num_clusters)
+    X_km = findClusters(map_name, num_clusters)
     df_clusters = X_km.join(df_fixation)
 	
     grouped_cluster = df_clusters.groupby('cluster')
@@ -200,10 +199,9 @@ def Find_AOIs(map_name, num_AOIs):
     return df_AOI
 
 # Returns adjacency matrix representing frequencies of shifts in AOIs 
-def get_adjacency_matrix(map_name, num_AOIs):
-	
-	df_AOI = Find_AOIs(map_name, num_AOIs)
-	groupuser = df_AOI.sort_values(['user','Timestamp'], ascending = [1,1]).reset_index()
+def get_adjacency_matrix(data, num_AOIs):
+
+	data = data.sort_values(['user','Timestamp'], ascending = [1,1]).reset_index()
 	
 	#Initializing the matrix
 	gridline = []
@@ -214,13 +212,43 @@ def get_adjacency_matrix(map_name, num_AOIs):
 		grid.append(list(gridline))
 
 	#Calculating number of transitions between AOIs and adding them to matrix
-	for i in range (len(groupuser) - 1):
-		current_AOI = groupuser.loc[i,'AOI']
-		next_AOI = groupuser.loc[i+1,'AOI']
-		if groupuser.loc[i,'user'] == groupuser.loc[i+1,'user']:
+	for i in range (len(data) - 1):
+		current_AOI = data.loc[i,'AOI']
+		next_AOI = data.loc[i+1,'AOI']
+		if data.loc[i,'user'] == data.loc[i+1,'user']:
 			if current_AOI != next_AOI:
 				grid[current_AOI][next_AOI] += 1
 			else: i+=1
 		else:i+=1
 
 	return grid
+
+def get_cropped_image_AOI(data, AOI, name_map):
+    data = data[data["AOI"] == AOI]
+    
+    string_folder = 'static/stimuli/'
+    image_source = string_folder+name_map
+    im = plt.imread(image_source)
+    img = Image.fromarray(im)
+
+    minX = data["MappedFixationPointX"].min()
+    maxX = data["MappedFixationPointX"].max()
+    minY = data["MappedFixationPointY"].min()
+    maxY = data["MappedFixationPointY"].max()
+    
+    diffX = maxX - minX
+    diffY = maxY - minY
+    
+    img_size = 200
+    
+    midX = minX + (diffX/2)
+    midY = minY + (diffY/2)
+    
+    x = minX + (diffX/2) - (img_size/2)
+    y = minY + (diffY/2) - (img_size/2)
+    w = x + img_size
+    h = y + img_size
+    
+    area = (x, y, w, h)
+    cropped_img = img.crop(area)
+    return cropped_img

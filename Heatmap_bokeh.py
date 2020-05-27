@@ -16,7 +16,7 @@ from HelperFunctions import get_x_fixation, get_y_fixation, get_duration_fixatio
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
-def draw_heatmap(user_name: str, name_map: str):
+def draw_heatmap(user_name: str, name_map: str, multiple = False):
     """
     This function creates a heatmap, based on the input data, from either one or all users and from one map.
     :param user_name:
@@ -28,8 +28,11 @@ def draw_heatmap(user_name: str, name_map: str):
     X_dat = get_x_fixation(user_name, name_map)
     Y_dat = get_y_fixation(user_name, name_map)
     Z_dat = get_duration_fixation(user_name, name_map)
+
+    #if there is no data from the user of that map, return a message informing the user    
     if X_dat == []:
-            return ["<B>No user data found</B>", ""]
+            return ["No user data found",""]
+
     #import the image the user has chosen
     string_folder = 'static/stimuli/'
     image_source = string_folder+name_map
@@ -60,8 +63,14 @@ def draw_heatmap(user_name: str, name_map: str):
     else:
         zi = gaussian_filter(zi_old,sigma=2.5)
 
+    max_matrix = 0
+
+    for x in range(len(zi)):
+        for y in range(len(zi[0])):
+            max_matrix = max(max_matrix, zi[x][y])
+
     #define a mapper that can assign colors from a certain palette to a range of integers
-    mapper = LinearColorMapper(palette="Turbo256", low=0, high=max(Z_dat)+50)
+    mapper = LinearColorMapper(palette="Turbo256", low=0, high=max_matrix)
 
     #Tools and tooltips that define the extra interactions
     TOOLS="hover,wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"
@@ -88,5 +97,8 @@ def draw_heatmap(user_name: str, name_map: str):
     p.image_url([image_source], 0, y_dim, x_dim, y_dim)
     p.image(image=[zi], x=0, y=0, dw=x_dim, dh=y_dim, color_mapper=mapper, global_alpha=0.7)
 
-    script, div = components(p)
-    return [script, div]
+    if not multiple:
+        script, div = components(p)
+        return [script, div]
+    else:
+        return p

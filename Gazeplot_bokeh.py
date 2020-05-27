@@ -14,7 +14,7 @@ df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
 ListUser = df_data.user.unique()
 
-def draw_gazeplot(user_name: str, name_map: str):
+def draw_gazeplot(user_name: str, name_map: str, multiple = False):
     """
     Draw a gazeplot using the given data and parameters
     :param user_name:
@@ -79,5 +79,8 @@ def draw_gazeplot(user_name: str, name_map: str):
         label = LabelSet(x='x_cor', y='y_cor', text='index', source=source, text_color='black', render_mode='canvas')
         ax.add_layout(label)
 
-    script, div = components(ax)
-    return [script, div]
+    if not multiple:
+        script, div = components(ax)
+        return [script, div]
+    else:
+        return ax
