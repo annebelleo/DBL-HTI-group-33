@@ -21,6 +21,19 @@ def drop_down_info(vis_methode: list, df: pd.DataFrame = df_data) -> list:
     all_users = np.insert(all_users, 0, "ALL")
     return [all_users, all_maps, vis_methode]
 
+def get_data_user_all_maps(user_name: str, df: pd.DataFrame = df_data) -> pd.DataFrame:
+    """
+    When given a pd.dataframe it will return all rows were the user_name & map_name match.
+    :param user_name: expected to be a sting string
+    :param map_name: expected to be a sting string
+    :param df: pd.dataframe to filter
+    :return: pd.dataframe
+    """
+    if user_name == 'ALL':
+        user_data = df
+    else:
+        user_data = df.loc[df['user'] == user_name]
+    return user_data
 
 def get_data_user(user_name: str, map_name: str, df: pd.DataFrame = df_data) -> pd.DataFrame:
     """
@@ -148,7 +161,6 @@ def get_cropped_images_gazestripe(user_name, name_map):
     image_source = string_folder+name_map
     img = Image.open(image_source)
     ImageOps.flip(img)
-    img.save("image_cropped_function.jpg")
     width, height = img.size
 
     list_fixations = get_array_fixations(user_name, name_map)
