@@ -19,25 +19,44 @@
 				    <H1>Eye Movement Visualization Tool</H1>
             <a href="{{url_for('help')}}">Help</a><p>
             <form action="" method="post">
+              <p>
+               <label>
+                 <input onclick="hide()" class="with-gap" name="group1" type="radio" checked  />
+                 <span>Use sample data</span>
+               </label>
+             </p>
+             <p>
+              <label>
+                <input onclick="display()" class="with-gap" name="group1" type="radio" />
+                <span>Upload data</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <span id="submit-1" style="display: none;">Dataset:</span>
+                <input type="file" id="submit-2" name="filename" style="display: none;">
+              </label>
+            </p>
+              <input type="submit" id="submit-3" style="display: none;" />
               <label>Map</label>
                <div class="input-field col s12 m4">
                <select class="browser-default" name="MapID">
 
                  {% if session %}
-                        {% for Item in LISTS[1] %}
+                    {% for Item in LISTS[1] %}
                         {% if Item ==  session["MapID"]%}
                             <option value= "{{Item}}" selected>{{Item}}</option>"
                         {% else %}
                             <option value= "{{Item}}">{{Item}}</option>"
                         {% endif %}
-                        {% endfor %}
+                    {% endfor %}
 
-                    {% else %}
+                {% else %}
                         <option value="" disabled selected>Choose your option</option>
                         {% for Item in LISTS[1] %}
                             <option value= "{{Item}}">{{Item}}</option>"
                         {% endfor %}
-                    {% endif %}
+                {% endif %}
                </select>
              </div>
 
@@ -99,10 +118,18 @@
                 </footer>
               </div>
                 <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                  var elems = document.querySelectorAll('select');
-                  var instances = M.FormSelect.init(elems, options);
-                });
+                // document.addEventListener('DOMContentLoaded', function() {
+                //   var elems = document.querySelectorAll('select');
+                //   var instances = M.FormSelect.init(elems, options);
+                // });
+                function display() {
+                  document.getElementById("submit-1").style.display = "initial"
+                  document.getElementById("submit-2").style.display = "initial"
+                }
+                function hide() {
+                  document.getElementById("submit-1").style.display = "none"
+                  document.getElementById("submit-2").style.display = "none"
+                }
               </script>
         </body>
 </html>

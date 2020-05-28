@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 import pandas as pd
 
 # visualization methods.
@@ -23,6 +23,22 @@ df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 # The visualization methods we support in this app.
 LIST_VIS_ID = ["Data table", "Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes", "All tools"]
 
+@app.route("/upload-image", methods=["GET", "POST"])
+def upload_image():
+
+    if request.method == "POST":
+
+        if request.files:
+
+            image = request.files["filename"]
+            app.logger.info('testing info log')
+
+            print(image)
+
+            return redirect(request.url)
+
+
+    return render_template("home.html")
 
 @app.route("/", methods=["POST", "GET"])
 def home():
@@ -70,4 +86,4 @@ def help():
     return render_template("help.html")
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
