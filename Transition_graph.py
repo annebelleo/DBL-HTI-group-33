@@ -18,26 +18,26 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
 
     # read in user input of desired top AOI's to be displayed in transition graph
     num_AOIs = 5 # num_AOIs is defined for now
-    
-    # run AOI algorithm  
+
+    # run AOI algorithm
     df_AOI = find_AOIs(name_map, num_AOIs)
 
-    # filter out all data that belongs to the chosen user(s) 
+    # filter out all data that belongs to the chosen user(s)
     data = df_AOI[df_AOI['StimuliName'] == name_map]
     if user_name != "ALL":
         data = data[data['user'] == user_name]
-        
+
     if data.size == 0:
         return ["No user data found",""]
 
     # create empty matrix
     dimension = num_AOIs + 1 # dimensions are +1 in size, so AOIs correspond with index
-    A = np.zeros(shape=(dimension, dimension))  
-        
+    A = np.zeros(shape=(dimension, dimension))
+
     # create adjacency matrix by finding out frequencies of shifts between AOI's over the data
     A = np.matrix(get_adjacency_matrix(data, num_AOIs))
 
-    # convert matrix to representation of graph    
+    # convert matrix to representation of graph
     G = nx.from_numpy_matrix(np.matrix(A), create_using=nx.DiGraph)
 
     # remove nodes without neigbours, including node 0
@@ -64,7 +64,7 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
     plot = figure(title="Transition Graph Demonstration", x_range=(-1.1, 1.1), y_range=(-1.1, 1.1),
                       tools=[HoverTool(tooltips=[("AOI", "@index")]), BoxZoomTool(), ResetTool(),
                              TapTool(), BoxSelectTool(), PointDrawTool(), SaveTool()],
-                              toolbar_location="below", toolbar_sticky=False)
+                              toolbar_location="below", toolbar_sticky=False, sizing_mode='scale_both')
 
     # customise nodes
     graph_renderer.node_renderer.glyph = Circle(size=15, fill_color=Spectral4[0])
@@ -73,7 +73,7 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
 
 ##        graph_renderer.node_renderer.glyph = ImageURL(url=[image_source], w=0.1, h=0.1)
 ##        graph_renderer.node_renderer.selection_glyph = ImageURL(url=[image_source], w=0.15, h=0.15)
-        
+
     # draw an arrow for each edge
     for S, E, W in edge_list:
         plot.add_layout(Arrow(end=VeeHead(line_color="firebrick", line_width=W['weight']),

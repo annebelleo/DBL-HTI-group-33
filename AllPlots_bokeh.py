@@ -1,6 +1,7 @@
 # import libraries
 import pandas as pd
 import matplotlib.pyplot as plt
+import gc
 from PIL import Image
 from bokeh.models import LabelSet
 from bokeh.plotting import ColumnDataSource, figure, show
@@ -15,6 +16,7 @@ from Transition_graph import draw_transition_graph
 from Gazestripes_bokeh import draw_gaze_stripes
 
 def draw_all_plots(user_name: str, name_map: str):
+    gc.collect()
     X_dat = get_x_fixation(user_name, name_map)
     if X_dat == []:
             return ["No user data found",""]
@@ -24,11 +26,8 @@ def draw_all_plots(user_name: str, name_map: str):
         transition = draw_transition_graph(user_name, name_map, True)
         gazestripes = draw_gaze_stripes(user_name, name_map, True)
 
-        gazeplot.plot_width=20
-        gazeplot.plot_height=20
-        
-
         grid = gridplot([gazeplot,heatmap,transition,gazestripes], ncols=1)
-        
+        print('works')
+
         script, div = components(grid)
         return [script, div]

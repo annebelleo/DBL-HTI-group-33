@@ -39,10 +39,10 @@ def draw_gazeplot(user_name: str, name_map: str, multiple = False):
     ]
 
     #create a figure, in which the gazeplot is plotted
-    ax = figure(tools=TOOLS, frame_width=int(x_dim / 1.8), frame_height=int(y_dim / 1.8),
+    ax = figure(tools=TOOLS, plot_width=int(x_dim / 1.5), plot_height=int(y_dim / 1.5),
                 x_range=[0, x_dim], y_range=[y_dim, 0],
                 x_axis_location=None, y_axis_location=None,
-                title="Gazeplot user " + user_name, tooltips=TOOLTIPS)
+                tooltips=TOOLTIPS, sizing_mode='scale_both')
 
     #add the image to the figure
     ax.image_url([image_source], 0, 0, x_dim, y_dim)
@@ -63,14 +63,14 @@ def draw_gazeplot(user_name: str, name_map: str, multiple = False):
                 ax.circle('x_cor', 'y_cor', color=random_color(), size='fix_time_scaled', source=source, alpha=0.6)
 
     else:
-            
+
         #make a source file based on the data from the user
         fixation_array = get_array_fixations(user_name, name_map)
         df = pd.DataFrame(fixation_array, columns=['x_cor', 'y_cor', 'fix_time'])
         df['fix_time_scaled'] = df['fix_time'] / 12
         df['user'] = user_name
         source = ColumnDataSource(df)
-        
+
         # draw the saccades
         ax.line('x_cor', 'y_cor', color='black', source=source, alpha=1)
 

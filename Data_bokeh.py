@@ -30,8 +30,8 @@ def draw_dataframe(user_name, name_map, sortby = ['StimuliName'], ascending=Fals
         TableColumn(field="user", title="Participant"),
         TableColumn(field="description", title="description"),
     ]
-    
-    data_table = DataTable(source=source, columns=columns, width = 750, height=1500)
+
+    data_table = DataTable(source=source, columns=columns)
 
     script, div = components(data_table)
     return [script, div]
