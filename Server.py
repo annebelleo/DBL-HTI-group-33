@@ -6,6 +6,7 @@ from Gazeplot_bokeh import draw_gazeplot
 from Heatmap_bokeh import draw_heatmap
 from Transition_graph import draw_transition_graph
 from Gazestripes_bokeh import draw_gaze_stripes
+from AOI_rivers_bokeh import draw_AOI_rivers
 from AllPlots_bokeh import draw_all_plots
 from Data_bokeh import draw_dataframe
 
@@ -21,7 +22,7 @@ FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
 # The visualization methods we support in this app.
-LIST_VIS_ID = ["Data table", "Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes", "All tools"]
+LIST_VIS_ID = ["Data table", "Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes", "AOI Rivers", "All tools"]
 
 @app.route("/upload-image", methods=["GET", "POST"])
 def upload_image():
@@ -68,6 +69,9 @@ def home():
 
         elif session["VisID"] == "Gaze Stripes":
             Graph = draw_gaze_stripes(session["UserID"], session["MapID"])
+        
+        elif session["VisID"] == "AOI Rivers":
+            Graph = draw_AOI_rivers(session["UserID"], session["MapID"], 7)    
 
         elif session["VisID"] == "All tools":
             Graph = draw_all_plots(session["UserID"], session["MapID"])
