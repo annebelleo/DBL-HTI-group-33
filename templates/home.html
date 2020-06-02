@@ -1,108 +1,154 @@
 <html>
-        <head>
-            <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js"
-        crossorigin="anonymous"></script>
-            <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.0.2.min.js"
-        crossorigin="anonymous"></script>
-            <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.0.2.min.js"
-        crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-        <title>Eye Movement Visualization Tool</title>
-        </head>
 
-        <body>
-          <div class="container">
-                <header>
+<head>
+  <style class="bk" type="text/css">
 
-                </header>
-				    <H1>Eye Movement Visualization Tool</H1>
-            <a href="{{url_for('help')}}">Help</a><p>
-            <form action="" method="post">
-              <label>Map</label>
-               <div class="input-field col s12 m4">
-               <select class="browser-default" name="MapID">
+  </style>
+  <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.0.2.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.0.2.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <title>Eye Movement Visualization Tool</title>
+</head>
 
-                 {% if session %}
-                        {% for Item in LISTS[1] %}
-                        {% if Item ==  session["MapID"]%}
-                            <option value= "{{Item}}" selected>{{Item}}</option>"
-                        {% else %}
-                            <option value= "{{Item}}">{{Item}}</option>"
-                        {% endif %}
-                        {% endfor %}
+<body>
+  <div class="container">
+    <header style="margin: 0 0 20px 0; background-color: #a6ffbe; border-radius: 10px">
+      <h1 align="center">Eye Movement Visualization Tool</h1>
+      <div class="links" align="center">
+        <a href="{{url_for('help')}}">Help</a>
+      </div>
+    </header>
+    <div style="display: flex;">
+      <div class="column" style="display: flex; float:left; width: 35%; background-color: #fff6b5; border-radius: 8px; padding: 10px;
+      justify-content: center;
+      align-items: center;">
+        <form action="" method="post">
+          <p>
+            <label>
+              <input onclick="hide()" class="with-gap" name="group1" type="radio" checked />
+              <span>Use sample data</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input onclick="display()" class="with-gap" name="group1" type="radio" />
+              <span>Upload data</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <span id="submit-1" style="display: none;">Dataset:</span>
+              <input type="file" id="submit-2" name="filename" style="display: none;" accept=".csv, .xml">
+            </label>
+          </p>
+          <p>
+            <label>
+              <span id="submit-3" style="display: none;">Stimuli:</span>
+              <input type="file" id="submit-4" name="filename" style="display: none;">
+            </label>
+          </p>
+          <label>Map</label>
+          <div class="input-field col s12 m4">
+            <select class="browser-default" name="MapID">
 
-                    {% else %}
-                        <option value="" disabled selected>Choose your option</option>
-                        {% for Item in LISTS[1] %}
-                            <option value= "{{Item}}">{{Item}}</option>"
-                        {% endfor %}
-                    {% endif %}
-               </select>
-             </div>
+              {% if session %}
+              {% for Item in LISTS[1] %}
+              {% if Item ==  session["MapID"]%}
+              <option value="{{Item}}" selected>{{Item}}</option>"
+              {% else %}
+              <option value="{{Item}}">{{Item}}</option>"
+              {% endif %}
+              {% endfor %}
 
+              {% else %}
+              <option value="" disabled selected>Choose your option</option>
+              {% for Item in LISTS[1] %}
+              <option value="{{Item}}">{{Item}}</option>"
+              {% endfor %}
+              {% endif %}
+            </select>
+          </div>
 
-              <label>User</label>
-              <div class="input-field col s12 m4">
-               <select class="browser-default" name="UserID">
+          <label>User</label>
+          <div class="input-field col s12 m4">
+            <select class="browser-default" name="UserID">
 
-                 {% if session %}
-                        {% for Item in LISTS[0] %}
-                        {% if Item ==  session["UserID"]%}
-                            <option value= "{{Item}}" selected>{{Item}}</option>"
-                        {% else %}
-                            <option value= "{{Item}}">{{Item}}</option>"
-                        {% endif %}
-                        {% endfor %}
+              {% if session %}
+              {% for Item in LISTS[0] %}
+              {% if Item ==  session["UserID"]%}
+              <option value="{{Item}}" selected>{{Item}}</option>"
+              {% else %}
+              <option value="{{Item}}">{{Item}}</option>"
+              {% endif %}
+              {% endfor %}
 
-                    {% else %}
-                        <option value="" disabled selected>Choose your option</option>
-                        {% for Item in LISTS[0] %}
-                            <option value= "{{Item}}">{{Item}}</option>"
-                        {% endfor %}
-                    {% endif %}
-               </select>
-             </div>
+              {% else %}
+              <option value="" disabled selected>Choose your option</option>
+              {% for Item in LISTS[0] %}
+              <option value="{{Item}}">{{Item}}</option>"
+              {% endfor %}
+              {% endif %}
+            </select>
+          </div>
 
-             <label>Visualization</label>
-               <div class="input-field col s12 m4">
-               <select class="browser-default" name="VisID">
-                    {% if session %}
-                        {% for Item in LISTS[2] %}
-                        {% if Item ==  session["VisID"]%}
-                            <option value= "{{Item}}" selected>{{Item}}</option>"
-                        {% else %}
-                            <option value= "{{Item}}">{{Item}}</option>"
-                        {% endif %}
-                        {% endfor %}
+          <label>Visualization</label>
+          <div class="input-field col s12 m4">
+            <select class="browser-default" name="VisID">
+              {% if session %}
+              {% for Item in LISTS[2] %}
+              {% if Item ==  session["VisID"]%}
+              <option value="{{Item}}" selected>{{Item}}</option>"
+              {% else %}
+              <option value="{{Item}}">{{Item}}</option>"
+              {% endif %}
+              {% endfor %}
 
-                    {% else %}
-                        <option value="" disabled selected>Choose your option</option>
-                        {% for Item in LISTS[2] %}
-                            <option value= "{{Item}}">{{Item}}</option>"
-                        {% endfor %}
-                    {% endif %}
+              {% else %}
+              <option value="" disabled selected>Choose your option</option>
+              {% for Item in LISTS[2] %}
+              <option value="{{Item}}">{{Item}}</option>"
+              {% endfor %}
+              {% endif %}
+            </select>
+          </div>
+          <input type="submit" value="submit" />
+      </div>
+      </form>
+      <div id="right" class="column" style="display: flex; float: right; width: 65%; text-align:center; justify-content: center;
+      align-items: center;">
 
+        {% if session %}
+        {{ Graph[0] | safe }} {{ Graph[1] | safe  }}
+        {% endif %}
+        <p id="output" style="display:inline-block"></p>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(document).ready(function() {
+      console.log("ready!");
+    });
+    // document.addEventListener('DOMContentLoaded', function() {
+    //   var elems = document.querySelectorAll('select');
+    //   var instances = M.FormSelect.init(elems, options);
+    // });
+    function display() {
+      document.getElementById("submit-1").style.display = "initial"
+      document.getElementById("submit-2").style.display = "initial"
+      document.getElementById("submit-3").style.display = "initial"
+      document.getElementById("submit-4").style.display = "initial"
+    }
 
-               </select>
-             </div>
-                <input type="submit" value="submit"/>
+    function hide() {
+      document.getElementById("submit-1").style.display = "none"
+      document.getElementById("submit-2").style.display = "none"
+      document.getElementById("submit-3").style.display = "none"
+      document.getElementById("submit-4").style.display = "none"
+    }
+  </script>
+</body>
 
-              </form>
-                {% if session %}
-                {{ Graph[0]|safe}}{{ Graph[1]|safe}}
-                {% endif %}
-
-                </main>
-
-                <footer>
-                </footer>
-              </div>
-                <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                  var elems = document.querySelectorAll('select');
-                  var instances = M.FormSelect.init(elems, options);
-                });
-              </script>
-        </body>
 </html>

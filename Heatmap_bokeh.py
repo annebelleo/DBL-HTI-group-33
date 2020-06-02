@@ -23,13 +23,13 @@ def draw_heatmap(user_name: str, name_map: str, multiple = False):
     :param name_map:
     :return:
     """
-    
+
     #separately get the data from the fixation coordinates and duration
     X_dat = get_x_fixation(user_name, name_map)
     Y_dat = get_y_fixation(user_name, name_map)
     Z_dat = get_duration_fixation(user_name, name_map)
 
-    #if there is no data from the user of that map, return a message informing the user    
+    #if there is no data from the user of that map, return a message informing the user
     if X_dat == []:
             return ["No user data found",""]
 
@@ -81,7 +81,7 @@ def draw_heatmap(user_name: str, name_map: str, multiple = False):
     #create a figure in which the heatmap can be displayed
     p = figure(plot_width=int(x_dim/1.8), plot_height=int(y_dim/1.8),x_range=[0, x_dim],
                y_range=[0, y_dim], tools=TOOLS, tooltips=TOOLTIPS,
-               title='Heatmap ' + user_name + " map " + name_map)
+               sizing_mode='scale_both')
     p.xaxis.visible = False
     p.yaxis.visible = False
     p.grid.grid_line_width = 0
@@ -89,7 +89,7 @@ def draw_heatmap(user_name: str, name_map: str, multiple = False):
     #add a color bar which shows the user which color is mapped to which fixation duration
     color_bar = ColorBar(color_mapper=mapper, formatter=PrintfTickFormatter(),
                          location=(0,0),background_fill_alpha=0.5)
-    
+
     p.add_layout(color_bar, 'right')
 
 

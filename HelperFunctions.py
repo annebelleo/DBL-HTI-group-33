@@ -8,6 +8,8 @@ from sklearn.cluster import KMeans
 
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
+dict = {'KÃ¶ln':'Köln', 'BrÃ¼ssel':'Brüssel', 'DÃ¼sseldorf': 'Düsseldorf', 'GÃ¶teborg' : 'Göteborg', 'ZÃ¼rich': 'Zürich' }
+df_data.replace(dict, regex=True, inplace=True)
 
 def drop_down_info(vis_methode: list, df: pd.DataFrame = df_data) -> list:
     """
@@ -21,6 +23,19 @@ def drop_down_info(vis_methode: list, df: pd.DataFrame = df_data) -> list:
     all_users = np.insert(all_users, 0, "ALL")
     return [all_users, all_maps, vis_methode]
 
+def get_data_user_all_maps(user_name: str, df: pd.DataFrame = df_data) -> pd.DataFrame:
+    """
+    When given a pd.dataframe it will return all rows were the user_name & map_name match.
+    :param user_name: expected to be a sting string
+    :param map_name: expected to be a sting string
+    :param df: pd.dataframe to filter
+    :return: pd.dataframe
+    """
+    if user_name == 'ALL':
+        user_data = df
+    else:
+        user_data = df.loc[df['user'] == user_name]
+    return user_data
 
 def get_data_user(user_name: str, map_name: str, df: pd.DataFrame = df_data) -> pd.DataFrame:
     """
@@ -148,7 +163,6 @@ def get_cropped_images_gazestripe(user_name, name_map):
     image_source = string_folder+name_map
     img = Image.open(image_source)
     ImageOps.flip(img)
-    img.save("image_cropped_function.jpg")
     width, height = img.size
 
     list_fixations = get_array_fixations(user_name, name_map)
@@ -252,3 +266,78 @@ def get_cropped_image_AOI(data, AOI, name_map):
     area = (x, y, w, h)
     cropped_img = img.crop(area)
     return cropped_img
+    
+def normalize_time(map_name, num_AOIs):
+    
+    df_AOI = find_AOIs(map_name, num_AOIs)
+    df_AOI =df_AOI.sort_values('Timestamp')
+    users = df_AOI['user'].unique()
+    df_AOI = df_AOI[['Timestamp', 'FixationDuration', 'user', 'AOI']]
+    grouped_user = df_AOI.groupby('user')
+
+    df_norm = pd.DataFrame(columns = ['Time', 'user', 'AOI'])
+    
+    for i in range (len(users)):
+        df_temp = grouped_user.get_group(users[i]).reset_index().drop('index', 1)
+        initial_time_in = df_temp.loc[0, 'Timestamp']
+        initial_time_out = df_temp.loc[0, 'Timestamp'] + df_temp.loc[0, 'FixationDuration']
+        total_time = df_temp['FixationDuration'].sum()
+        
+        for j in range (len(df_temp)):
+            current_time = df_temp.loc[j, 'Timestamp']
+            AOI = df_temp.loc[j, 'AOI']
+            fix_time = df_temp.loc[j, 'FixationDuration']
+            time_in = int(1000*((current_time - initial_time_in)/total_time))
+            time_out = int(1000*((current_time + fix_time - initial_time_out)/total_time))
+            df_norm = df_norm.append({'Time': time_in,'user': users[i],'AOI': AOI}, ignore_index=True)
+            df_norm = df_norm.append({'Time': time_out,'user': users[i],'AOI': AOI}, ignore_index=True)
+            
+            df_norm = df_norm.sort_values('Time').reset_index().drop('index', 1)
+            
+    return df_norm  
+
+def aggregate_time(map_name, num_AOIs):
+    
+    df_norm = normalize_time(map_name, num_AOIs) 
+    df = pd.DataFrame(df_norm['Time'])
+    
+    for i in range (1, num_AOIs + 1):
+        df[i] = 0
+        
+    for i in range(len(df)):
+        AOI = df_norm.loc[i, 'AOI']
+        df.loc[i, AOI] = 1
+        
+    for i in range (1,num_AOIs + 1):
+        df = df.rename(columns={i:'AOI_{0}'.format(i)})
+        
+    step = 50
+    max = df_norm['Time'].max()
+    min = df_norm['Time'].min()
+    s = math.ceil((max-min)/step)
+    df_agg = pd.DataFrame(columns = df.columns.to_list())
+    df_agg.loc[0,'Time'] = 0
+    
+    for i in range(1,s+1):
+        df_agg.loc[i, 'Time'] = df_agg.loc[i-1, 'Time'] + step
+    
+    df_agg['Time']=df_agg[['Time']].astype(int)    
+    count = 0
+    i=0
+    
+    while i < ((len(df_norm)) - 1):
+        norm = df_agg.loc[count, 'Time']
+        time = df_norm.loc[i, 'Time']
+        prev = i
+        while (norm >= time) and (i < (len(df_norm)) - 1):
+            i = i+1
+            norm = df_agg.loc[count, 'Time']
+            time = df_norm.loc[i, 'Time']
+        for j in range (1, num_AOIs + 1):
+            df_temp = df.loc[prev:i, 'AOI_{0}'.format(j)].to_frame()
+            df_agg.loc[count, 'AOI_{0}'.format(j)] = df_temp.sum()[0]
+        count+=1 
+        
+    df_agg.drop(df_agg[df_agg['Time'] > 1000].index,inplace=True)     
+        
+    return df_agg    
