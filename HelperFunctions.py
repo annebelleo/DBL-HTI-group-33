@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from PIL import Image, ImageOps
 import random
 import math
+from bokeh.plotting import ColumnDataSource
 from sklearn.cluster import KMeans
 
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
@@ -22,6 +23,12 @@ def drop_down_info(vis_methode: list, df: pd.DataFrame = df_data) -> list:
     all_users = np.sort(df.user.unique())
     all_users = np.insert(all_users, 0, "ALL")
     return [all_users, all_maps, vis_methode]
+
+def get_source(user_name: str, name_map: str, df: pd.DataFrame = df_data) -> ColumnDataSource:
+    df = get_data_user(user_name, name_map)
+    df['fix_time_scaled'] = df['FixationDuration']/12
+    source = ColumnDataSource(df)
+    return source
 
 def get_data_user_all_maps(user_name: str, df: pd.DataFrame = df_data) -> pd.DataFrame:
     """
@@ -340,4 +347,4 @@ def aggregate_time(map_name, num_AOIs):
         
     df_agg.drop(df_agg[df_agg['Time'] > 1000].index,inplace=True)     
         
-    return df_agg    
+    return df_agg
