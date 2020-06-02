@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import re
 import matplotlib.pyplot as plt
 from PIL import Image, ImageOps
 import random
@@ -12,6 +13,9 @@ df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 dict = {'KÃ¶ln':'Köln', 'BrÃ¼ssel':'Brüssel', 'DÃ¼sseldorf': 'Düsseldorf', 'GÃ¶teborg' : 'Göteborg', 'ZÃ¼rich': 'Zürich' }
 df_data.replace(dict, regex=True, inplace=True)
 
+def natural_key(string_):
+    return [int(s) if s.isdigit() else s for s in re.split(r'(\d+)', string_)]
+
 def drop_down_info(vis_methode: list, df: pd.DataFrame = df_data) -> list:
     """
     Gives all items to de displayed on the dropdown menus.
@@ -21,6 +25,8 @@ def drop_down_info(vis_methode: list, df: pd.DataFrame = df_data) -> list:
     """
     all_maps = np.sort(df.StimuliName.unique())
     all_users = np.sort(df.user.unique())
+    if type(all_users[0]) is str:
+        all_users = sorted(all_users, key = natural_key)
     all_users = np.insert(all_users, 0, "ALL")
     return [all_users, all_maps, vis_methode]
 
