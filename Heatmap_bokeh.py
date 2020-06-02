@@ -10,7 +10,7 @@ from bokeh.embed import components
 from bokeh.models import ColorBar, LinearColorMapper
 
 # 'library' created by the team to help with he processing of the data
-from HelperFunctions import get_x_fixation, get_y_fixation, get_duration_fixation, get_data_map
+from HelperFunctions import get_x_fixation, get_source, get_y_fixation, get_duration_fixation, get_data_map
 
 
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
@@ -23,6 +23,7 @@ def draw_heatmap(user_name: str, name_map: str, multiple = False):
     :param name_map:
     :return:
     """
+    source=get_source(user_name, name_map)
 
     #separately get the data from the fixation coordinates and duration
     X_dat = get_x_fixation(user_name, name_map)
@@ -75,7 +76,7 @@ def draw_heatmap(user_name: str, name_map: str, multiple = False):
     #Tools and tooltips that define the extra interactions
     TOOLS="hover,wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"
     TOOLTIPS = [
-    ("(x,y)", "($x, $y)")
+    ("(x,y)", "(@MappedFixationPointX, @MappedFixationPointY)")
     ]
 
     #create a figure in which the heatmap can be displayed

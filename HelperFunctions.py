@@ -1,15 +1,20 @@
 import pandas as pd
 import numpy as np
+import re
 import matplotlib.pyplot as plt
 from PIL import Image, ImageOps
 import random
 import math
+from bokeh.plotting import ColumnDataSource
 from sklearn.cluster import KMeans
 
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 dict = {'KÃ¶ln':'Köln', 'BrÃ¼ssel':'Brüssel', 'DÃ¼sseldorf': 'Düsseldorf', 'GÃ¶teborg' : 'Göteborg', 'ZÃ¼rich': 'Zürich' }
 df_data.replace(dict, regex=True, inplace=True)
+
+def natural_key(string_):
+    return [int(s) if s.isdigit() else s for s in re.split(r'(\d+)', string_)]
 
 def drop_down_info(vis_methode: list, df: pd.DataFrame = df_data) -> list:
     """
@@ -20,8 +25,16 @@ def drop_down_info(vis_methode: list, df: pd.DataFrame = df_data) -> list:
     """
     all_maps = np.sort(df.StimuliName.unique())
     all_users = np.sort(df.user.unique())
+    if type(all_users[0]) is str:
+        all_users = sorted(all_users, key = natural_key)
     all_users = np.insert(all_users, 0, "ALL")
     return [all_users, all_maps, vis_methode]
+
+def get_source(user_name: str, name_map: str, df: pd.DataFrame = df_data) -> ColumnDataSource:
+    df = get_data_user(user_name, name_map)
+    df['fix_time_scaled'] = df['FixationDuration']/12
+    source = ColumnDataSource(df)
+    return source
 
 def get_data_user_all_maps(user_name: str, df: pd.DataFrame = df_data) -> pd.DataFrame:
     """
@@ -29,7 +42,7 @@ def get_data_user_all_maps(user_name: str, df: pd.DataFrame = df_data) -> pd.Dat
     :param user_name: expected to be a sting string
     :param map_name: expected to be a sting string
     :param df: pd.dataframe to filter
-    :return: pd.dataframe
+    :return: pd.dataframegit
     """
     if user_name == 'ALL':
         user_data = df
@@ -340,4 +353,4 @@ def aggregate_time(map_name, num_AOIs):
         
     df_agg.drop(df_agg[df_agg['Time'] > 1000].index,inplace=True)     
         
-    return df_agg    
+    return df_agg
