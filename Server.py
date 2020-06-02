@@ -32,15 +32,18 @@ def home():
 
     :return: The web page to be renderd.
     """
-    if session['dataset'] and session['stimuli']:
-        df_data = pd.read_csv(session['dataset'], encoding='latin1', delim_whitespace=True)
-    lists = drop_down_info(LIST_VIS_ID, df_data)
+    # if dataset_file and stimuli_file:
+    #     print("yes")
+    #     df_uploaded_data = pd.read_csv(dataset_file, encoding='latin1', delim_whitespace=True)
+    #     dropdown = drop_down_info(LIST_VIS_ID, df_uploaded_data)
+    # else:
+    #     lists = drop_down_info(LIST_VIS_ID, df_data)
     if request.method == "POST":
         for ID in ["MapID", "UserID", "VisID"]:
             if request.form[ID]:
                 session[ID] = request.form[ID]
             else:
-                return render_template("home.html", session=[], LISTS=lists)
+                # return render_template("home.html", session=[], LISTS=dropdown)
 
         if session["VisID"] == "Gazeplot":
             Graph = draw_gazeplot(session["UserID"], session["MapID"])
@@ -56,16 +59,16 @@ def home():
 
         elif session["VisID"] == "Gaze Stripes":
             Graph = draw_gaze_stripes(session["UserID"], session["MapID"])
-        
+
         elif session["VisID"] == "AOI Rivers":
-            Graph = draw_AOI_rivers(session["UserID"], session["MapID"], 7)    
+            Graph = draw_AOI_rivers(session["UserID"], session["MapID"], 7)
 
         elif session["VisID"] == "All tools":
             Graph = draw_all_plots(session["UserID"], session["MapID"])
 
-        return render_template("home.html", session=session, LISTS=lists, Graph=Graph)
+        # return render_template("home.html", session=session, LISTS=dropdown, Graph=Graph)
     else:
-        return render_template("home.html", session=[], LISTS=lists)
+        # return render_template("home.html", session=[], LISTS=dropdown)
 
 
 @app.route("/help/")
@@ -87,8 +90,8 @@ def upload():
         # print(type(dataset_file))
         stimuli_file = request.files["stimuli"]
         if dataset_file and stimuli_file:
-            session['dataset'] = dataset_file.read()
-            session['stimuli'] = stimuli_file.read()
+            # dataset_file.read()
+            # stimuli_file.read()
             return redirect("/")
     return render_template("upload.html")
 
