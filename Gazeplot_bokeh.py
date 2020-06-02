@@ -75,11 +75,8 @@ def draw_gazeplot(user_name: str, name_map: str, multiple = False):
         label = LabelSet(x='MappedFixationPointX', y='MappedFixationPointY', text='index', source=new_source, text_color='black', render_mode='canvas')
         ax.add_layout(label)
 
-    show(ax)
     if not multiple:
         script, div = components(ax)
         return [script, div]
     else:
         return ax
-
-draw_gazeplot('ALL', '01_Antwerpen_S1.jpg')

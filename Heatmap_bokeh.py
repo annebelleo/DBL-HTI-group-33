@@ -96,13 +96,10 @@ def draw_heatmap(user_name: str, name_map: str, multiple = False):
 
     #map the original map and the data grid using the color mapper, turning it into a heatmap
     p.image_url([image_source], 0, y_dim, x_dim, y_dim)
-    p.image(image=[zi], x=0, y=0, dw=x_dim, dh=y_dim, color_mapper=mapper, source=source, global_alpha=0.7)
+    p.image(image=[zi], x=0, y=0, dw=x_dim, dh=y_dim, color_mapper=mapper, global_alpha=0.7)
 
-    show(p)
     if not multiple:
         script, div = components(p)
         return [script, div]
     else:
         return p
-
-draw_heatmap('p1', '01_Antwerpen_S1.jpg')

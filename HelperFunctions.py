@@ -36,7 +36,7 @@ def get_data_user_all_maps(user_name: str, df: pd.DataFrame = df_data) -> pd.Dat
     :param user_name: expected to be a sting string
     :param map_name: expected to be a sting string
     :param df: pd.dataframe to filter
-    :return: pd.dataframe
+    :return: pd.dataframegit
     """
     if user_name == 'ALL':
         user_data = df
