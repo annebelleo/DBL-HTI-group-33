@@ -1,9 +1,6 @@
 <html>
 
 <head>
-  <style class="bk" type="text/css">
-
-  </style>
   <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.0.2.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.0.2.min.js" crossorigin="anonymous"></script>
@@ -23,33 +20,16 @@
     </header>
     <div style="display: flex;">
       <div class="column" style="display: flex; float:left; width: 35%; background-color: #fff6b5; border-radius: 8px; padding: 10px;
-      justify-content: center;
       align-items: center;">
-        <form action="" method="post">
+        <form action="" method="post" style="display: initial">
           <p>
             <label>
               <input onclick="hide()" class="with-gap" name="group1" type="radio" checked />
               <span>Use sample data</span>
             </label>
           </p>
-          <p>
-            <label>
-              <input onclick="display()" class="with-gap" name="group1" type="radio" />
-              <span>Upload data</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <span id="submit-1" style="display: none;">Dataset:</span>
-              <input type="file" id="submit-2" name="filename" style="display: none;" accept=".csv, .xml">
-            </label>
-          </p>
-          <p>
-            <label>
-              <span id="submit-3" style="display: none;">Stimuli:</span>
-              <input type="file" id="submit-4" name="filename" style="display: none;">
-            </label>
-          </p>
+          <a href="{{url_for('upload')}}">Upload data</a>
+          <br>
           <label>Map</label>
           <div class="input-field col s12 m4">
             <select class="browser-default" name="MapID">

@@ -23,29 +23,14 @@ df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 # The visualization methods we support in this app.
 LIST_VIS_ID = ["Data table", "Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes", "All tools"]
 
-@app.route("/upload-image", methods=["GET", "POST"])
-def upload_image():
-
-    if request.method == "POST":
-
-        if request.files:
-
-            image = request.files["filename"]
-            app.logger.info('testing info log')
-
-            print(image)
-
-            return redirect(request.url)
-
-
-    return render_template("home.html")
-
 @app.route("/", methods=["POST", "GET"])
 def home():
     """
 
     :return: The web page to be renderd.
     """
+    if session['dataset'] and session['stimuli']:
+        df_data = pd.read_csv(session['dataset'], encoding='latin1', delim_whitespace=True)
     lists = drop_down_info(LIST_VIS_ID, df_data)
     if request.method == "POST":
         for ID in ["MapID", "UserID", "VisID"]:
@@ -84,6 +69,22 @@ def help():
     :return: The web page to be renderd.
     """
     return render_template("help.html")
+
+@app.route("/upload/", methods=["POST", "GET"])
+def upload():
+    """
+
+    :return: The web page to be renderd.
+    """
+    if request.method == "POST":
+        dataset_file = request.files["dataset"]
+        # print(type(dataset_file))
+        stimuli_file = request.files["stimuli"]
+        if dataset_file and stimuli_file:
+            session['dataset'] = dataset_file.read()
+            session['stimuli'] = stimuli_file.read()
+            return redirect("/")
+    return render_template("upload.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
