@@ -20,6 +20,8 @@ app.secret_key = "pPAQaAI4lte5d8Hwci1i"
 # Read the Fixation data, This should become a non static part of the code.
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
+dict = {'KÃ¶ln':'Köln', 'BrÃ¼ssel':'Brüssel', 'DÃ¼sseldorf': 'Düsseldorf', 'GÃ¶teborg' : 'Göteborg', 'ZÃ¼rich': 'Zürich' }
+df_data.replace(dict, regex=True, inplace=True)
 
 # The visualization methods we support in this app.
 LIST_VIS_ID = ["Data table", "Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes", "AOI Rivers", "All tools"]
