@@ -95,6 +95,13 @@
               {% endif %}
             </select>
           </div>
+          
+          <label>Number of AOIs</label>
+		      <div class="input-field col s12 m4">
+			      <input type="range" name="AOInum" min="3" max="20" onchange="updateTextInput(this.value);">
+			      <input type="text" id="textInput" value="">
+		      </div>
+          
           <input type="submit" value="submit" />
       </div>
       </form>
@@ -128,6 +135,10 @@
       document.getElementById("submit-2").style.display = "none"
       document.getElementById("submit-3").style.display = "none"
       document.getElementById("submit-4").style.display = "none"
+    }
+    
+    function updateTextInput(val) {
+          document.getElementById('textInput').value=val; 
     }
   </script>
 </body>
