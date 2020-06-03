@@ -39,7 +39,7 @@ def home():
     # else:
     #     lists = drop_down_info(LIST_VIS_ID, df_data)
     if request.method == "POST":
-        for ID in ["MapID", "UserID", "VisID"]:
+        for ID in ["MapID", "UserID", "VisID", "AOInum"]:
             if request.form[ID]:
                 session[ID] = request.form[ID]
             else:
@@ -61,7 +61,7 @@ def home():
             Graph = draw_gaze_stripes(session["UserID"], session["MapID"])
 
         elif session["VisID"] == "AOI Rivers":
-            Graph = draw_AOI_rivers(session["UserID"], session["MapID"], 7)
+            Graph = draw_AOI_rivers(session["UserID"], session["MapID"], session["AOInum"])
 
         elif session["VisID"] == "All tools":
             Graph = draw_all_plots(session["UserID"], session["MapID"])
