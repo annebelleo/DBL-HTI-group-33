@@ -28,7 +28,10 @@ def drop_down_info(vis_methode: list, df: pd.DataFrame = df_data) -> list:
     if type(all_users[0]) is str:
         all_users = sorted(all_users, key = natural_key)
     all_users = np.insert(all_users, 0, "ALL")
-    return [all_users, all_maps, vis_methode]
+    max_AOI = 20
+    all_AOIs = list(range(1,max_AOI+1))
+    
+    return [all_users, all_maps, vis_methode, all_AOIs]
 
 def get_source(user_name: str, name_map: str, df: pd.DataFrame = df_data) -> ColumnDataSource:
     df = get_data_user(user_name, name_map)
