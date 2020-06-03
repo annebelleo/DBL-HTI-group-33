@@ -37,13 +37,13 @@ def home():
     #     df_uploaded_data = pd.read_csv(dataset_file, encoding='latin1', delim_whitespace=True)
     #     dropdown = drop_down_info(LIST_VIS_ID, df_uploaded_data)
     # else:
-    #     lists = drop_down_info(LIST_VIS_ID, df_data)
+    dropdown = drop_down_info(LIST_VIS_ID, df_data)
     if request.method == "POST":
         for ID in ["MapID", "UserID", "VisID"]:
             if request.form[ID]:
                 session[ID] = request.form[ID]
             else:
-                # return render_template("home.html", session=[], LISTS=dropdown)
+                return render_template("home.html", session=[], LISTS=dropdown)
 
         if session["VisID"] == "Gazeplot":
             Graph = draw_gazeplot(session["UserID"], session["MapID"])
@@ -66,9 +66,9 @@ def home():
         elif session["VisID"] == "All tools":
             Graph = draw_all_plots(session["UserID"], session["MapID"])
 
-        # return render_template("home.html", session=session, LISTS=dropdown, Graph=Graph)
+        return render_template("home.html", session=session, LISTS=dropdown, Graph=Graph)
     else:
-        # return render_template("home.html", session=[], LISTS=dropdown)
+        return render_template("home.html", session=[], LISTS=dropdown)
 
 
 @app.route("/help/")
