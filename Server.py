@@ -43,7 +43,7 @@ def home():
             if request.form[ID]:
                 session[ID] = request.form[ID]
             else:
-                # return render_template("home.html", session=[], LISTS=dropdown)
+                return render_template("home.html", session=[], LISTS=dropdown)
 
         if session["VisID"] == "Gazeplot":
             Graph = draw_gazeplot(session["UserID"], session["MapID"])
@@ -66,9 +66,9 @@ def home():
         elif session["VisID"] == "All tools":
             Graph = draw_all_plots(session["UserID"], session["MapID"])
 
-        # return render_template("home.html", session=session, LISTS=dropdown, Graph=Graph)
+        return render_template("home.html", session=session, LISTS=dropdown, Graph=Graph)
     else:
-        # return render_template("home.html", session=[], LISTS=dropdown)
+        return render_template("home.html", session=[], LISTS=dropdown)
 
 
 @app.route("/help/")
@@ -96,4 +96,4 @@ def upload():
     return render_template("upload.html")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
