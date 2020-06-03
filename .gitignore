@@ -2,8 +2,10 @@
 .idea/DBL-HTI-group-33.iml
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/misc.xml
+TEMP/
 .idea/modules.xml
 .idea/vcs.xml
 __pycache__/
+TEMP/
 TransitionGraph.png
 .idea/other.xml

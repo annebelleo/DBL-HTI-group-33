@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, flash, render_template, request, session, redirect
+from werkzeug.utils import secure_filename
+import os
 import pandas as pd
 
 # visualization methods.
@@ -14,7 +16,9 @@ from Data_bokeh import draw_dataframe
 from HelperFunctions import drop_down_info
 
 # Initialize the flask server and the encryption key for session data.
+UPLOAD_FOLDER = '/TEMP'
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = "pPAQaAI4lte5d8Hwci1i"
 
 # Read the Fixation data, This should become a non static part of the code.
@@ -37,7 +41,11 @@ def home():
     #     df_uploaded_data = pd.read_csv(dataset_file, encoding='latin1', delim_whitespace=True)
     #     dropdown = drop_down_info(LIST_VIS_ID, df_uploaded_data)
     # else:
-    dropdown = drop_down_info(LIST_VIS_ID, df_data)
+    if session["dataset"]:
+        data = pd.read_csv(session["dataset"], encoding='latin1', delim_whitespace=True)
+        dropdown = drop_down_info(LIST_VIS_ID, data)
+    else:
+        dropdown = drop_down_info(LIST_VIS_ID, df_data)
     if request.method == "POST":
         for ID in ["MapID", "UserID", "VisID", "AOInum"]:
             if request.form[ID]:
@@ -86,14 +94,23 @@ def upload():
     :return: The web page to be renderd.
     """
     if request.method == "POST":
-        dataset_file = request.files["dataset"]
-        # print(type(dataset_file))
-        stimuli_file = request.files["stimuli"]
-        if dataset_file and stimuli_file:
-            # dataset_file.read()
-            # stimuli_file.read()
+        # check if the post request has the file part
+        if 'dataset' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['dataset']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file:
+            filename = "TEMP/"+secure_filename(file.filename)
+            file.save(filename)
+            session["dataset"] = filename
             return redirect("/")
+
     return render_template("upload.html")
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
