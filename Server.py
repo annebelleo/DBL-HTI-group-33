@@ -41,10 +41,11 @@ def home():
     #     df_uploaded_data = pd.read_csv(dataset_file, encoding='latin1', delim_whitespace=True)
     #     dropdown = drop_down_info(LIST_VIS_ID, df_uploaded_data)
     # else:
-    if session["dataset"]:
-        data = pd.read_csv(session["dataset"], encoding='latin1', delim_whitespace=True)
-        dropdown = drop_down_info(LIST_VIS_ID, data)
-    else:
+    try:
+        if session["dataset"]:
+            data = pd.read_csv(session["dataset"], encoding='latin1', delim_whitespace=True)
+            dropdown = drop_down_info(LIST_VIS_ID, data)
+    except:
         dropdown = drop_down_info(LIST_VIS_ID, df_data)
     if request.method == "POST":
         for ID in ["MapID", "UserID", "VisID", "AOInum"]:
