@@ -95,21 +95,23 @@
               {% endif %}
             </select>
           </div>
-          
+
           <label>Number of AOIs</label>
 		      <div class="input-field col s12 m4">
 			      <input type="range" name="AOInum" min="3" max="20" onchange="updateTextInput(this.value);">
 			      <input type="text" id="textInput" value="">
 		      </div>
-          
+
           <input type="submit" value="submit" />
       </div>
       </form>
       <div id="right" class="column" style="display: flex; float: right; width: 65%; text-align:center; justify-content: center;
       align-items: center;">
 
-        {% if session %}
+        {% if Graph %}
         {{ Graph[0] | safe }} {{ Graph[1] | safe  }}
+        {% else %}
+        {{text}}
         {% endif %}
         <p id="output" style="display:inline-block"></p>
       </div>
@@ -136,9 +138,9 @@
       document.getElementById("submit-3").style.display = "none"
       document.getElementById("submit-4").style.display = "none"
     }
-    
+
     function updateTextInput(val) {
-          document.getElementById('textInput').value=val; 
+          document.getElementById('textInput').value=val;
     }
   </script>
 </body>

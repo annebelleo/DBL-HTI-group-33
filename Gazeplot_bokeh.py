@@ -40,7 +40,6 @@ def draw_gazeplot(user_name: str, name_map: str, multiple = False):
         ("user", "@user")
     ]
 
- 
     #create a figure, in which the gazeplot is plotted
     ax = figure(tools=TOOLS, plot_width=int(x_dim / 1.5), plot_height=int(y_dim / 1.5),
                 x_range=[0, x_dim], y_range=[y_dim, 0],
@@ -50,6 +49,11 @@ def draw_gazeplot(user_name: str, name_map: str, multiple = False):
     #add the image to the figure
     ax.image_url([image_source], 0, 0, x_dim, y_dim)
 
+    #define if there is data for the user and map
+    output_info = df_data.loc[(df_data['user'] == user_name) & (df_data['StimuliName'] == name_map), 'MappedFixationPointX']
+    if output_info.empty:
+        return ("There is no data available for this user and map.")
+
     #define if all users are selected or only one
     if user_name == 'ALL':
         view1=CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map)])
@@ -57,13 +61,13 @@ def draw_gazeplot(user_name: str, name_map: str, multiple = False):
         for i in ListUser:
             if i != 'ALL':
                 view2=CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map),GroupFilter(column_name='user', group=str(i))])
-                
+
                 #plot the saccades and fixations based on the source file of that user
                 ax.circle('MappedFixationPointX', 'MappedFixationPointY', color=random_color(), size='fix_time_scaled', source=source, view=view2, alpha=0.6)
 
     else:
         view3 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map),GroupFilter(column_name='user', group=user_name)])
-        
+
         # draw the saccades
         ax.line('MappedFixationPointX', 'MappedFixationPointY', color='black', source=source, view=view3, alpha=1)
 

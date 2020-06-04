@@ -55,7 +55,11 @@ def home():
                 return render_template("home.html", session=[], LISTS=dropdown)
 
         if session["VisID"] == "Gazeplot":
-            Graph = draw_gazeplot(session["UserID"], session["MapID"])
+            if isinstance(draw_gazeplot(session["UserID"], session["MapID"]), str):
+                Graph = False
+                output_graph = "There is no data available for this user and map."
+            else:
+                Graph = draw_gazeplot(session["UserID"], session["MapID"])
 
         elif session["VisID"] == "Data table":
             Graph = draw_dataframe(session["UserID"], session["MapID"])
@@ -74,8 +78,10 @@ def home():
 
         elif session["VisID"] == "All tools":
             Graph = draw_all_plots(session["UserID"], session["MapID"])
-
-        return render_template("home.html", session=session, LISTS=dropdown, Graph=Graph)
+        if Graph == False:
+            return render_template("home.html", text=output_graph, session=session, LISTS=dropdown, Graph=[])
+        else:
+            return render_template("home.html", session=session, LISTS=dropdown, Graph=Graph)
     else:
         return render_template("home.html", session=[], LISTS=dropdown)
 
