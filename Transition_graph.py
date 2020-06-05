@@ -4,8 +4,8 @@ import pandas as pd
 from bokeh.embed import components
 from bokeh.models import HoverTool, BoxZoomTool, ResetTool, TapTool, BoxSelectTool, PointDrawTool, \
     SaveTool
-from bokeh.models.graphs import from_networkx
-from bokeh.models import Arrow, VeeHead, Circle
+from bokeh.models.graphs import from_networkx, NodesAndLinkedEdges
+from bokeh.models import Arrow, VeeHead, Circle, MultiLine
 from bokeh.plotting import figure
 from bokeh.palettes import Spectral4
 from HelperFunctions import get_adjacency_matrix, find_AOIs, get_cropped_image_AOI
@@ -37,6 +37,10 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
     # create adjacency matrix by finding out frequencies of shifts between AOI's over the data
     A = np.matrix(get_adjacency_matrix(data, num_AOIs))
 
+    #scale matrix
+    if user_name !="ALL":
+        A = 5*A
+
     # convert matrix to representation of graph
     G = nx.from_numpy_matrix(np.matrix(A), create_using=nx.DiGraph)
 
@@ -59,7 +63,6 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
     # convert networkx graph representation to bokeh graph renderer
     graph_renderer = from_networkx(G, pos, scale=2, center=(0, 0))
 
-
     # define plot features
     plot = figure(title="Transition Graph Demonstration", x_range=(-1.1, 1.1), y_range=(-1.1, 1.1),
                       tools=[HoverTool(tooltips=[("AOI", "@index")]), BoxZoomTool(), ResetTool(),
@@ -67,16 +70,24 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
                               toolbar_location="below", toolbar_sticky=False, sizing_mode='scale_both')
 
     # customise nodes
-    graph_renderer.node_renderer.glyph = Circle(size=15, fill_color=Spectral4[0])
-    graph_renderer.node_renderer.selection_glyph = Circle(size=15, fill_color=Spectral4[2])
-    graph_renderer.node_renderer.hover_glyph = Circle(size=15, fill_color=Spectral4[1])
+    graph_renderer.node_renderer.glyph = Circle(size=40, fill_color=Spectral4[0])
+    graph_renderer.node_renderer.selection_glyph = Circle(size=40, fill_color=Spectral4[2])
+    graph_renderer.node_renderer.hover_glyph = Circle(size=40, fill_color=Spectral4[1])
 
-##        graph_renderer.node_renderer.glyph = ImageURL(url=[image_source], w=0.1, h=0.1)
-##        graph_renderer.node_renderer.selection_glyph = ImageURL(url=[image_source], w=0.15, h=0.15)
+    # customise edges
+    graph_renderer.edge_renderer.glyph = MultiLine(line_color="#CCCCCC", line_alpha=0.8, line_width=10)
+    graph_renderer.edge_renderer.selection_glyph = MultiLine(line_color=Spectral4[2], line_width=10)
+    graph_renderer.edge_renderer.hover_glyph = MultiLine(line_color=Spectral4[1], line_width=10)
+
+    # customise edge width
+    graph_renderer.edge_renderer.data_source.data["line_width"] = [G.get_edge_data(a,b)['weight'] for a, b in G.edges()]
+    graph_renderer.edge_renderer.glyph.line_width = {'field': 'line_width'}
+
+    graph_renderer.selection_policy = NodesAndLinkedEdges()
 
     # draw an arrow for each edge
     for S, E, W in edge_list:
-        plot.add_layout(Arrow(end=VeeHead(line_color="firebrick", line_width=W['weight']),
+        plot.add_layout(Arrow(line_alpha=0, end=VeeHead(fill_color = "#CCCCCC", line_color="#CCCCCC", line_width=W['weight']),
                                   x_start=pos[S][0], y_start=pos[S][1], x_end=pos[E][0], y_end=pos[E][1]))
 
     plot.axis.visible = False
