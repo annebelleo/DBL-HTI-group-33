@@ -47,13 +47,15 @@ def home():
             dropdown = drop_down_info(LIST_VIS_ID, data)
     except:
         dropdown = drop_down_info(LIST_VIS_ID, df_data)
+        
     if request.method == "POST":
         for ID in ["MapID", "UserID", "VisID", "AOInum"]:
             if request.form[ID]:
                 session[ID] = request.form[ID]
             else:
                 return render_template("home.html", session=[], LISTS=dropdown)
-
+        session["VisID"] = request.form.getlist('VisID') 
+        
         if session["VisID"] == "Gazeplot":
             if isinstance(draw_gazeplot(session["UserID"], session["MapID"]), str):
                 Graph = False
@@ -61,23 +63,8 @@ def home():
             else:
                 Graph = draw_gazeplot(session["UserID"], session["MapID"])
 
-        elif session["VisID"] == "Data table":
-            Graph = draw_dataframe(session["UserID"], session["MapID"])
-
-        elif session["VisID"] == "Heatmap":
-            Graph = draw_heatmap(session["UserID"], session["MapID"])
-
-        elif session["VisID"] == "Transition graph":
-            Graph = draw_transition_graph(session["UserID"], session["MapID"])
-
-        elif session["VisID"] == "Gaze Stripes":
-            Graph = draw_gaze_stripes(session["UserID"], session["MapID"])
-
-        elif session["VisID"] == "AOI Rivers":
-            Graph = draw_AOI_rivers(session["UserID"], session["MapID"], session["AOInum"])
-
-        elif session["VisID"] == "All tools":
-            Graph = draw_all_plots(session["UserID"], session["MapID"])
+        Graph = draw_all_plots(session["UserID"], session["MapID"], session["VisID"], session["AOInum"])
+    
         if Graph == False:
             return render_template("home.html", text=output_graph, session=session, LISTS=dropdown, Graph=[])
         else:
