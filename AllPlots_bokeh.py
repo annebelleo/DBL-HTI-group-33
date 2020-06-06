@@ -51,7 +51,7 @@ def draw_all_plots(user_name: str, name_map: str, check_vis, num_AOIs):
                     aoiriv = draw_AOI_rivers(user_name, name_map, num_AOIs, True)
                     vis.append(aoiriv)
                     
-        grid = gridplot(vis, ncols=1, plot_width=int(x_dim / 2), plot_height=int(y_dim / 2))
+        grid = gridplot(vis, ncols=1, plot_width=int(x_dim / 2.5), plot_height=int(y_dim / 2.5))
         print('works')
 
         script, div = components(grid)
