@@ -14,19 +14,44 @@ from Gazeplot_bokeh import draw_gazeplot
 from Heatmap_bokeh import draw_heatmap
 from Transition_graph import draw_transition_graph
 from Gazestripes_bokeh import draw_gaze_stripes
+from AOI_rivers_bokeh import draw_AOI_rivers
 
-def draw_all_plots(user_name: str, name_map: str):
+def draw_all_plots(user_name: str, name_map: str, check_vis, num_AOIs):
+    vis = []
     gc.collect()
     X_dat = get_x_fixation(user_name, name_map)
+    
+    string_folder = 'static/stimuli/'
+    image_source = string_folder + name_map
+    img = plt.imread(image_source)
+    im = Image.fromarray(img)
+    x_dim, y_dim = im.size
+    
     if X_dat == []:
             return ["No user data found",""]
     else:
-        gazeplot = draw_gazeplot(user_name, name_map, True)
-        heatmap = draw_heatmap(user_name, name_map, True)
-        transition = draw_transition_graph(user_name, name_map, True)
-        gazestripes = draw_gaze_stripes(user_name, name_map, True)
-
-        grid = gridplot([gazeplot,heatmap,transition,gazestripes], ncols=1)
+        if "Data Table" in check_vis:
+            return["Data Table can only be displayed as a standalone option", ""]
+        if "Gaze Plot" in check_vis:
+            gazeplot = draw_gazeplot(user_name, name_map, True)
+            vis.append(gazeplot)
+        if "Heatmap" in check_vis:
+            heatmap = draw_heatmap(user_name, name_map, True)
+            vis.append(heatmap)
+        if "Transition Graph" in check_vis: 
+            transition = draw_transition_graph(user_name, name_map, True)
+            vis.append(transition)
+        if "Gaze Stripes" in check_vis:    
+            gazestripes = draw_gaze_stripes(user_name, name_map, True)
+            vis.append(gazestripes)
+        if "AOI Rivers" in check_vis:
+                if user_name != "ALL":
+                    return ["AOI rivers only displays data for all users",""]
+                else: 
+                    aoiriv = draw_AOI_rivers(user_name, name_map, num_AOIs, True)
+                    vis.append(aoiriv)
+                    
+        grid = gridplot(vis, ncols=1, plot_width=int(x_dim / 2), plot_height=int(y_dim / 2))
         print('works')
 
         script, div = components(grid)
