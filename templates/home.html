@@ -69,25 +69,49 @@
           </div>
 
           <label>Visualization</label>
-           <div class="container">
-		 <input type="checkbox" id="Data Table" name="VisID" value="Data Table">
-		 <label for="Data Table">Data Table (standalone option only)</label><br>
-                 <input type="checkbox" id="Gaze Plot" name="VisID" value="Gaze Plot">
-		 <label for="Gaze Plot">Gaze Plot</label><br>
-         	 <input type="checkbox" id="Heatmap" name="VisID" value="Heatmap" >
-		 <label for="Heatmap">Heatmap</label><br>
-	         <input type="checkbox" id="Transition Graph" name="VisID" value="Transition Graph">
-		 <label for="Transition Graph">Transition Graph</label><br>
-		 <input type="checkbox" id="Gaze Stripes" name="VisID" value="Gaze Stripes">
-		 <label for="Gaze Stripes">Gaze Stripes</label><br>
-		 <input type="checkbox" id="AOI Rivers" name="VisID" value="AOI Rivers">
-		 <label for="AOI Rivers">AOI Rivers (all users only)</label><br><br>
-          </div>
+          <form>
+            <p>
+              <label for="Data Table">
+                <input type="checkbox" id="Data Table" name="VisID" value="Data Table">
+                <span>Data Table (standalone option only)</span>
+              </label>
+            <p>
+            <p>
+              <label for="Gaze Plot">
+                <input type="checkbox" id="Gaze Plot" name="VisID" value="Gaze Plot">
+                <span>Gaze Plot</span>
+              </label>
+            </p>
+            <p>
+              <label for="Heatmap">
+                <input type="checkbox" id="Heatmap" name="VisID" value="Heatmap">
+                <span>Heatmap</span>
+              </label>
+            </p>
+            <p>
+              <label for="Transition Graph">
+                <input type="checkbox" id="Transition Graph" name="VisID" value="Transition Graph">
+                <span>Transition Graph</span>
+              </label>
+            </p>
+            <p>
+              <label for="Gaze Stripes">
+                <input type="checkbox" id="Gaze Stripes" name="VisID" value="Gaze Stripes">
+                <span>Gaze Stripes</span>
+              </label>
+            </p>
+            <p>
+              <label for="AOI Rivers">
+                <input type="checkbox" id="AOI Rivers" name="VisID" value="AOI Rivers">
+                <span>AOI Rivers (all users only)</span>
+              </label>
+            </p>
+          </form>
 
           <label>Number of AOIs</label>
-		      <div class="input-field col s12 m4">
-			      <input type="range" name="AOInum" min="3" max="20" onchange="updateTextInput(this.value);">
-		      </div>
+          <div class="input-field col s12 m4">
+            <input type="range" name="AOInum" min="3" max="20" onchange="updateTextInput(this.value);">
+          </div>
 
           <input type="submit" value="submit" />
       </div>
@@ -124,7 +148,7 @@
     }
 
     function updateTextInput(val) {
-          document.getElementById('textInput').value=val;
+      document.getElementById('textInput').value = val;
     }
   </script>
 </body>
