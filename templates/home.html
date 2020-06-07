@@ -69,24 +69,19 @@
           </div>
 
           <label>Visualization</label>
-          <div class="input-field col s12 m4">
-            <select class="browser-default" name="VisID">
-              {% if session %}
-              {% for Item in LISTS[2] %}
-              {% if Item ==  session["VisID"]%}
-              <option value="{{Item}}" selected>{{Item}}</option>"
-              {% else %}
-              <option value="{{Item}}">{{Item}}</option>"
-              {% endif %}
-              {% endfor %}
-
-              {% else %}
-              <option value="" disabled selected>Choose your option</option>
-              {% for Item in LISTS[2] %}
-              <option value="{{Item}}">{{Item}}</option>"
-              {% endfor %}
-              {% endif %}
-            </select>
+           <div class="container">
+		 <input type="checkbox" id="Data Table" name="VisID" value="Data Table">
+		 <label for="Data Table">Data Table (standalone option only)</label><br>
+                 <input type="checkbox" id="Gaze Plot" name="VisID" value="Gaze Plot">
+		 <label for="Gaze Plot">Gaze Plot</label><br>
+         	 <input type="checkbox" id="Heatmap" name="VisID" value="Heatmap" >
+		 <label for="Heatmap">Heatmap</label><br>
+	         <input type="checkbox" id="Transition Graph" name="VisID" value="Transition Graph">
+		 <label for="Transition Graph">Transition Graph</label><br>
+		 <input type="checkbox" id="Gaze Stripes" name="VisID" value="Gaze Stripes">
+		 <label for="Gaze Stripes">Gaze Stripes</label><br>
+		 <input type="checkbox" id="AOI Rivers" name="VisID" value="AOI Rivers">
+		 <label for="AOI Rivers">AOI Rivers (all users only)</label><br><br>
           </div>
 
           <label>Number of AOIs</label>
