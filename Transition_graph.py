@@ -126,10 +126,10 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
     plot.axis.visible = False
     plot.renderers.append(graph_renderer) # append graph renderer to the plot
     
-     ## BOKEH END CODE
-     # display graph on web page
-     if not multiple:
-         script, div = components(plot)
-         return [script, div]
-     else:
-         return plot
+    ## BOKEH END CODE
+    # display graph on web page
+    if not multiple:
+        script, div = components(plot)
+        return [script, div]
+    else:
+        return plot
