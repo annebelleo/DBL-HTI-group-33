@@ -7,7 +7,6 @@
   <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.0.2.min.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
   <title>Eye Movement Visualization Tool</title>
 </head>
 
@@ -23,16 +22,10 @@
       <div class="column" style="display: flex; float:left; width: 35%; background-color: #fff6b5; border-radius: 8px; padding: 10px;
       align-items: center;">
         <form action="" method="post" style="display: initial">
-          <p>
-            <label>
-              <input onclick="hide()" class="with-gap" name="group1" type="radio" checked />
-              <span>Use sample data</span>
-            </label>
-          </p>
-          <a href="{{url_for('upload')}}">Upload data</a>
+          <p>Click<a href="{{url_for('upload')}}"> here </a> to upload data instead.</p>
           <br>
           <label>Map</label>
-          <div class="input-field col s12 m4">
+          <div class="input-field col s12 m4" style="display: flex">
             <select class="browser-default" name="MapID">
 
               {% if session %}
@@ -99,13 +92,12 @@
           <label>Number of AOIs</label>
 		      <div class="input-field col s12 m4">
 			      <input type="range" name="AOInum" min="3" max="20" onchange="updateTextInput(this.value);">
-			      <input type="text" id="textInput" value="">
 		      </div>
 
           <input type="submit" value="submit" />
       </div>
       </form>
-      <div id="right" class="column" style="display: flex; float: right; width: 65%; text-align:center; justify-content: center;
+      <div id="right" class="column" style="background-color: lightblue; border-radius: 8px; display: flex; float: right; width: 65%; text-align:center; justify-content: center;
       align-items: center;">
 
         {% if Graph %}
@@ -118,9 +110,6 @@
     </div>
   </div>
   <script>
-    $(document).ready(function() {
-      console.log("ready!");
-    });
     // document.addEventListener('DOMContentLoaded', function() {
     //   var elems = document.querySelectorAll('select');
     //   var instances = M.FormSelect.init(elems, options);

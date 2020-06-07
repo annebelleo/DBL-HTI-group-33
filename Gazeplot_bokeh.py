@@ -49,11 +49,6 @@ def draw_gazeplot(user_name: str, name_map: str, multiple = False):
     #add the image to the figure
     ax.image_url([image_source], 0, 0, x_dim, y_dim)
 
-    #define if there is data for the user and map
-    output_info = df_data.loc[(df_data['user'] == user_name) & (df_data['StimuliName'] == name_map), 'MappedFixationPointX']
-    if output_info.empty:
-        return ("There is no data available for this user and map.")
-
     #define if all users are selected or only one
     if user_name == 'ALL':
         view1=CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map)])
@@ -66,6 +61,11 @@ def draw_gazeplot(user_name: str, name_map: str, multiple = False):
                 ax.circle('MappedFixationPointX', 'MappedFixationPointY', color=random_color(), size='fix_time_scaled', source=source, view=view2, alpha=0.6)
 
     else:
+        #define if there is data for the user and map
+        output_info = df_data.loc[(df_data['user'] == user_name) & (df_data['StimuliName'] == name_map), 'MappedFixationPointX']
+        if output_info.empty:
+            return ("There is no data available for this user and map.")
+            
         view3 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map),GroupFilter(column_name='user', group=user_name)])
 
         # draw the saccades
