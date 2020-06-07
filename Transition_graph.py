@@ -1,24 +1,18 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[2]:
-
+import base64
 import networkx as nx
 import numpy as np
 import pandas as pd
 from bokeh.embed import components
-from bokeh.models import HoverTool, BoxZoomTool, ResetTool, TapTool, BoxSelectTool, PointDrawTool,     SaveTool
+from bokeh.models import HoverTool, BoxZoomTool, ResetTool, TapTool, BoxSelectTool, PointDrawTool, \
+    SaveTool
 from bokeh.models.graphs import from_networkx, NodesAndLinkedEdges
 from bokeh.models import Arrow, VeeHead, Circle, MultiLine
 from bokeh.plotting import figure
 from bokeh.palettes import Spectral4
 from HelperFunctions import get_adjacency_matrix, find_AOIs, get_cropped_image_AOI
+import io
 
 df_data = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding='latin1', sep='\t')
-
-
-# In[12]:
-
 
 # draw a figure showing the transition graph for one map:
 def draw_transition_graph(user_name: str, name_map: str, multiple = False):
@@ -70,29 +64,33 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
     # convert networkx graph representation to bokeh graph renderer
     graph_renderer = from_networkx(G, pos, scale=2, center=(0, 0))
     
-#     # store AOI thumnails in list (not working)
-#     image = get_cropped_image_AOI(df_AOI, 1, name_map)
-    
-#     graph_renderer.node_renderer.data_source.data['imgs'] = [image,image,image,image,image]
-    
-    graph_renderer.node_renderer.data_source.data['imgs'] = [
-    'https://cdn.discordapp.com/attachments/411252758918856715/713308484787241011/cropped.jpg',
-    'https://cdn.discordapp.com/attachments/411252758918856715/713308484787241011/cropped.jpg',
-    'https://cdn.discordapp.com/attachments/411252758918856715/713308484787241011/cropped.jpg',
-    'https://cdn.discordapp.com/attachments/411252758918856715/713308484787241011/cropped.jpg',
-    'https://cdn.discordapp.com/attachments/411252758918856715/713308484787241011/cropped.jpg']
+    # save AOI thumbnails in memory and encode to base64 strings
+    graph_renderer.node_renderer.data_source.data['imgs'] = []
+    for AOI in node_list:
+        AOI_thumbnail = get_cropped_image_AOI(df_AOI, AOI, name_map)
+        in_mem_file = io.BytesIO()
+        AOI_thumbnail.save(in_mem_file, format = "JPEG")
+
+        # reset file pointer to start
+        in_mem_file.seek(0)
+        img_bytes = in_mem_file.read()
+        
+        # encode image to base64 string
+        base64_encoded_result_bytes = base64.b64encode(img_bytes)
+        AOI_image_b64 = base64_encoded_result_bytes.decode('latin1')
+        graph_renderer.node_renderer.data_source.data['imgs'].append(AOI_image_b64) # save base64-encoded strings to nodes
 
     # define custom tooltips behaviour when hovering over nodes
     TOOLTIPS = """
-    <div>
         <div>
-            <p> AOI: @index </p>
-            <img
-                src="@imgs" height="100" alt="@imgs" width="100"
-            ></img>
+            <div>
+                <p><b> AOI: @index </b></p>
+                <img
+                    src="data:image/jpeg;base64, @imgs" height="100" alt="@imgs" width="100"
+                ></img>
+            </div>
         </div>
-    </div>
-    """
+        """
 
     # define plot features
     plot = figure(title="Transition Graph Demonstration", x_range=(-1.1, 1.1), y_range=(-1.1, 1.1),
@@ -124,9 +122,8 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
                                   x_start=pos[S][0], y_start=pos[S][1], x_end=pos[E][0], y_end=pos[E][1]))
         
     plot.axis.visible = False
-    plot.renderers.append(graph_renderer) # append graph renderer to the plot
+    plot.renderers.append(graph_renderer) # append graph renderer to the plot  
     
-    ## BOKEH END CODE
     # display graph on web page
     if not multiple:
         script, div = components(plot)
