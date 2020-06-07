@@ -69,7 +69,6 @@
           </div>
 
           <label>Visualization</label>
-          <form>
             <p>
               <label for="Data Table">
                 <input type="checkbox" id="Data Table" name="VisID" value="Data Table">
@@ -106,12 +105,13 @@
                 <span>AOI Rivers (all users only)</span>
               </label>
             </p>
-          </form>
 
-          <label>Number of AOIs</label>
-          <div class="input-field col s12 m4">
-            <input type="range" name="AOInum" min="3" max="20" onchange="updateTextInput(this.value);">
-          </div>
+            <p class="range-field">
+              <label>
+                <input type="range" name="AOInum" id="test5" onchange="updateTextInput(this.value);" min="3" max="20" />
+                <span>Number of AOIs</span>
+              </label>
+            </p>
 
           <input type="submit" value="submit" />
       </div>
