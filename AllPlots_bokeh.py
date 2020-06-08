@@ -10,6 +10,7 @@ from bokeh.embed import components
 
 # 'library' created by the team to help with he processing of the data
 from HelperFunctions import get_array_fixations, get_x_fixation, random_color
+from Data_bokeh import draw_dataframe
 from Gazeplot_bokeh import draw_gazeplot
 from Heatmap_bokeh import draw_heatmap
 from Transition_graph import draw_transition_graph
@@ -31,7 +32,9 @@ def draw_all_plots(user_name: str, name_map: str, check_vis, num_AOIs):
             return ["No user data found",""]
     else:
         if "Data Table" in check_vis:
-            return["Data Table can only be displayed as a standalone option", ""]
+            datatable = draw_dataframe(user_name, name_map)
+            script, div = components(datatable)
+            return [script, div]
         if "Gaze Plot" in check_vis:
             gazeplot = draw_gazeplot(user_name, name_map, True)
             vis.append(gazeplot)
