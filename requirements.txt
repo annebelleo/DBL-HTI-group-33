@@ -4,10 +4,12 @@ Click==7.0
 Flask==1.1.1
 gunicorn==20.0.4
 heroku==0.1.4
+heroku3==4.2.1
 idna==2.9
 itsdangerous==1.1.0
 Jinja2==2.10.1
 MarkupSafe==1.1.1
+pandas==1.0.4  
 python-dateutil==1.5
 requests==2.23.0
 urllib3==1.25.9
