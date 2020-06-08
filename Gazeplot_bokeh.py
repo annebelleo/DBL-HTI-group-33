@@ -63,8 +63,8 @@ def draw_gazeplot(user_name: str, name_map: str, multiple = False):
     else:
         #define if there is data for the user and map
         output_info = df_data.loc[(df_data['user'] == user_name) & (df_data['StimuliName'] == name_map), 'MappedFixationPointX']
-        if output_info.empty:
-            return ("There is no data available for this user and map.")
+        #if output_info.empty:
+            #return ("There is no data available for this user and map.")
             
         view3 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map),GroupFilter(column_name='user', group=user_name)])
 
@@ -73,8 +73,15 @@ def draw_gazeplot(user_name: str, name_map: str, multiple = False):
 
         # draw each fixation
         ax.circle('MappedFixationPointX', 'MappedFixationPointY', color='magenta', size='fix_time_scaled', source=source, view=view3, alpha=0.6)
-
+        
         new_source=get_data_user(user_name, name_map)
+
+        indexing = []
+        for i in range(len(output_info)):
+            indexing.append(i)
+
+        new_source['index'] = indexing
+        
         new_source = ColumnDataSource(new_source)
         label = LabelSet(x='MappedFixationPointX', y='MappedFixationPointY', text='index', source=new_source, text_color='black', render_mode='canvas')
         ax.add_layout(label)

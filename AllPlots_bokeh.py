@@ -32,7 +32,7 @@ def draw_all_plots(user_name: str, name_map: str, check_vis, num_AOIs):
             return ["No user data found",""]
     else:
         if "Data Table" in check_vis:
-            datatable = draw_dataframe(user_name, name_map)
+            datatable = draw_dataframe(user_name, name_map, True)
             script, div = components(datatable)
             return [script, div]
         if "Gaze Plot" in check_vis:
@@ -55,7 +55,6 @@ def draw_all_plots(user_name: str, name_map: str, check_vis, num_AOIs):
                     vis.append(aoiriv)
                     
         grid = gridplot(vis, ncols=1, plot_width=int(x_dim / 2.5), plot_height=int(y_dim / 2.5))
-        print('works')
 
         script, div = components(grid)
         return [script, div]

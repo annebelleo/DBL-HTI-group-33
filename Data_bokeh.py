@@ -11,13 +11,13 @@ from bokeh.embed import components
 # 'library' created by the team to help with he processing of the data
 from HelperFunctions import get_data_user, get_data_user_all_maps
 
-def draw_dataframe(user_name, name_map, sortby = ['StimuliName'], ascending=False, multiple = False):
+def draw_dataframe(user_name, name_map, multiple = False):
     if name_map == 'ALL':
         df = get_data_user_all_maps(user_name)
     else:
         df = get_data_user(user_name, name_map)
 
-    df.sort_values(by=sortby, inplace=True, ascending=ascending)
+    df.sort_values(by=['StimuliName'], inplace=True)
 
     source = ColumnDataSource(df)
     columns = [
