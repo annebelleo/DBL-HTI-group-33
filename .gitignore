@@ -6,7 +6,10 @@ TEMP/
 .idea/modules.xml
 .idea/vcs.xml
 .idea
+__pycache__\
 __pycache__/
+/__pycache__\
+/__pycache__/
 TEMP/
 TransitionGraph.png
 .idea/other.xml
@@ -18,3 +21,4 @@ TransitionGraph.png
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+*.pyc

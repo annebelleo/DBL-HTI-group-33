@@ -377,4 +377,4 @@ def cleanup(x: int = 7200) -> None:
         b = datetime.datetime.now()
         if x < (b - a).total_seconds():
             os.remove(path+i)
-            print ("yeah")
+            print("removed file:", i)

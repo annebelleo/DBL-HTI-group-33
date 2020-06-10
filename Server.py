@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, request, session, redirect
+from flask import Flask, flash, render_template, request, session, redirect, url_for
 from werkzeug.utils import secure_filename
 import random as random
 import pandas as pd
@@ -39,13 +39,14 @@ def home():
 
     :return: The web page to be renderd.
     """
+
     try:
         if session["dataset"]:
             data = pd.read_csv(session["dataset"], encoding='latin1', delim_whitespace=True)
             dropdown = drop_down_info(LIST_VIS_ID, data)
     except:
         dropdown = drop_down_info(LIST_VIS_ID, df_data)
-        
+
     if request.method == "POST":
         for ID in ["MapID", "UserID", "VisID", "AOInum"]:
             if request.form[ID]:
@@ -86,8 +87,9 @@ def upload():
 
     :return: The web page to be renderd.
     """
+    print (1)
     if request.method == "POST":
-        cleanup(7200)
+        cleanup(60)
         # check if the post request has the file part
         if 'dataset' not in request.files or 'stimuli' not in request.files:
             flash('No file part')
@@ -107,14 +109,14 @@ def upload():
             fileid = date + digits + "_"
 
             filename_ds = "TEMP/" + fileid + secure_filename(file_ds.filename)
-
             file_ds.save(filename_ds)
             session["dataset"] = filename_ds
+            file_ds.close()
 
             filename_st = "TEMP/" + fileid + secure_filename(file_st.filename)
             file_st.save(filename_st)
-            session["stimuli"] = file_st
-
+            session["stimuli"] = filename_st
+            file_st.close()
             return redirect("/")
 
     return render_template("upload.html")
