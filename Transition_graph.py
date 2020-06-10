@@ -13,16 +13,14 @@ from bokeh.palettes import Spectral4
 from HelperFunctions import get_adjacency_matrix, find_AOIs, get_cropped_image_AOI
 import sympy.geometry as sp
 
-df_data = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding='latin1', sep='\t')
 
 # draw a figure showing the transition graph for one map:
-def draw_transition_graph(user_name: str, name_map: str, multiple = False):
-
+def draw_transition_graph(user_name: str, name_map: str, data_set: pd.DataFrame, image_source: str, multiple=False):
     # read in user input of desired top AOI's to be displayed in transition graph
-    num_AOIs = 5 # num_AOIs is defined for now
+    NUM_AOIS = 5  # num_AOIs is defined for now
 
     # run AOI algorithm
-    df_AOI = find_AOIs(name_map, num_AOIs)
+    df_AOI = find_AOIs(name_map, NUM_AOIS, data_set)
 
     # filter out all data that belongs to the chosen user(s)
     data = df_AOI[df_AOI['StimuliName'] == name_map]
@@ -30,20 +28,20 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
         data = data[data['user'] == user_name]
 
     if data.size == 0:
-        return ["No user data found",""]
+        return ["No user data found", ""]
 
     # create empty matrix
-    dimension = num_AOIs + 1 # dimensions are +1 in size, so AOIs correspond with index
+    dimension = NUM_AOIS + 1  # dimensions are +1 in size, so AOIs correspond with index
     A = np.zeros(shape=(dimension, dimension))
 
     # create adjacency matrix by finding out frequencies of shifts between AOI's over the data
-    A = np.matrix(get_adjacency_matrix(data, num_AOIs))
+    A = np.matrix(get_adjacency_matrix(data, NUM_AOIS))
 
-    #scale matrix
-    if user_name !="ALL":
-        A = 5*A
+    # scale matrix
+    if user_name != "ALL":
+        A = 5 * A
     else:
-        A = 0.2*A
+        A = 0.2 * A
 
     # convert matrix to representation of graph
     G = nx.from_numpy_matrix(np.matrix(A), create_using=nx.DiGraph)
@@ -51,7 +49,7 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
     # remove nodes without neigbours, including node 0
     iso_nodes = list(nx.isolates(G))
     for n in iso_nodes:
-            G.remove_node(n)  # removes node 0, which does not have any edges
+        G.remove_node(n)  # removes node 0, which does not have any edges
 
     # define list of existing nodes and edges
     node_list = list(G.nodes)
@@ -59,14 +57,14 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
 
     # define positions of nodes
     try:
-        pos = nx.planar_layout(G) # apply planar positioning
-    except nx.exception.NetworkXException: # in case the adjacency matrix is not planar
-        pos=nx.circular_layout(G) # apply circular positioning
+        pos = nx.planar_layout(G)  # apply planar positioning
+    except nx.exception.NetworkXException:  # in case the adjacency matrix is not planar
+        pos = nx.circular_layout(G)  # apply circular positioning
         pass
 
     # convert networkx graph representation to bokeh graph renderer
     graph_renderer = from_networkx(G, pos, scale=2, center=(0, 0))
-    
+
     # save AOI thumbnails in memory and encode to base64 strings
     graph_renderer.node_renderer.data_source.data['imgs'] = []
     for AOI in node_list:
@@ -74,16 +72,17 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
         AOI_thumbnail = get_cropped_image_AOI(df_AOI, AOI, name_map)
         # save image in memory
         in_mem_file = io.BytesIO()
-        AOI_thumbnail.save(in_mem_file, format = "JPEG")
+        AOI_thumbnail.save(in_mem_file, format="JPEG")
 
         # reset file pointer to start
         in_mem_file.seek(0)
         img_bytes = in_mem_file.read()
-        
+
         # encode image to base64 string
         base64_encoded_result_bytes = base64.b64encode(img_bytes)
         AOI_image_b64 = base64_encoded_result_bytes.decode('latin1')
-        graph_renderer.node_renderer.data_source.data['imgs'].append(AOI_image_b64) # save base64-encoded strings to nodes
+        graph_renderer.node_renderer.data_source.data['imgs'].append(
+            AOI_image_b64)  # save base64-encoded strings to nodes
 
     # define custom tooltips behaviour when hovering over nodes
     TOOLTIPS = """
@@ -99,10 +98,10 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
 
     # define plot features
     plot = figure(title="Transition Graph " + name_map, x_range=(-1.1, 1.1), y_range=(-1.1, 1.1),
-                      tools=[HoverTool(tooltips=[("AOI", "@index")]), BoxZoomTool(), ResetTool(),
-                             TapTool(), BoxSelectTool(), PointDrawTool(), SaveTool()],
-                              tooltips = TOOLTIPS, # custom defined html code
-                              toolbar_location="below", toolbar_sticky=False, sizing_mode='scale_both')
+                  tools=[HoverTool(tooltips=[("AOI", "@index")]), BoxZoomTool(), ResetTool(),
+                         TapTool(), BoxSelectTool(), PointDrawTool(), SaveTool()],
+                  tooltips=TOOLTIPS,  # custom defined html code
+                  toolbar_location="below", toolbar_sticky=False, sizing_mode='scale_both')
 
     # customise nodes
     circleRadius = 0.075
@@ -111,10 +110,13 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
     graph_renderer.node_renderer.hover_glyph = Circle(size=circleRadius, fill_color=Spectral4[1])
 
     # customise edges
-    graph_renderer.edge_renderer.data_source.data["line_width"] = [G.get_edge_data(a,b)['weight'] for a, b in G.edges()]
-    graph_renderer.edge_renderer.glyph = MultiLine(line_color="#CCCCCC", line_alpha=0.8, line_width = {'field': 'line_width'})
-    graph_renderer.edge_renderer.selection_glyph = MultiLine(line_color=Spectral4[2], line_width = {'field': 'line_width'})
-    
+    graph_renderer.edge_renderer.data_source.data["line_width"] = [G.get_edge_data(a, b)['weight'] for a, b in
+                                                                   G.edges()]
+    graph_renderer.edge_renderer.glyph = MultiLine(line_color="#CCCCCC", line_alpha=0.8,
+                                                   line_width={'field': 'line_width'})
+    graph_renderer.edge_renderer.selection_glyph = MultiLine(line_color=Spectral4[2],
+                                                             line_width={'field': 'line_width'})
+
     graph_renderer.selection_policy = NodesAndLinkedEdges()
 
     # draw an arrow for each edge
@@ -141,12 +143,13 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
             intersectX = intersection2[0]
             intersectY = intersection2[1]
 
-        plot.add_layout(Arrow(line_alpha=0, end=VeeHead(fill_color = "#b3b3b3", line_color="#b3b3b3", line_width=W['weight']),
-                                  x_start=pos[S][0], y_start=pos[S][1], x_end=intersectX, y_end=intersectY))
-        
+        plot.add_layout(
+            Arrow(line_alpha=0, end=VeeHead(fill_color="#b3b3b3", line_color="#b3b3b3", line_width=W['weight']),
+                  x_start=pos[S][0], y_start=pos[S][1], x_end=intersectX, y_end=intersectY))
+
     plot.axis.visible = False
-    plot.renderers.append(graph_renderer) # append graph renderer to the plot 
-    
+    plot.renderers.append(graph_renderer)  # append graph renderer to the plot
+
     # display graph on web page
     if not multiple:
         script, div = components(plot)
