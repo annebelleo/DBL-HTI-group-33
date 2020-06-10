@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
+import os
 import re
+import datetime
 import matplotlib.pyplot as plt
 from PIL import Image, ImageOps
 import random
@@ -357,3 +359,22 @@ def aggregate_time(map_name, num_AOIs):
     df_agg.drop(df_agg[df_agg['Time'] > 1000].index,inplace=True)     
         
     return df_agg
+
+def cleanup(x: int = 7200) -> None:
+    """ removes all files older tahn
+
+
+    """
+    path = "TEMP/"
+
+    files = []
+    format_str = "%Y-%m-%d-%H-%M"  # The format
+    # r=root, d=directories, f = files
+    for r, d, f in os.walk(path):
+        files = f
+    for i in files:
+        a = datetime.datetime.strptime(i[:16], format_str)
+        b = datetime.datetime.now()
+        if x < (b - a).total_seconds():
+            os.remove(path+i)
+            print ("yeah")

@@ -1,7 +1,8 @@
 from flask import Flask, flash, render_template, request, session, redirect
 from werkzeug.utils import secure_filename
-import os
+import random as random
 import pandas as pd
+import datetime
 
 # visualization methods.
 from Gazeplot_bokeh import draw_gazeplot
@@ -13,7 +14,7 @@ from AllPlots_bokeh import draw_all_plots
 from Data_bokeh import draw_dataframe
 
 # 'library' created by the team to help with he processing of the data
-from HelperFunctions import drop_down_info
+from HelperFunctions import drop_down_info, cleanup
 
 # Initialize the flask server and the encryption key for session data.
 UPLOAD_FOLDER = '/TEMP'
@@ -24,11 +25,13 @@ app.secret_key = "pPAQaAI4lte5d8Hwci1i"
 # Read the Fixation data, This should become a non static part of the code.
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
-dict = {'KÃ¶ln':'Köln', 'BrÃ¼ssel':'Brüssel', 'DÃ¼sseldorf': 'Düsseldorf', 'GÃ¶teborg' : 'Göteborg', 'ZÃ¼rich': 'Zürich' }
-df_data.replace(dict, regex=True, inplace=True)
+translate = {'KÃ¶ln': 'Köln', 'BrÃ¼ssel': 'Brüssel', 'DÃ¼sseldorf': 'Düsseldorf', 'GÃ¶teborg': 'Göteborg',
+        'ZÃ¼rich': 'Zürich'}
+df_data.replace(translate, regex=True, inplace=True)
 
 # The visualization methods we support in this app.
 LIST_VIS_ID = ["Data table", "Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes", "AOI Rivers", "All tools"]
+
 
 @app.route("/", methods=["POST", "GET"])
 def home():
@@ -36,11 +39,6 @@ def home():
 
     :return: The web page to be renderd.
     """
-    # if dataset_file and stimuli_file:
-    #     print("yes")
-    #     df_uploaded_data = pd.read_csv(dataset_file, encoding='latin1', delim_whitespace=True)
-    #     dropdown = drop_down_info(LIST_VIS_ID, df_uploaded_data)
-    # else:
     try:
         if session["dataset"]:
             data = pd.read_csv(session["dataset"], encoding='latin1', delim_whitespace=True)
@@ -94,6 +92,7 @@ def help():
     """
     return render_template("help.html")
 
+
 @app.route("/upload/", methods=["POST", "GET"])
 def upload():
     """
@@ -101,23 +100,38 @@ def upload():
     :return: The web page to be renderd.
     """
     if request.method == "POST":
+        cleanup(7200)
         # check if the post request has the file part
-        if 'dataset' not in request.files:
+        if 'dataset' not in request.files or 'stimuli' not in request.files:
             flash('No file part')
             return redirect(request.url)
-        file = request.files['dataset']
+        file_ds = request.files['dataset']
+        file_st = request.files['stimuli']
         # if user does not select file, browser also
         # submit an empty part without filename
-        if file.filename == '':
+        if file_ds.filename == '' or file_st.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        if file:
-            filename = "TEMP/"+secure_filename(file.filename)
-            file.save(filename)
-            session["dataset"] = filename
+        if file_ds and file_st:
+
+            chars = "0123456789"
+            date = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-")
+            digits = "".join(random.choice(chars) for _ in range(6))
+            fileid = date + digits + "_"
+
+            filename_ds = "TEMP/" + fileid + secure_filename(file_ds.filename)
+
+            file_ds.save(filename_ds)
+            session["dataset"] = filename_ds
+
+            filename_st = "TEMP/" + fileid + secure_filename(file_st.filename)
+            file_st.save(filename_st)
+            session["stimuli"] = file_st
+
             return redirect("/")
 
     return render_template("upload.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
