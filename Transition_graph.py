@@ -1,3 +1,4 @@
+import io
 import base64
 import networkx as nx
 import numpy as np
@@ -10,7 +11,7 @@ from bokeh.models import Arrow, VeeHead, Circle, MultiLine
 from bokeh.plotting import figure
 from bokeh.palettes import Spectral4
 from HelperFunctions import get_adjacency_matrix, find_AOIs, get_cropped_image_AOI
-import io
+import sympy.geometry as sp
 
 df_data = pd.read_csv('static/all_fixation_data_cleaned_up.csv', encoding='latin1', sep='\t')
 
@@ -41,6 +42,8 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
     #scale matrix
     if user_name !="ALL":
         A = 5*A
+    else:
+        A = 0.2*A
 
     # convert matrix to representation of graph
     G = nx.from_numpy_matrix(np.matrix(A), create_using=nx.DiGraph)
@@ -67,7 +70,9 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
     # save AOI thumbnails in memory and encode to base64 strings
     graph_renderer.node_renderer.data_source.data['imgs'] = []
     for AOI in node_list:
+        # get AOI thumbnail
         AOI_thumbnail = get_cropped_image_AOI(df_AOI, AOI, name_map)
+        # save image in memory
         in_mem_file = io.BytesIO()
         AOI_thumbnail.save(in_mem_file, format = "JPEG")
 
@@ -93,36 +98,54 @@ def draw_transition_graph(user_name: str, name_map: str, multiple = False):
         """
 
     # define plot features
-    plot = figure(title="Transition Graph Demonstration", x_range=(-1.1, 1.1), y_range=(-1.1, 1.1),
+    plot = figure(title="Transition Graph " + name_map, x_range=(-1.1, 1.1), y_range=(-1.1, 1.1),
                       tools=[HoverTool(tooltips=[("AOI", "@index")]), BoxZoomTool(), ResetTool(),
                              TapTool(), BoxSelectTool(), PointDrawTool(), SaveTool()],
                               tooltips = TOOLTIPS, # custom defined html code
                               toolbar_location="below", toolbar_sticky=False, sizing_mode='scale_both')
 
     # customise nodes
-    circleSize = 40
-    graph_renderer.node_renderer.glyph = Circle(size=circleSize, fill_color=Spectral4[0])
-    graph_renderer.node_renderer.selection_glyph = Circle(size=circleSize, fill_color=Spectral4[2])
-    graph_renderer.node_renderer.hover_glyph = Circle(size=circleSize, fill_color=Spectral4[1])
+    circleRadius = 0.075
+    graph_renderer.node_renderer.glyph = Circle(radius=circleRadius, fill_color=Spectral4[0])
+    graph_renderer.node_renderer.selection_glyph = Circle(size=circleRadius, fill_color=Spectral4[2])
+    graph_renderer.node_renderer.hover_glyph = Circle(size=circleRadius, fill_color=Spectral4[1])
 
     # customise edges
-    graph_renderer.edge_renderer.glyph = MultiLine(line_color="#CCCCCC", line_alpha=0.8, line_width=10)
-    graph_renderer.edge_renderer.selection_glyph = MultiLine(line_color=Spectral4[2], line_width=10)
-    graph_renderer.edge_renderer.hover_glyph = MultiLine(line_color=Spectral4[1], line_width=10)
-
-    # customise edge width
     graph_renderer.edge_renderer.data_source.data["line_width"] = [G.get_edge_data(a,b)['weight'] for a, b in G.edges()]
-    graph_renderer.edge_renderer.glyph.line_width = {'field': 'line_width'}
-
+    graph_renderer.edge_renderer.glyph = MultiLine(line_color="#CCCCCC", line_alpha=0.8, line_width = {'field': 'line_width'})
+    graph_renderer.edge_renderer.selection_glyph = MultiLine(line_color=Spectral4[2], line_width = {'field': 'line_width'})
+    
     graph_renderer.selection_policy = NodesAndLinkedEdges()
 
     # draw an arrow for each edge
     for S, E, W in edge_list:
-        plot.add_layout(Arrow(line_alpha=0, end=VeeHead(fill_color = "#CCCCCC", line_color="#CCCCCC", line_width=W['weight']),
-                                  x_start=pos[S][0], y_start=pos[S][1], x_end=pos[E][0], y_end=pos[E][1]))
+        x1 = pos[S][0]
+        y1 = pos[S][1]
+        x2 = pos[E][0]
+        y2 = pos[E][1]
+        p1 = sp.Point(x1, y1)
+        p2 = sp.Point(x2, y2)
+
+        c = sp.Circle(p2, circleRadius)
+
+        l = sp.Line(p1, p2)
+
+        intersections = sp.intersection(l, c)
+        intersection1 = [float(intersections[0][0]), float(intersections[0][1])]
+        intersection2 = [float(intersections[1][0]), float(intersections[1][1])]
+
+        if x1 <= intersection1[0] <= x2:
+            intersectX = intersection1[0]
+            intersectY = intersection1[1]
+        else:
+            intersectX = intersection2[0]
+            intersectY = intersection2[1]
+
+        plot.add_layout(Arrow(line_alpha=0, end=VeeHead(fill_color = "#b3b3b3", line_color="#b3b3b3", line_width=W['weight']),
+                                  x_start=pos[S][0], y_start=pos[S][1], x_end=intersectX, y_end=intersectY))
         
     plot.axis.visible = False
-    plot.renderers.append(graph_renderer) # append graph renderer to the plot  
+    plot.renderers.append(graph_renderer) # append graph renderer to the plot 
     
     # display graph on web page
     if not multiple:
