@@ -27,7 +27,6 @@ DF_DATA.replace(TRANSLATE, regex=True, inplace=True)
 # The visualization methods we support in this app.
 LIST_VIS_ID = ["Data table", "Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes", "AOI Rivers", "All tools"]
 
-
 @app.route("/", methods=["POST", "GET"])
 def home():
     """
@@ -48,15 +47,17 @@ def home():
                 session[ID] = request.form[ID]
             except:
                 return render_template("home.html", session=[], LISTS=dropdown)
+
         # We want the list version of VisID instead of a string version.
         # The string version above is enough to check that the data is present
         session["VisID"] = request.form.getlist('VisID')
 
-        # Draw all plots with the session data.
         try:
             img_loc = session["stimuli"] + "/"
         except:
             img_loc = 'static/stimuli/'
+
+        # Draw all plots with the session data.
         graph = draw_all_plots(session["UserID"], session["MapID"], session["VisID"], session["AOInum"], data, img_loc)
 
         return render_template("home.html", session=session, LISTS=dropdown, Graph=graph)
