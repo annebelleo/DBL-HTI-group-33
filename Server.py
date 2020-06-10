@@ -32,7 +32,6 @@ df_data.replace(translate, regex=True, inplace=True)
 # The visualization methods we support in this app.
 LIST_VIS_ID = ["Data table", "Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes", "AOI Rivers", "All tools"]
 
-
 @app.route("/", methods=["POST", "GET"])
 def home():
     """
@@ -53,17 +52,17 @@ def home():
                 session[ID] = request.form[ID]
             else:
                 return render_template("home.html", session=[], LISTS=dropdown)
-        session["VisID"] = request.form.getlist('VisID') 
-        
+        session["VisID"] = request.form.getlist('VisID')
+
         if session["VisID"] == "Gazeplot":
             if isinstance(draw_gazeplot(session["UserID"], session["MapID"]), str):
                 Graph = False
-                output_graph = "There is no data available for this user and map."
+                output_graph = "There is no data available for this user and map." # this doesn't work
             else:
                 Graph = draw_gazeplot(session["UserID"], session["MapID"])
 
         Graph = draw_all_plots(session["UserID"], session["MapID"], session["VisID"], session["AOInum"])
-    
+
         if Graph == False:
             return render_template("home.html", text=output_graph, session=session, LISTS=dropdown, Graph=[])
         else:

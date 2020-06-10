@@ -11,146 +11,138 @@
 </head>
 
 <body>
-  <div class="container">
-    <header style="margin: 0 0 20px 0; background-color: #a6ffbe; border-radius: 10px">
+  <div class="#b2dfdb teal lighten-4" style="float:left; width: 35%; height: 100%;">
+    <header>
       <h1 align="center">Eye Movement Visualization Tool</h1>
       <div class="links" align="center">
         <a href="{{url_for('help')}}">Help</a>
       </div>
     </header>
-    <div style="display: flex;">
-      <div class="column" style="display: flex; float:left; width: 35%; background-color: #fff6b5; border-radius: 8px; padding: 10px;
-      align-items: center;">
-        <form action="" method="post" style="display: initial">
-          <p>Click<a href="{{url_for('upload')}}"> here </a> to upload data instead.</p>
-          <br>
-          <label>Map</label>
-          <div class="input-field col s12 m4" style="display: flex">
-            <select class="browser-default" name="MapID">
+    <div style="padding: 10px; align-items: center;">
+      <form action="" method="post" style="display: initial">
+        <p>Click<a href="{{url_for('upload')}}"> here </a> to upload data instead.</p>
+        <br>
+        <label class="black-text">Map</label>
+        <div class="input-field col s12 m4" style="display: flex">
+          <select class="browser-default" name="MapID">
 
-              {% if session %}
-              {% for Item in LISTS[1] %}
-              {% if Item ==  session["MapID"]%}
-              <option value="{{Item}}" selected>{{Item}}</option>"
-              {% else %}
-              <option value="{{Item}}">{{Item}}</option>"
-              {% endif %}
-              {% endfor %}
+            {% if session %}
+            {% for Item in LISTS[1] %}
+            {% if Item ==  session["MapID"]%}
+            <option value="{{Item}}" selected>{{Item}}</option>"
+            {% else %}
+            <option value="{{Item}}">{{Item}}</option>"
+            {% endif %}
+            {% endfor %}
 
-              {% else %}
-              <option value="" disabled selected>Choose your option</option>
-              {% for Item in LISTS[1] %}
-              <option value="{{Item}}">{{Item}}</option>"
-              {% endfor %}
-              {% endif %}
-            </select>
-          </div>
+            {% else %}
+            <option value="" disabled selected>Choose your option</option>
+            {% for Item in LISTS[1] %}
+            <option value="{{Item}}">{{Item}}</option>"
+            {% endfor %}
+            {% endif %}
+          </select>
+        </div>
 
-          <label>User</label>
-          <div class="input-field col s12 m4">
-            <select class="browser-default" name="UserID">
+        <!-- Switch -->
+        <div class="switch">
+          <label class="black-text">
+            Grayscale
+            <input type="checkbox" name="grayscale">
+            <span class="lever"></span>
+        </div>
+        <br>
+        <label class="black-text">User</label>
+        <div class="input-field col s12 m4">
+          <select class="browser-default" name="UserID">
 
-              {% if session %}
-              {% for Item in LISTS[0] %}
-              {% if Item ==  session["UserID"]%}
-              <option value="{{Item}}" selected>{{Item}}</option>"
-              {% else %}
-              <option value="{{Item}}">{{Item}}</option>"
-              {% endif %}
-              {% endfor %}
+            {% if session %}
+            {% for Item in LISTS[0] %}
+            {% if Item ==  session["UserID"]%}
+            <option value="{{Item}}" selected>{{Item}}</option>"
+            {% else %}
+            <option value="{{Item}}">{{Item}}</option>"
+            {% endif %}
+            {% endfor %}
 
-              {% else %}
-              <option value="" disabled selected>Choose your option</option>
-              {% for Item in LISTS[0] %}
-              <option value="{{Item}}">{{Item}}</option>"
-              {% endfor %}
-              {% endif %}
-            </select>
-          </div>
+            {% else %}
+            <option value="" disabled selected>Choose your option</option>
+            {% for Item in LISTS[0] %}
+            <option value="{{Item}}">{{Item}}</option>"
+            {% endfor %}
+            {% endif %}
+          </select>
+        </div>
 
-          <label>Visualization</label>
-            <p>
-              <label for="Data Table">
-                <input type="checkbox" id="Data Table" name="VisID" value="Data Table">
-                <span>Data Table (standalone option only)</span>
-              </label>
-            <p>
-            <p>
-              <label for="Gaze Plot">
-                <input type="checkbox" id="Gaze Plot" name="VisID" value="Gaze Plot">
-                <span>Gaze Plot</span>
-              </label>
-            </p>
-            <p>
-              <label for="Heatmap">
-                <input type="checkbox" id="Heatmap" name="VisID" value="Heatmap">
-                <span>Heatmap</span>
-              </label>
-            </p>
-            <p>
-              <label for="Transition Graph">
-                <input type="checkbox" id="Transition Graph" name="VisID" value="Transition Graph">
-                <span>Transition Graph</span>
-              </label>
-            </p>
-            <p>
-              <label for="Gaze Stripes">
-                <input type="checkbox" id="Gaze Stripes" name="VisID" value="Gaze Stripes">
-                <span>Gaze Stripes</span>
-              </label>
-            </p>
-            <p>
-              <label for="AOI Rivers">
-                <input type="checkbox" id="AOI Rivers" name="VisID" value="AOI Rivers">
-                <span>AOI Rivers (all users only)</span>
-              </label>
-            </p>
+        <label class="black-text">Visualization</label>
+        <p>
+          <label class="black-text" for="Data Table">
+            <input type="checkbox" id="Data Table" name="VisID" value="Data Table">
+            <span>Data Table (standalone option only)</span>
+          </label>
+        <p>
+        <p>
+          <label class="black-text" for="Gaze Plot">
+            <input type="checkbox" id="Gaze Plot" name="VisID" value="Gaze Plot">
+            <span>Gaze Plot</span>
+          </label>
+        </p>
+        <p>
+          <label class="black-text" for="Heatmap">
+            <input type="checkbox" id="Heatmap" name="VisID" value="Heatmap">
+            <span>Heatmap</span>
+          </label>
+        </p>
+        <p>
+          <label class="black-text" for="Transition Graph">
+            <input type="checkbox" id="Transition Graph" name="VisID" value="Transition Graph">
+            <span>Transition Graph</span>
+          </label>
+        </p>
+        <p>
+          <label class="black-text" for="Gaze Stripes">
+            <input type="checkbox" id="Gaze Stripes" name="VisID" value="Gaze Stripes">
+            <span>Gaze Stripes</span>
+          </label>
+        </p>
+        <p>
+          <label class="black-text" for="AOI Rivers">
+            <input type="checkbox" id="AOI Rivers" name="VisID" value="AOI Rivers">
+            <span>AOI Rivers (all users only)</span>
+          </label>
+        </p>
 
-            <p class="range-field">
-              <label>
-                <input type="range" name="AOInum" id="test5" onchange="updateTextInput(this.value);" min="3" max="20" />
-                <span>Number of AOIs</span>
-              </label>
-            </p>
+        <p class="range-field">
+          <label>
+          <span class="black-text">Number of AOIs</span>
+            <input type="range" name="AOInum" id="test5" onchange="updateTextInput(this.value);" min="3" max="20" />
+          </label>
+        </p>
 
-          <input type="submit" value="submit" />
-      </div>
-      </form>
-      <div id="right" class="column" style="background-color: lightblue; border-radius: 8px; display: flex; float: right; width: 65%; text-align:center; justify-content: center;
-      align-items: center;">
-
-        {% if Graph %}
-        {{ Graph[0] | safe }} {{ Graph[1] | safe  }}
-        {% else %}
-        {{text}}
-        {% endif %}
-        <p id="output" style="display:inline-block"></p>
-      </div>
+        <input type="submit" value="submit" />
     </div>
   </div>
-  <script>
-    // document.addEventListener('DOMContentLoaded', function() {
-    //   var elems = document.querySelectorAll('select');
-    //   var instances = M.FormSelect.init(elems, options);
-    // });
-    function display() {
-      document.getElementById("submit-1").style.display = "initial"
-      document.getElementById("submit-2").style.display = "initial"
-      document.getElementById("submit-3").style.display = "initial"
-      document.getElementById("submit-4").style.display = "initial"
-    }
 
-    function hide() {
-      document.getElementById("submit-1").style.display = "none"
-      document.getElementById("submit-2").style.display = "none"
-      document.getElementById("submit-3").style.display = "none"
-      document.getElementById("submit-4").style.display = "none"
-    }
+  <div style="float: right; width: 65%; height: 100%; text-align:center; justify-content: center; align-items: center; overflow: scroll; vertical-align: middle">
+    <div id="panel" style="margin:20px">
+      <!-- <a value="color" class="#b2dfdb teal lighten-4 lighten-5 btn"></a>
+      <a value="grayscale" class="#b2dfdb teal lighten-4 lighten-5 btn"></a> -->
+    </div>
+    <div style="display: inline-block;">
+      {% if Graph %}
+      {{ Graph[0] | safe }} {{ Graph[1] | safe  }}
+      {% else %}
+      {{text}}
+      {% endif %}
+      <div>
+      </div>
+      </form>
 
-    function updateTextInput(val) {
-      document.getElementById('textInput').value = val;
-    }
-  </script>
+      <script>
+        function updateTextInput(val) {
+          document.getElementById('textInput').value = val;
+        }
+      </script>
 </body>
 
 </html>
