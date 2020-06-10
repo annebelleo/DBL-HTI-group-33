@@ -5,6 +5,7 @@
 TEMP/
 .idea/modules.xml
 .idea/vcs.xml
+.idea
 __pycache__/
 TEMP/
 TransitionGraph.png
