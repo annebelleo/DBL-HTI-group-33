@@ -48,19 +48,21 @@ def draw_gaze_stripes(user_name: str, name_map: str, multiple = False):
             fig.image_rgba(image=[imarray], x=0, y=j, dw=amount_fixations[j], dh=0.9)
             
     else:
-        images, amount_images = get_cropped_images(user_name, name_map)
+        images = get_cropped_images_gazestripe(user_name, name_map)
+        fixations = get_array_fixations(user_name, name_map)
+        amount_images = len(fixations)
         
         if amount_images == 0:
             return ["No user data found",""]
         
-        fig = figure(plot_width=150*amount_images, plot_height=150, x_range=(0,amount_images),
+        fig = figure(plot_width=25*amount_images, plot_height=25, x_range=(0,amount_images),
                      y_range=(0,1), x_axis_label = "Time (order of fixations)",
                      y_axis_label = "User", title = 'Gaze stripes user '+ user_name + ' map ' + name_map,
                      tools=TOOLS)
-        for i in range(amount_images):
-            im = images[i].convert("RGBA")
-            imarray = np.array(im)
-            fig.image_rgba(image=[imarray], x=i, y=0, dw=1, dh=1)
+        
+        im = images.convert("RGBA")
+        imarray = np.array(im)
+        fig.image_rgba(image=[imarray], x=0, y=0, dw=amount_images, dh=1)    
             
     if not multiple:
         script, div = components(fig)

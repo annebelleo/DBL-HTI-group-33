@@ -2,28 +2,29 @@
 
 <head>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <title>title</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <title>Eye Movement Visualization Tool</title>
 </head>
-
 
 <body>
   <div class="container">
-  <form action="" method="post" enctype="multipart/form-data">
-    <p>
-      <label>
-        <span id="submit-1"">Dataset:</span>
-        <input type="file" id="submit-2" name="dataset" accept=".csv, .xml">
-      </label>
-    </p>
-    <p>
-      <label>
-        <span id="submit-3">Stimuli:</span>
-        <input type="file" id="submit-4" name="stimuli" accept=".zip">
-      </label>
-    </p>
-    <input type="submit" value="submit">
+    <h1 align=center>Upload Files</h1>
+    <form method="post" enctype="multipart/form-data">
+      <p>
+        <label>
+          <span id="submit-1">Dataset:</span>
+          <input type="file" id="submit-2" name="dataset" accept=".csv, .xml">
+        </label>
+      </p>
+      <p>
+        <label>
+          <span id="submit-3">Stimuli:</span>
+          <input type="file" id="submit-4" name="stimuli" accept=".zip">
+        </label>
+      </p>
+      <input type="submit" value="submit">
     </form>
-    </div>
+  </div>
 </body>
 
 </html>

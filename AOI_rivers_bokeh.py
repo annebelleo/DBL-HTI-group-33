@@ -30,6 +30,7 @@ def draw_AOI_rivers(user_name, map_name, num_AOIs, multiple = False):
 
     # reverse the legend entries to match the stacked order
     p.legend.items.reverse()
+    p.legend.click_policy="hide"
 
     if not multiple:
         script, div = components(p)
