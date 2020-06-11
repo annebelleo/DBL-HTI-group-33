@@ -41,7 +41,7 @@ def draw_all_plots(user_name: str, name_map: str, check_vis, num_AOIs, data_set,
             heatmap = draw_heatmap(user_name, name_map, data_set, image_source, True)
             vis.append(heatmap)
         if "Transition Graph" in check_vis:
-            transition = draw_transition_graph(user_name, name_map, data_set, image_source, True)
+            transition = draw_transition_graph(user_name, name_map, data_set, image_source,num_AOIs, True)
             vis.append(transition)
         if "Gaze Stripes" in check_vis:
             gazestripes = draw_gaze_stripes(user_name, name_map, data_set, image_source, True)
