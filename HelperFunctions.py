@@ -182,18 +182,21 @@ def get_cropped_images(user_name, name_map):
 def get_cropped_images_gazestripe(user_name, name_map, data_set, image_source):
     img = Image.open(image_source)
 
+    img = img.transpose(Image.FLIP_TOP_BOTTOM)
+    width, height = img.size
     list_fixations = get_array_fixations(user_name, name_map, data_set)
     images = Image.new('RGB', (200 * len(list_fixations), 200))
-    count = 0
-    for i in list_fixations:
+
+    for n, i in enumerate(list_fixations):
+        i[1] = height - i[1]
         x = i[0] - 100
         y = i[1] - 100
         w = i[0] + 100
         h = i[1] + 100
         area = (x, y, w, h)
         cropped_img = img.crop(area)
-        images.paste(cropped_img, (count * 200, 0))
-        count += 1
+        images.paste(cropped_img, (n * 200, 0))
+
     return images
 
 
