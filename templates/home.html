@@ -6,7 +6,6 @@
   <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.0.2.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.0.2.min.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <title>Eye Movement Visualization Tool</title>
 </head>
 
@@ -111,12 +110,9 @@
             <span>AOI Rivers (all users only)</span>
           </label>
         </p>
-
+        <label class="black-text">Number of AOIs</label>
         <p class="range-field">
-          <label>
-          <span class="black-text">Number of AOIs</span>
-            <input type="range" name="AOInum" id="test5" onchange="updateTextInput(this.value);" min="3" max="20" />
-          </label>
+          <input type="range" name="AOInum" id="test" min="3" max="20" />
         </p>
 
         <input type="submit" value="submit" />
@@ -138,11 +134,7 @@
       </div>
       </form>
 
-      <script>
-        function updateTextInput(val) {
-          document.getElementById('textInput').value = val;
-        }
-      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 
 </html>
