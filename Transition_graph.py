@@ -15,9 +15,9 @@ import sympy.geometry as sp
 
 
 # draw a figure showing the transition graph for one map:
-def draw_transition_graph(user_name: str, name_map: str, data_set: pd.DataFrame, image_source: str, multiple=False):
+def draw_transition_graph(user_name: str, name_map: str, data_set: pd.DataFrame, image_source: str, NUM_AOIS, multiple=False):
     # read in user input of desired top AOI's to be displayed in transition graph
-    NUM_AOIS = 5  # num_AOIs is defined for now
+    NUM_AOIS = int(NUM_AOIS)  # num_AOIs is defined for now
 
     # run AOI algorithm
     df_AOI = find_AOIs(name_map, NUM_AOIS, data_set)
