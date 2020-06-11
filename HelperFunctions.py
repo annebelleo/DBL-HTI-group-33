@@ -11,6 +11,7 @@ from bokeh.plotting import ColumnDataSource
 from sklearn.cluster import KMeans
 import shutil
 
+
 def natural_key(string_):
     return [int(s) if s.isdigit() else s for s in re.split(r'(\d+)', string_)]
 
@@ -375,16 +376,21 @@ def cleanup_temp_files(t: int = 7200) -> None:
         directories = d
         break
 
-    for i in files:
-        a = datetime.datetime.strptime(i[:16], format_str)
-        b = datetime.datetime.now()
-        if t < (b - a).total_seconds():
-            os.remove(path + i)
-            print("removed file:", i)
-
-    for i in directories:
-        a = datetime.datetime.strptime(i[:16], format_str)
-        b = datetime.datetime.now()
-        if t < (b - a).total_seconds():
-            shutil.rmtree(path + i)
-            print("removed folder:", i)
+    try:
+        for i in files:
+            a = datetime.datetime.strptime(i[:16], format_str)
+            b = datetime.datetime.now()
+            if t < (b - a).total_seconds():
+                os.remove(path + i)
+                print("removed file:", i)
+    except:
+        print("no files found")
+    try:
+        for i in directories:
+            a = datetime.datetime.strptime(i[:16], format_str)
+            b = datetime.datetime.now()
+            if t < (b - a).total_seconds():
+                shutil.rmtree(path + i)
+                print("removed folder:", i)
+    except:
+        print("no folders found")
