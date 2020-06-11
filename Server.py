@@ -12,9 +12,9 @@ from AllPlots_bokeh import draw_all_plots
 from HelperFunctions import drop_down_info, cleanup_temp_files
 
 # Initialize the flask server and the encryption key for session data.
-UPLOAD_FOLDER = '/TEMP'
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = '/static/TEMP'
+UPLOAD_FOLDER = 'static/TEMP/'
 app.secret_key = "pPAQaAI4lte5d8Hwci1i"
 
 # Read the Fixation data, This should become a non static part of the code.
@@ -83,7 +83,7 @@ def upload():
     """
 
     if request.method == "POST":
-        cleanup_temp_files(t=60)  # cleanup uploaded files that are older than t seconds
+        cleanup_temp_files(path=UPLOAD_FOLDER, t=60)  # cleanup uploaded files that are older than t seconds
         # check if the post request has the file part
         if 'dataset' not in request.files or 'stimuli' not in request.files:
             flash('No file part')
@@ -101,12 +101,12 @@ def upload():
             digits = "".join(random.choice(chars) for _ in range(6))
             fileid = date + digits + "_"
 
-            filename_ds = "TEMP/" + fileid + secure_filename(file_ds.filename)
+            filename_ds = UPLOAD_FOLDER + fileid + secure_filename(file_ds.filename)
             file_ds.save(filename_ds)
             session["dataset"] = filename_ds
             file_ds.close()
 
-            filename_st = "TEMP/" + fileid + secure_filename(file_st.filename)
+            filename_st = UPLOAD_FOLDER + fileid + secure_filename(file_st.filename)
             file_st.save(filename_st)
             session["stimuli"] = filename_st[:-4]
             file_st.close()

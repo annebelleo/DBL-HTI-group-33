@@ -181,7 +181,6 @@ def get_cropped_images(user_name, name_map):
 
 def get_cropped_images_gazestripe(user_name, name_map, data_set, image_source):
     img = Image.open(image_source)
-    ImageOps.flip(img)
 
     list_fixations = get_array_fixations(user_name, name_map, data_set)
     images = Image.new('RGB', (200 * len(list_fixations), 200))
@@ -361,12 +360,9 @@ def aggregate_time(map_name, num_AOIs, data_set):
     return df_agg
 
 
-def cleanup_temp_files(t: int = 7200) -> None:
+def cleanup_temp_files(path, t: int = 7200,) -> None:
     """ removes all files older tahn
-
-
     """
-    path = "TEMP/"
     files = []
     format_str = "%Y-%m-%d-%H-%M"  # The format
     # r=root, d=directories, f = files
