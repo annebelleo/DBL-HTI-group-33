@@ -83,7 +83,7 @@ def upload():
     """
 
     if request.method == "POST":
-        cleanup_temp_files(path=UPLOAD_FOLDER, t=60)  # cleanup uploaded files that are older than t seconds
+        cleanup_temp_files(path=UPLOAD_FOLDER, t=7200)  # cleanup uploaded files that are older than t seconds
         # check if the post request has the file part
         if 'dataset' not in request.files or 'stimuli' not in request.files:
             flash('No file part')
