@@ -260,14 +260,16 @@ def get_adjacency_matrix(data, num_AOIs):
     return grid
 
 
-def get_cropped_image_AOI(data, AOI, name_map):
+def get_cropped_image_AOI(data, AOI, name_map, image_source):
     data = data[data["AOI"] == AOI]
 
-    string_folder = 'static/stimuli/'
-    image_source = string_folder + name_map
-    im = plt.imread(image_source)
-    img = Image.fromarray(im)
 
+    im = plt.imread(image_source)
+    img = Image.fromarray((im * 255).astype(np.uint8))
+
+    if img.mode in ("RGBA", "P"):
+        img = img.convert("RGB")
+    
     minX = data["MappedFixationPointX"].min()
     maxX = data["MappedFixationPointX"].max()
     minY = data["MappedFixationPointY"].min()
