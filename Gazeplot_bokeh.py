@@ -1,5 +1,6 @@
 # import libraries
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 from bokeh.models import LabelSet, CDSView, GroupFilter
@@ -25,7 +26,7 @@ def draw_gazeplot(user_name: str, name_map: str, data_set: pd.DataFrame, image_s
 
     # import the image of the map, which will be displayed later
     img = plt.imread(image_source)
-    im = Image.fromarray(img)
+    im = Image.fromarray((img * 255).astype(np.uint8))
     x_dim, y_dim = im.size
 
     # define tools and tooltips to add interactions to the plot
