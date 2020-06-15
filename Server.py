@@ -50,7 +50,7 @@ def home():
 
         # We want the list version of VisID instead of a string version.
         # The string version above is enough to check that the data is present
-        # session["VisID"] = request.form[.getlist('VisID')]
+        session["VisID"] = request.form.getlist('VisID')
 
         try:
             img_loc = session["stimuli"] + "/"
