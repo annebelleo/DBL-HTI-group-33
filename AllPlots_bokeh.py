@@ -2,6 +2,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import gc
+import numpy as np
 from PIL import Image
 from bokeh.models import LabelSet
 from bokeh.plotting import ColumnDataSource, figure, show
@@ -26,7 +27,7 @@ def draw_all_plots(user_name: str, name_map: str, check_vis, num_AOIs, data_set,
 
     image_source = string_folder + name_map
     img = plt.imread(image_source)
-    im = Image.fromarray(img)
+    im = Image.fromarray((img * 255).astype(np.uint8))
     x_dim, y_dim = im.size
 
     if x_dat:
