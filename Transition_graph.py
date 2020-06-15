@@ -69,7 +69,7 @@ def draw_transition_graph(user_name: str, name_map: str, data_set: pd.DataFrame,
     graph_renderer.node_renderer.data_source.data['imgs'] = []
     for AOI in node_list:
         # get AOI thumbnail
-        AOI_thumbnail = get_cropped_image_AOI(df_AOI, AOI, name_map)
+        AOI_thumbnail = get_cropped_image_AOI(df_AOI, AOI, name_map, image_source)
         # save image in memory
         in_mem_file = io.BytesIO()
         AOI_thumbnail.save(in_mem_file, format="JPEG")
