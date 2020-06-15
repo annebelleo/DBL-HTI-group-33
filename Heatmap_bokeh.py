@@ -41,7 +41,7 @@ def draw_heatmap(user_name: str, name_map: str, data_set: pd.DataFrame, image_so
 
     # import the image the user has chosen
     img = plt.imread(image_source)
-    im = Image.fromarray(img)
+    im = Image.fromarray((img * 255).astype(np.uint8))
     x_dim = im.size[0]
     y_dim = im.size[1]
 
