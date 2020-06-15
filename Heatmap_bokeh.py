@@ -45,36 +45,38 @@ def draw_heatmap(user_name: str, name_map: str, data_set: pd.DataFrame, image_so
     x_dim = im.size[0]
     y_dim = im.size[1]
 
-    # make numpy arrays from the coordinates and duration (in order to make the grid of data)
-    X, Y, Z, = np.array([]), np.array([]), np.array([])
-    for i in range(len(X_dat)):
-        X = np.append(X, X_dat[i])
-        Y = np.append(Y, Y_dat[i])
-        Z = np.append(Z, (Z_dat[i]))
+##    # make numpy arrays from the coordinates and duration (in order to make the grid of data)
+##    X, Y, Z, = np.array([]), np.array([]), np.array([])
+##    for i in range(len(X_dat)):
+##        X = np.append(X, X_dat[i])
+##        Y = np.append(Y, Y_dat[i])
+##        Z = np.append(Z, (Z_dat[i]))
 
-    # create a grid with all the fixation durations together in a grid
-    xi = np.linspace(0, x_dim)
-    yi = np.linspace(y_dim, 0)
-    zi_old = griddata((X, Y), Z, (xi[None, :], yi[:, None]))
-    for x in range(len(zi_old)):
-        for y in range(len(zi_old[0])):
-            if np.isnan(zi_old[x][y]):
-                zi_old[x][y] = 0
+    xi = np.linspace(0, x_dim,200)
+    yi = np.linspace(y_dim, 0,200)
+
+    grid = np.array([[0]*len(xi)]*len(yi))
+
+    for x in range(len(X_dat)):
+        Y = int(Y_dat[x]//(y_dim/len(yi)))
+        X = int(X_dat[x]//(x_dim/len(xi)))
+        if not (X >= len(xi) or Y >= len(yi)):
+            grid[Y][X] = Z_dat[x]
+
+    zi_old=grid
 
     # apply a gaussian filter from the scipy library, the sigma is based on if all users are selected or just one
-    if user_name == 'ALL':
-        zi = gaussian_filter(zi_old, sigma=2)
-    else:
-        zi = gaussian_filter(zi_old, sigma=2)
+    zi = gaussian_filter(zi_old, sigma=4)
 
-    max_matrix = 0
+    max_zi = 0
+    for i in range(len(zi)):
+        for j in range(len(zi[0])):
+            max_zi = max(max_zi, zi[i][j])
 
-    for x in range(len(zi)):
-        for y in range(len(zi[0])):
-            max_matrix = max(max_matrix, zi[x][y])
+    zi = np.flip(zi,0)
 
     # define a mapper that can assign colors from a certain palette to a range of integers
-    mapper = LinearColorMapper(palette="Turbo256", low=0, high=max_matrix)
+    mapper = LinearColorMapper(palette="Turbo256", low=0, high=max_zi)
 
     # Tools and tooltips that define the extra interactions
     TOOLS = "hover,wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"
