@@ -51,6 +51,7 @@ def home():
         # We want the list version of VisID instead of a string version.
         # The string version above is enough to check that the data is present
         session["VisID"] = request.form.getlist('VisID')
+        # session["VisID"] = request.form[.getlist('VisID')]
 
         try:
             img_loc = session["stimuli"] + "/"
@@ -59,6 +60,7 @@ def home():
 
         # Draw all plots with the session data.
         graph = draw_all_plots(session["UserID"], session["MapID"], session["VisID"], session["AOInum"], data, img_loc)
+        print(session["VisID"])
 
         return render_template("home.html", session=session, LISTS=dropdown, Graph=graph)
     else:
@@ -68,10 +70,6 @@ def home():
 
 @app.route("/help/")
 def help():
-    """
-
-    :return: The web page to be renderd.
-    """
     return render_template("help.html")
 
 

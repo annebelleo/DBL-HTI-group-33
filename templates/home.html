@@ -1,30 +1,27 @@
 <html>
 
 <head>
-
-  <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.0.2.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.0.2.min.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eye Movement Visualization Tool</title>
 </head>
 
 <body>
-  <div class="#b2dfdb teal lighten-4" style="float:left; width: 35%; height: 100%;">
+  <div class="#b2dfdb teal lighten-4" style="float:left; width: 35%; height: 100%">
     <header>
       <h3 align="center">Eye Movement Visualization Tool</h1>
-      <div class="links" align="center">
-        <a href="{{url_for('help')}}">Help</a>
-      </div>
+        <div class="links" align="center">
+          <a href="{{url_for('help')}}">Help</a>
+        </div>
     </header>
     <div style="padding: 10px; align-items: center;">
       <form action="" method="post" style="display: initial">
         <p>Click<a href="{{url_for('upload')}}"> here </a> to upload data instead.</p>
         <br>
         <label class="black-text">Map</label>
-        <div class="input-field col s12 m4" style="display: flex">
-          <select class="browser-default" name="MapID">
+        <div class="input-field col s12">
+          <select name="MapID">
 
             {% if session %}
             {% for Item in LISTS[1] %}
@@ -53,9 +50,8 @@
         </div>
         <br>
         <label class="black-text">User</label>
-        <div class="input-field col s12 m4">
-          <select class="browser-default" name="UserID">
-
+        <div class="input-field col s12">
+          <select name="UserID">
             {% if session %}
             {% for Item in LISTS[0] %}
             {% if Item ==  session["UserID"]%}
@@ -75,47 +71,20 @@
         </div>
 
         <label class="black-text">Visualization</label>
-        <p>
-          <label class="black-text" for="Data Table">
-            <input type="checkbox" id="Data Table" name="VisID" value="Data Table">
-            <span>Data Table (standalone option only)</span>
-          </label>
-        <p>
-        <p>
-          <label class="black-text" for="Gaze Plot">
-            <input type="checkbox" id="Gaze Plot" name="VisID" value="Gaze Plot">
-            <span>Gaze Plot</span>
-          </label>
-        </p>
-        <p>
-          <label class="black-text" for="Heatmap">
-            <input type="checkbox" id="Heatmap" name="VisID" value="Heatmap">
-            <span>Heatmap</span>
-          </label>
-        </p>
-        <p>
-          <label class="black-text" for="Transition Graph">
-            <input type="checkbox" id="Transition Graph" name="VisID" value="Transition Graph">
-            <span>Transition Graph</span>
-          </label>
-        </p>
-        <p>
-          <label class="black-text" for="Gaze Stripes">
-            <input type="checkbox" id="Gaze Stripes" name="VisID" value="Gaze Stripes">
-            <span>Gaze Stripes</span>
-          </label>
-        </p>
-        <p>
-          <label class="black-text" for="AOI Rivers">
-            <input type="checkbox" id="AOI Rivers" name="VisID" value="AOI Rivers">
-            <span>AOI Rivers (all users only)</span>
-          </label>
-        </p>
+        <div class="input-field col s12 m6">
+          <select class="icons" name="VisID" multiple>
+            <option id="Data Table" value="Data Table" data-icon="static/data_table.png" class="left">Data Table</option>
+            <option id="Gaze Plot" value="Gaze Plot" data-icon="static/gaze_plot.png" class="left">Gaze Plot</option>
+            <option id="Heatmap" value="Heatmap" data-icon="static/heatmap.png" class="left">Heat map</option>
+            <option id="Transition Graph" value="Transition Graph" name="VisID" data-icon="static/transition_graph.png" class="left">Transition Graph</option>
+            <option id="Gaze Stripes" value="Gaze Stripes" data-icon="static/gaze_stripes.png" class="left">Gaze Stripes</option>
+            <option id="AOI Rivers" value="AOI Rivers" data-icon="static/AOI_rivers.png" class="left">AOI Rivers</option>
+          </select>
+        </div>
         <label class="black-text">Number of AOIs</label>
         <p class="range-field">
           <input type="range" name="AOInum" id="test" min="3" max="20" />
         </p>
-
         <input type="submit" value="submit" />
     </div>
   </div>
@@ -135,7 +104,15 @@
       </div>
       </form>
 
+      <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" crossorigin="anonymous"></script>
+      <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.0.2.min.js" crossorigin="anonymous"></script>
+      <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.0.2.min.js" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <script>
+        $(document).ready(function() {
+          $('select').formSelect();
+        });
+      </script>
 </body>
 
 </html>

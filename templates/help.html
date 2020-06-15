@@ -1,30 +1,37 @@
 <html>
-    <head>
-      <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" crossorigin="anonymous"></script>
-      <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.0.2.min.js" crossorigin="anonymous"></script>
-      <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.0.2.min.js"crossorigin="anonymous"></script>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-      <title>Help Page</title>
-    </head>
 
-        <body>
-          <div class="container">
-                <h1>Help Page</h1>
-                <a href="{{url_for('home')}}">Home</a><br>
-                <p>The sample dataset, preloaded into the tool, contains subway maps from different cities and data collected from several different users. You can use the tool by choosing a map, user, and method(s) from the dataset. Alternatively, you can upload your own data, which will change the map and user options.</p>
-                <!-- how to use the tool
-                info about sample dataset
-                how to load a visual -->
-                <b>Maps</b>
-                <p>These are the stimuli you can choose from.</p>
-                <p>We are still working on using the slider to display a grayscale map.</p>
-                <b>User</b><p>These are the users from the dataset that data was collected from.</p>
-                <b>Visualization</b><p>You can choose which method to display.</p>
-                <b>Number of AOIs</b><p>This determines how many AOIs are used. It only applies for AOI rivers.</p>
+<head>
+  <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.0.2.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.0.2.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <title>Help Page</title>
+</head>
 
-                <footer>
-                </footer>
-          </div>
-        </body>
+<body>
+  <div class="container">
+    <h1>Help Page</h1>
+    <a href="{{url_for('home')}}">Home</a><br>
+    <p>The sample dataset, preloaded into the tool, contains subway maps from different cities and data collected from several different users. You can use the tool by choosing a map, user, and method(s). Alternatively, you can
+      upload your own data, which will change the map and user options.</p>
+    <b>Maps</b>
+    <p>These are the stimuli you can choose from.</p>
+    <ul class="collection">
+      <li class="collection-item">01 vs 01b: the location of the target on the map.</li>
+      <li class="collection-item">S1: color, S2: grayscale</li>
+    </ul>
+    <p>We are still working on using the slider to display a grayscale map.</p>
+    <b>User</b>
+    <p>These are the users from the dataset that data was collected from.</p>
+    <b>Visualization</b>
+    <p>You can choose which method to display. Note that AOI Rivers only works for all users while Data Table only works for a single user.</p>
+    <b>Number of AOIs</b>
+    <p>This determines how many AOIs are used. It only applies for AOI rivers.</p>
+
+    <footer>
+    </footer>
+  </div>
+</body>
+
 </html>
