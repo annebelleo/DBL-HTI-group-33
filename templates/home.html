@@ -51,7 +51,7 @@
         <br>
         <label class="black-text">User</label>
         <div class="input-field col s12">
-          <select name="UserID">
+          <select name="UserID" multiple>
             {% if session %}
             {% for Item in LISTS[0] %}
             {% if Item ==  session["UserID"]%}

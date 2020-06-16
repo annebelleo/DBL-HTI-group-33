@@ -11,7 +11,7 @@ from bokeh.embed import components
 from HelperFunctions import get_array_fixations, random_color, get_source, get_data_user
 
 
-def draw_gazeplot(user_name: str, name_map: str, data_set: pd.DataFrame, image_source: str, multiple=False):
+def draw_gazeplot(user_name, name_map: str, data_set: pd.DataFrame, image_source: str, multiple=False):
     """
     Draw a gazeplot using the given data and parameters
     :param image_source:
@@ -47,10 +47,11 @@ def draw_gazeplot(user_name: str, name_map: str, data_set: pd.DataFrame, image_s
     # add the image to the figure
     ax.image_url([image_source], 0, 0, x_dim, y_dim)
 
+    view1 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map)])
+    ax.line('MappedFixationPointX', 'MappedFixationPointY',color='black', source=source, view=view1, alpha=1)
+
     # define if all users are selected or only one
     if user_name == 'ALL':
-        view1 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map)])
-        ax.line('MappedFixationPointX', 'MappedFixationPointY', color='black', source=source, view=view1, alpha=1)
         for i in data_set.user.unique():
             if i != 'ALL':
                 view2 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map),
@@ -61,35 +62,23 @@ def draw_gazeplot(user_name: str, name_map: str, data_set: pd.DataFrame, image_s
                           source=source, view=view2, alpha=0.6)
 
     else:
-        # define if there is data for the user and map
-        output_info = data_set.loc[
-            (data_set['user'] == user_name) & (data_set['StimuliName'] == name_map), 'MappedFixationPointX']
-        # if output_info.empty:
-        # return ("There is no data available for this user and map.")
+        for i in user_name:
+            view3 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map),
+                                                GroupFilter(column_name='user', group=i)])
 
-        view3 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map),
-                                                GroupFilter(column_name='user', group=user_name)])
+            # draw each fixation
+            ax.circle('MappedFixationPointX', 'MappedFixationPointY', color=random_color(), size='fix_time_scaled',
+                       source=source, view=view3, alpha=0.6)
 
-        # draw the saccades
-        ax.line('MappedFixationPointX', 'MappedFixationPointY', color='black',
-                source=source, view=view3, alpha=1)
-
-        # draw each fixation
-        ax.circle('MappedFixationPointX', 'MappedFixationPointY', color='magenta', size='fix_time_scaled',
-                  source=source, view=view3, alpha=0.6)
-
-        new_source = get_data_user(user_name, name_map, data_set)
-
-        indexing = []
-        for i in range(len(output_info)):
-            indexing.append(i)
-
-        new_source['index'] = indexing
-
-        new_source = ColumnDataSource(new_source)
-        label = LabelSet(x='MappedFixationPointX', y='MappedFixationPointY',
-                         text='index', source=new_source, text_color='black', render_mode='canvas')
-        ax.add_layout(label)
+            new_source = get_data_user(user_name, name_map, data_set)
+            # indexing = []
+            # for i in range(len(output_info)):
+            #     indexing.append(i)
+            # new_source['index'] = indexing
+            new_source = ColumnDataSource(new_source)
+            label = LabelSet(x='MappedFixationPointX', y='MappedFixationPointY',
+                             text='index', source=source, text_color='black', render_mode='canvas')
+            ax.add_layout(label)
 
     if not multiple:
         script, div = components(ax)

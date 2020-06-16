@@ -56,18 +56,21 @@ def get_data_user_all_maps(user_name: str, df: pd.DataFrame) -> pd.DataFrame:
     return user_data
 
 
-def get_data_user(user_name: str, map_name: str, df: pd.DataFrame) -> pd.DataFrame:
+def get_data_user(user_name : list, map_name: str, df: pd.DataFrame) -> pd.DataFrame:
     """
     When given a pd.dataframe it will return all rows were the user_name & map_name match.
-    :param user_name: expected to be a sting string
-    :param map_name: expected to be a sting string
+    :param user_name: expected to be a list
+    :param map_name: expected to be a string
     :param df: pd.dataframe to filter
     :return: pd.dataframe
     """
     if user_name == 'ALL':
         user_data = df.loc[df['StimuliName'] == map_name]
     else:
-        user_data = df.loc[df['user'] == user_name]
+        user_data = pd.DataFrame()
+        for i in user_name:
+            user_data_part = df.loc[df['user'] == i]
+            user_data = user_data.append(user_data_part)
         user_data = user_data.loc[user_data['StimuliName'] == map_name]
     return user_data
 
@@ -83,10 +86,10 @@ def get_data_map(map_name, df: pd.DataFrame) -> pd.DataFrame:
     return map_data
 
 
-def get_x_fixation(user_name: str, map_name: str, df: pd.DataFrame) -> list:
+def get_x_fixation(user_name : list, map_name: str, df: pd.DataFrame) -> list:
     """
     get array of all x_coordinate fixations from one experiment:
-    :param user_name: expected to be a string
+    :param user_name: expected to be a list
     :param map_name: expected to be a string
     :param df: pd.dataframe to filter
     :return:
@@ -98,10 +101,10 @@ def get_x_fixation(user_name: str, map_name: str, df: pd.DataFrame) -> list:
     return array_fixations_x
 
 
-def get_y_fixation(user_name: str, map_name: str, df: pd.DataFrame) -> list:
+def get_y_fixation(user_name: list, map_name: str, df: pd.DataFrame) -> list:
     """
     get array of all y_coordinate fixations from one experiment:
-    :param user_name: expected to be a string
+    :param user_name: expected to be a list
     :param map_name: expected to be a string
     :param df: pd.dataframe to filter
     :return:
@@ -210,7 +213,7 @@ def findClusters(map_name, num_clusters, data_set):
     return X_km
 
 
-# Returns dataframe with column identifying specific AOI for each fixation 
+# Returns dataframe with column identifying specific AOI for each fixation
 def find_AOIs(map_name, num_AOIs, data_set):
     df_map = get_data_map(map_name, data_set)
     df_fixation = df_map[['FixationDuration', 'Timestamp', 'user', 'StimuliName', ]]
@@ -269,7 +272,7 @@ def get_cropped_image_AOI(data, AOI, name_map, image_source):
 
     if img.mode in ("RGBA", "P"):
         img = img.convert("RGB")
-    
+
     minX = data["MappedFixationPointX"].min()
     maxX = data["MappedFixationPointX"].max()
     minY = data["MappedFixationPointY"].min()
