@@ -51,7 +51,7 @@ def draw_gazeplot(user_name, name_map: str, data_set: pd.DataFrame, image_source
     ax.line('MappedFixationPointX', 'MappedFixationPointY',color='black', source=source, view=view1, alpha=1)
 
     # define if all users are selected or only one
-    if user_name == 'ALL':
+    if 'ALL' in user_name:
         for i in data_set.user.unique():
             if i != 'ALL':
                 view2 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map),
