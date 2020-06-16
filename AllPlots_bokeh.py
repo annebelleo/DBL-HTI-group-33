@@ -18,6 +18,7 @@ from Heatmap_bokeh import draw_heatmap
 from Transition_graph import draw_transition_graph
 from Gazestripes_bokeh import draw_gaze_stripes
 from AOI_rivers_bokeh import draw_AOI_rivers
+from Heat_Gaze_comb_bokeh import draw_heat_gaze_comb
 
 
 def draw_all_plots(user_name: str, name_map: str, check_vis, num_AOIs, data_set, string_folder):
