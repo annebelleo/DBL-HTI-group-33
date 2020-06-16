@@ -53,6 +53,9 @@ def draw_all_plots(user_name: str, name_map: str, check_vis, num_AOIs, data_set,
             else:
                 aoiriv = draw_AOI_rivers(user_name, name_map, num_AOIs, data_set, True)
                 vis.append(aoiriv)
+        if "Heatmap + Gaze Plot" in check_vis:
+            heat_gaze = draw_heat_gaze_comb(user_name, name_map, data_set, image_source, True)
+            vis.append(heat_gaze)        
 
         grid = gridplot(vis, ncols=1, plot_width=int(x_dim / 2.5), plot_height=int(y_dim / 2.5))
 
