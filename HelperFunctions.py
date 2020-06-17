@@ -64,7 +64,7 @@ def get_data_user(user_name : list, map_name: str, df: pd.DataFrame) -> pd.DataF
     :param df: pd.dataframe to filter
     :return: pd.dataframe
     """
-    if 'ALL' in user_name:
+    if user_name == 'ALL':
         user_data = df.loc[df['StimuliName'] == map_name]
     else:
         user_data = pd.DataFrame()
