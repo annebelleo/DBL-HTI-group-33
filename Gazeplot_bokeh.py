@@ -61,26 +61,6 @@ def draw_gazeplot(user_name: str, name_map: str, data_set: pd.DataFrame, image_s
                           source=source, view=view2, alpha=0.6)
 
     else:
-<<<<<<< HEAD
-        for i in user_name:
-            view3 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map),
-                                                GroupFilter(column_name='user', group=i)])
-
-            # draw each fixation
-            ax.circle('MappedFixationPointX', 'MappedFixationPointY', color=random_color(), size='fix_time_scaled',
-                       source=source, view=view3, alpha=0.6)
-
-            if len(user_name) < 2:
-                new_source = get_data_user(user_name, name_map, data_set)
-                indexing = []
-                for i in range(len(new_source)):
-                    indexing.append(str(i))
-                new_source['index_num'] = indexing
-                new_source = ColumnDataSource(new_source)
-                label = LabelSet(x='MappedFixationPointX', y='MappedFixationPointY',
-                                 text='index_num', source=new_source, text_color='black', render_mode='canvas')
-                ax.add_layout(label)
-=======
         # define if there is data for the user and map
         output_info = data_set.loc[
             (data_set['user'] == user_name) & (data_set['StimuliName'] == name_map), 'MappedFixationPointX']
@@ -110,7 +90,6 @@ def draw_gazeplot(user_name: str, name_map: str, data_set: pd.DataFrame, image_s
         label = LabelSet(x='MappedFixationPointX', y='MappedFixationPointY',
                          text='index', source=new_source, text_color='black', render_mode='canvas')
         ax.add_layout(label)
->>>>>>> parent of e2a3ceb... added multiple users option
 
     if not multiple:
         script, div = components(ax)
