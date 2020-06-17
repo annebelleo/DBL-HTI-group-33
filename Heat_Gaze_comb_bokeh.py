@@ -105,7 +105,7 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
 
     p.extra_y_ranges = {"gaze": Range1d(start=y_dim, end=0)}
     
-    if user_name == 'ALL':
+    if 'ALL' in user_name:
         view1 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map)])
         
         p.line('MappedFixationPointX', 'MappedFixationPointY', color='black', source=source, view=view1, alpha=1, name = "li", y_range_name="gaze")
@@ -119,15 +119,9 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
                           source=source, view=view2, alpha=0.6, name = 'ci', y_range_name = "gaze")
 
     else:
-        # define if there is data for the user and map
-        output_info = data_set.loc[
-            (data_set['user'] == user_name) & (data_set['StimuliName'] == name_map), 'MappedFixationPointX']
-        # if output_info.empty:
-        # return ("There is no data available for this user and map.")
-
-        view3 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map),
-                                                GroupFilter(column_name='user', group=user_name)])
-
+        for i in user_name:
+            view3 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map),
+                                                GroupFilter(column_name='user', group=i)])
         # draw the saccades
         p.line('MappedFixationPointX', 'MappedFixationPointY', color='black',
                 source=source, view=view3, alpha=1, name = "line", y_range_name="gaze")
@@ -136,18 +130,16 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
         p.circle('MappedFixationPointX', 'MappedFixationPointY', color='magenta', size='fix_time_scaled',
                   source=source, view=view3, alpha=0.7, name = 'circle', y_range_name="gaze")
 
-        new_source = get_data_user(user_name, name_map, data_set)
-
-        indexing = []
-        for i in range(len(output_info)):
-            indexing.append(i)
-
-        new_source['index'] = indexing
-
-        new_source = ColumnDataSource(new_source)
-        label = LabelSet(x='MappedFixationPointX', y='MappedFixationPointY',
-                         text='index', source=new_source, text_color='black', render_mode='canvas', y_range_name="gaze")
-        p.add_layout(label)
+        if len(user_name) < 2:
+                new_source = get_data_user(user_name, name_map, data_set)
+                indexing = []
+                for i in range(len(new_source)):
+                    indexing.append(str(i))
+                new_source['index_num'] = indexing
+                new_source = ColumnDataSource(new_source)
+                label = LabelSet(x='MappedFixationPointX', y='MappedFixationPointY',
+                                 text='index_num', source=new_source, text_color='black', render_mode='canvas', y_range_name = 'gaze')
+                p.add_layout(label)
     
     # add a color bar which shows the user which color is mapped to which fixation duration
     color_bar = ColorBar(color_mapper=mapper, formatter=PrintfTickFormatter(),
