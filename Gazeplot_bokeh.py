@@ -70,15 +70,16 @@ def draw_gazeplot(user_name, name_map: str, data_set: pd.DataFrame, image_source
             ax.circle('MappedFixationPointX', 'MappedFixationPointY', color=random_color(), size='fix_time_scaled',
                        source=source, view=view3, alpha=0.6)
 
-            new_source = get_data_user(user_name, name_map, data_set)
-            # indexing = []
-            # for i in range(len(output_info)):
-            #     indexing.append(i)
-            # new_source['index'] = indexing
-            new_source = ColumnDataSource(new_source)
-            label = LabelSet(x='MappedFixationPointX', y='MappedFixationPointY',
-                             text='index', source=source, text_color='black', render_mode='canvas')
-            ax.add_layout(label)
+            if len(user_name) < 2:
+                new_source = get_data_user(user_name, name_map, data_set)
+                indexing = []
+                for i in range(len(new_source)):
+                    indexing.append(str(i))
+                new_source['index_num'] = indexing
+                new_source = ColumnDataSource(new_source)
+                label = LabelSet(x='MappedFixationPointX', y='MappedFixationPointY',
+                                 text='index_num', source=new_source, text_color='black', render_mode='canvas')
+                ax.add_layout(label)
 
     if not multiple:
         script, div = components(ax)
