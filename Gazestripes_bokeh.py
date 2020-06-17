@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image
 from bokeh.plotting import figure, show
 from bokeh.embed import components
+from bokeh.models import Range1d
 from bokeh.models.tickers import FixedTicker
 
 # 'library' created by the team to help with he processing of the data
@@ -14,7 +15,7 @@ df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
 
 def draw_gaze_stripes(user_name: str, name_map: str, data_set: pd.DataFrame, image_source: str, multiple=False):
-    TOOLS = "hover,wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"
+    TOOLS = "hover, wheel_zoom, zoom_in, zoom_out, box_zoom, reset, save, box_select, pan"
 
     if user_name == 'ALL':
         ListUser = get_data_map(name_map, data_set).user.unique()
@@ -28,7 +29,7 @@ def draw_gaze_stripes(user_name: str, name_map: str, data_set: pd.DataFrame, ima
         max_amount_images = max(amount_fixations)
 
         fig = figure(plot_width=25 * max_amount_images, plot_height=25 * len(ListUser),
-                     x_range=(0, max_amount_images), y_range=(0, len(ListUser)),
+                     x_range=Range1d(0, max_amount_images, bounds="auto"), y_range=Range1d(0, len(ListUser), bounds="auto"),
                      x_axis_label="Time (order of fixations)", y_axis_label="User",
                      title='Gaze stripes all users map ' + name_map, tools=TOOLS)
         fig.xgrid.visible = False
@@ -55,10 +56,10 @@ def draw_gaze_stripes(user_name: str, name_map: str, data_set: pd.DataFrame, ima
         if amount_images == 0:
             return ["No user data found", ""]
 
-        fig = figure(plot_width=25 * amount_images, plot_height=25, x_range=(0, amount_images),
-                     y_range=(0, 1), x_axis_label="Time (order of fixations)",
-                     y_axis_label="User", title='Gaze stripes user ' + user_name + ' map ' + name_map,
-                     tools=TOOLS)
+        fig = figure(plot_width=25 * amount_images, plot_height=25,
+                    x_range=Range1d(0, amount_images, bounds="auto"), y_range=Range1d(0, amount_images, bounds="auto"),
+                    x_axis_label="Time (order of fixations)", y_axis_label="User",
+                    title='Gaze stripes user ' + user_name + ' map ' + name_map, tools=TOOLS)
 
         im = images.convert("RGBA")
         imarray = np.array(im)
