@@ -49,7 +49,7 @@ def draw_all_plots(user_name: str, name_map: str, check_vis, num_AOIs, data_set,
             gazestripes = draw_gaze_stripes(user_name, name_map, data_set, image_source, True)
             vis.append(gazestripes)
         if "AOI Rivers" in check_vis:
-            if user_name != "ALL":
+            if 'ALL' not in user_name:
                 return ["AOI rivers only displays data for all users", ""]
             else:
                 aoiriv = draw_AOI_rivers(user_name, name_map, num_AOIs, data_set, True)
