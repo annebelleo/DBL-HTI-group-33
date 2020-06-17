@@ -10,28 +10,36 @@
 </head>
 
 <body>
-  <div class="container">
-    <h1>Help Page</h1>
-    <a href="{{url_for('home')}}">Home</a><br>
-    <p>The sample dataset, preloaded into the tool, contains subway maps from different cities and data collected from several different users. You can use the tool by choosing a map, user, and method(s). Alternatively, you can
-      upload your own data, which will change the map and user options.</p>
-    <b>Maps</b>
-    <p>These are the stimuli you can choose from.</p>
-    <ul class="collection">
-      <li class="collection-item">01 vs 01b: the location of the target on the map.</li>
-      <li class="collection-item">S1: color, S2: grayscale</li>
-    </ul>
-    <p>We are still working on using the slider to display a grayscale map.</p>
-    <b>User</b>
-    <p>These are the users from the dataset that data was collected from.</p>
-    <b>Visualization</b>
-    <p>You can choose which method to display. Note that AOI Rivers only works for all users while Data Table only works for a single user.</p>
-    <b>Number of AOIs</b>
-    <p>This determines how many AOIs are used. It only applies for AOI rivers.</p>
-
-    <footer>
-    </footer>
-  </div>
+    <div class="container">
+        <h1>Help Page</h1>
+        <a href="{{url_for('home')}}">Home</a><br>
+        <p>
+            The sample dataset, preloaded into the tool, contains subway maps from different cities and data collected from several different users. You can use the tool by choosing a map, user, and method(s). Alternatively, you can
+            upload your own data, which will change the map and user options.
+        </p>
+        <b>Maps</b>
+        <p>These are the stimuli you can choose from.</p>
+        <ul class="collection">
+            <li class="collection-item">01 vs 01b: the location of the target on the map.</li>
+            <li class="collection-item">S1: color, S2: grayscale</li>
+        </ul>
+        <p>We are still working on using the slider to display a grayscale map.</p>
+        <b>User</b>
+        <p>These are the users from the dataset that data was collected from.</p>
+        <b>Visualization</b>
+        <p>You can choose which method to display. Note that AOI Rivers only works for all users while Data Table only works for a single user.</p>
+        <b>Number of AOIs</b>
+        <p>This determines how many AOIs are used. It only applies for AOI rivers.</p>
+        <b>Visualisation methods</b>
+        <p>Data table: The data table method produces a table that can be sorted, ascending and descending, by each variable.</p>
+        <p>Gazeplot: The gazeplot method shows the chosen stimulus with the saccades, as lines, and fixations, as circles, plotted onto it. The size of the circles represent the relative fixation duration.</p>
+        <p>Static Visual Attention Map (Heat Map): The static visual attention map is a map that displays the relative fixation duration putting a color filter over the stimulus. Blue areas are not fixated on at all and red areas are fixated on the most.</p>
+        <p>Gazeplot + Heat Map: This map shows the stimulus with the gaze plot and heatmap plotted over it.</p>
+        <p>Transition Graph: The transition graph method displays a graph in which each node represents an area of interest and each edge represents the relation between to AOIs. The size of the arrow represents how much participants shift from the one AOI to the other.</p>
+        <p>Gaze Stripes: The gaze stripes method shows each of the fixations on the stimulus of a user ordered as a one long stripe.</p>
+        <p>AOI Rivers: The AOI rivers give a plot in which the AOIs are all represented as a colored stripe and the thickness of the stripe in a particular moment in time is the participants's relative interest in that area at that time. </p>
+        <footer></footer>
+    </div>
 </body>
 
 </html>
