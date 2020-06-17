@@ -51,7 +51,6 @@ def home():
         # We want the list version of VisID instead of a string version.
         # The string version above is enough to check that the data is present
         session["VisID"] = request.form.getlist('VisID')
-        session["UserID"] = request.form.getlist('UserID')
 
         try:
             img_loc = session["stimuli"] + "/"
@@ -59,7 +58,8 @@ def home():
             img_loc = 'static/stimuli/'
 
         # Draw all plots with the session data.
-        graph = draw_all_plots(session["UserID"], session["MapID"], session["VisID"], session["AOInum"], data, img_loc)
+        print(session["VisID"])
+        graph = draw_all_plots(session["UserID"], session["MapID"], session["VisID"], session["AOInum"], data, img_loc) #currently doesn't pass multiple plots
 
         return render_template("home.html", session=session, LISTS=dropdown, Graph=graph)
     else:
