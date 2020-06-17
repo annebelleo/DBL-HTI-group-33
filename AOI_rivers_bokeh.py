@@ -10,10 +10,8 @@ from HelperFunctions import find_AOIs, findClusters, normalize_time, aggregate_t
 
 
 def draw_AOI_rivers(user_name, map_name, num_AOIs, data_set: pd.DataFrame, multiple=False):
+    
     num_AOIs = int(num_AOIs)
-
-    if user_name != "ALL":
-        return ["AOI rivers only displays data for all users", ""]
 
     TOOLS = "hover,wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"
 
