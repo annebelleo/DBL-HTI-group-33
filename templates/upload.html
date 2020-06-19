@@ -23,37 +23,40 @@
           <input type="file" id="submit-4" name="stimuli" accept=".zip">
         </label>
       </p>
-        <i>By hitting the upload button you agree to understanding the privacy statement and accepting  it.<br></i>
+		<i>By hitting the upload button you agree to understanding the privacy statement and accept it.<br></i>
       <input type="submit" value="submit">
     </form>
-      <br><br>
       <h4>Formatting guidelines</h4>
+	  <p>
       Both the .zip and the .csv file need to be structured specifically. following the upcoming guidelines.<br>
       There is no way to edit the files after uploading. Make sure they are in the right formating beforehand.<br>
       The .csv file needs to have a set of columns with the first row being titles.<br>
-      Columns from left to right.<br>
-      <b>*Timestamp:</b>   Time stamp in second can be any positive integer<br>
-      <b>*StimuliName:</b>    Full file path & FileName for the image that it corresponds to (including extension)<br>
-      <b>*FixationIndex:</b>    can be any string<br>
-      <b>*FixationDuration:</b>    Time length in second can be any positive integer<br>
-      <b>*MappedFixationPointX:</b>    x coordinates can be any integer (left is x 0)<br>
-      <b>*MappedFixationPointY:</b>    y coordinates can be any integer (top is y 0)<br>
-      <b>*user:</b> Name of the user can be any string<br>
-      <b>*description:</b> Personal comments NOT used by our code. may be empty <br>
-        <br><br>
+      </p>
+	  
+	  <ul>
+		<li>Required columns from left to right:</li>
+		<li><b>*Timestamp:</b> Time stamp in second can be any positive integer</li>
+		<li><b>*StimuliName:</b> Full file path & FileName for the image that it corresponds to (including extension)</li>
+		<li><b>*FixationIndex:</b> Can be any string</li>
+		<li><b>*FixationDuration:</b> Time length in second can be any positive integer</li>
+		<li><b>*MappedFixationPointX:</b> x-coordinates can be any integer (left is x 0)</li>
+		<li><b>*MappedFixationPointY:</b> y-coordinates can be any integer (top is y 0)</li>
+		<li><b>*user:</b> Name of the user can be any string</li>
+		<li><b>*description:</b> Personal comments NOT used by our code. may be empty</li>
+	  </ul>
+        <br>
       The .zip file needs to contain an image for each StimuliName used.<br>
       If all images are kept in the top folder you do not need to add a file path to the  StimuliName column in .csv<br>
       .jpg and .png have been tested other file formats may work but are not supported<br>
 
-      <H4>Privacy statement</H4>
-Any data upload via this tool will be sent to our service via NON secure connection.<br>
-Data is NOT encrypted when stored on our servers<br>
-Data is NOT protected on our servers and can be accessed by our engineers. <br>
-Data is deleted periodically and we are not responsible for any loss of data.<br>
-There is no way to download the data from our service.<br>
-
-
-
+      <h4>Privacy statement</h4>
+	  <ul>
+		<li>Any data uploaded via this tool will be sent to our service via a NON-secure connection.</li>
+		<li>Data is NOT encrypted when stored on our servers.</li>
+		<li>Data is NOT protected on our servers and can be accessed by our engineers.</li>
+		<li>Data is deleted periodically and we are not responsible for any loss of data</li>
+		<li>There is no way to download the data from our service.</li>
+	  </ul>
   </div>
 </body>
 
