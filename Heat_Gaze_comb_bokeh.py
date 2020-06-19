@@ -6,7 +6,7 @@ from PIL import Image
 from scipy.interpolate import griddata
 from scipy.ndimage import gaussian_filter
 from bokeh.plotting import ColumnDataSource, figure, show
-from bokeh.models import PrintfTickFormatter, Range1d, HoverTool, ColorBar, LinearColorMapper, LabelSet, CDSView, GroupFilter
+from bokeh.models import PrintfTickFormatter, Range1d, HoverTool, ColorBar, LinearAxis, LinearColorMapper, LabelSet, CDSView, GroupFilter
 from bokeh.embed import components
 
 # 'library' created by the team to help with he processing of the data
@@ -154,6 +154,9 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
                          location=(0, 0), background_fill_alpha=0.5)
 
     p.add_layout(color_bar, 'right')
+    
+    # add extra label on the right of the color bar
+    p.add_layout(LinearAxis(axis_label="Fixation Duration", major_tick_line_color = None, minor_tick_line_color = None, major_label_text_color = None, axis_line_color = None), 'right')
 
     # map the original map and the data grid using the color mapper, turning it into a heatmap
     

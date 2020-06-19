@@ -6,10 +6,8 @@ from PIL import Image
 from scipy.interpolate import griddata
 from scipy.ndimage import gaussian_filter
 from bokeh.plotting import figure, show
-from bokeh.models import PrintfTickFormatter
+from bokeh.models import ColorBar, LinearAxis, LinearColorMapper, PrintfTickFormatter
 from bokeh.embed import components
-from bokeh.models import ColorBar, LinearColorMapper
-
 # 'library' created by the team to help with he processing of the data
 from HelperFunctions import get_x_fixation, get_source, get_y_fixation, get_duration_fixation, get_data_map
 
@@ -94,6 +92,9 @@ def draw_heatmap(user_name: str, name_map: str, data_set: pd.DataFrame, image_so
                          location=(0, 0), background_fill_alpha=0.5)
 
     p.add_layout(color_bar, 'right')
+    
+    # add extra label on the right of the color bar
+    p.add_layout(LinearAxis(axis_label="Fixation Duration", major_tick_line_color = None, minor_tick_line_color = None, major_label_text_color = None, axis_line_color = None), 'right')
 
     # map the original map and the data grid using the color mapper, turning it into a heatmap
     p.image_url([image_source], 0, y_dim, x_dim, y_dim)
