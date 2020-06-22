@@ -6,8 +6,9 @@ from PIL import Image
 from scipy.interpolate import griddata
 from scipy.ndimage import gaussian_filter
 from bokeh.plotting import ColumnDataSource, figure, show
-from bokeh.models import PrintfTickFormatter, Range1d, HoverTool, ColorBar, LinearAxis, LinearColorMapper, LabelSet, CDSView, GroupFilter
+from bokeh.models import PrintfTickFormatter, Label, Range1d, HoverTool, ColorBar, LinearAxis, LinearColorMapper, LabelSet, CDSView, GroupFilter, FixedTicker
 from bokeh.embed import components
+from bokeh.layouts import gridplot
 
 # 'library' created by the team to help with he processing of the data
 from HelperFunctions import get_x_fixation, get_source, get_y_fixation, get_duration_fixation, get_data_map, get_array_fixations, random_color, get_data_user
@@ -46,15 +47,8 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
     x_dim = im.size[0]
     y_dim = im.size[1]
 
-##    # make numpy arrays from the coordinates and duration (in order to make the grid of data)
-##    X, Y, Z, = np.array([]), np.array([]), np.array([])
-##    for i in range(len(X_dat)):
-##        X = np.append(X, X_dat[i])
-##        Y = np.append(Y, Y_dat[i])
-##        Z = np.append(Z, (Z_dat[i]))
-
-    xi = np.linspace(0, x_dim,200)
-    yi = np.linspace(y_dim, 0,200)
+    xi = np.linspace(0, x_dim,300)
+    yi = np.linspace(y_dim, 0,300)
 
     grid = np.array([[0]*len(xi)]*len(yi))
 
@@ -67,7 +61,7 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
     zi_old=grid
 
     # apply a gaussian filter from the scipy library, the sigma is based on if all users are selected or just one
-    zi = gaussian_filter(zi_old, sigma=4)
+    zi = gaussian_filter(zi_old, sigma=6)
 
     max_zi = 0
     for i in range(len(zi)):
@@ -99,34 +93,37 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
     
     p.xaxis.visible = False
     p.yaxis.visible = False
-    p.grid.grid_line_width = 0
+    p.grid.grid_line_width = 0    
     
     p.image_url([image_source], 0, y_dim, x_dim, y_dim)
 
     p.extra_y_ranges = {"gaze": Range1d(start=y_dim, end=0)}
     
     if user_name == 'ALL':
-        view1 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map)])
+        view1 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName',
+                                                            group=name_map)])
         
-        p.line('MappedFixationPointX', 'MappedFixationPointY', color='black', source=source, view=view1, alpha=1, name = "li", y_range_name="gaze")
+        p.line('MappedFixationPointX', 'MappedFixationPointY', color='black', source=source,
+               alpha=0.5, view=view1, name = "li", y_range_name="gaze")
         for i in data_set.user.unique():
             if i != 'ALL':
                 view2 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map),
                                                         GroupFilter(column_name='user', group=str(i))])
 
                 # plot the saccades and fixations based on the source file of that user
-                p.circle('MappedFixationPointX', 'MappedFixationPointY', color=random_color(), size='fix_time_scaled',
-                          source=source, view=view2, alpha=0.6, name = 'ci', y_range_name = "gaze")
+                p.circle('MappedFixationPointX', 'MappedFixationPointY', color=random_color(),
+                         size='fix_time_scaled', source=source, view=view2, alpha=0.6,
+                         name = 'ci', y_range_name = "gaze")
 
     else:
         # define if there is data for the user and map
-        output_info = data_set.loc[
-            (data_set['user'] == user_name) & (data_set['StimuliName'] == name_map), 'MappedFixationPointX']
-        # if output_info.empty:
-        # return ("There is no data available for this user and map.")
+        output_info = data_set.loc[(data_set['user'] == user_name) &
+                                   (data_set['StimuliName'] == name_map),
+                                   'MappedFixationPointX']
 
-        view3 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName', group=name_map),
-                                                GroupFilter(column_name='user', group=user_name)])
+        view3 = CDSView(source=source,
+                        filters=[GroupFilter(column_name='StimuliName', group=name_map),
+                                 GroupFilter(column_name='user', group=user_name)])
 
         # draw the saccades
         p.line('MappedFixationPointX', 'MappedFixationPointY', color='black',
@@ -134,38 +131,29 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
 
         # draw each fixation
         p.circle('MappedFixationPointX', 'MappedFixationPointY', color='magenta', size='fix_time_scaled',
-                  source=source, view=view3, alpha=0.7, name = 'circle', y_range_name="gaze")
-
-        new_source = get_data_user(user_name, name_map, data_set)
-
-        indexing = []
-        for i in range(len(output_info)):
-            indexing.append(i)
-
-        new_source['index'] = indexing
-
-        new_source = ColumnDataSource(new_source)
-        label = LabelSet(x='MappedFixationPointX', y='MappedFixationPointY',
-                         text='index', source=new_source, text_color='black', render_mode='canvas', y_range_name="gaze")
-        p.add_layout(label)
+                  source=source, view=view3, alpha=1, name = 'circle', y_range_name="gaze")
     
     # add a color bar which shows the user which color is mapped to which fixation duration
-    color_bar = ColorBar(color_mapper=mapper, formatter=PrintfTickFormatter(),
-                         location=(0, 0), background_fill_alpha=0.5)
+    color_bar = ColorBar(color_mapper=mapper, location=(0, 0), background_fill_alpha=1,
+                         major_tick_line_color = None, major_label_text_color = None,
+                         margin = 1, major_tick_out = 1, padding=5)
+
+    color_bar_label= Label(text="Relative Fixation Duration (<- high - low ->)", x=-10, y= int(y_dim / 1.8)/2,
+                           angle=270, render_mode='canvas', text_align = 'center',
+                           angle_units='deg', x_units='screen', y_units='screen', text_font_size='14pt')
 
     p.add_layout(color_bar, 'right')
-    
-    # add extra label on the right of the color bar
-    p.add_layout(LinearAxis(axis_label="Fixation Duration", major_tick_line_color = None, minor_tick_line_color = None, major_label_text_color = None, axis_line_color = None), 'right')
+
+    p_dummy = figure(plot_height=int(y_dim / 1.8), width=50, toolbar_location=None, min_border=0, outline_line_color=None)
+    p_dummy.add_layout(color_bar_label, 'right')
 
     # map the original map and the data grid using the color mapper, turning it into a heatmap
-    
     p.image(image=[zi], x=0, y=0, dw=x_dim, dh=y_dim, color_mapper=mapper, global_alpha=0.6)
+
+    grid_plot = gridplot([p, p_dummy], ncols=2, toolbar_location=None)
     
-
-
     if not multiple:
-        script, div = components(p)
+        script, div = components(grid_plot)
         return [script, div]
     else:
-        return p
+        return grid_plot

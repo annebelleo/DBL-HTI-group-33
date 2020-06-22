@@ -50,8 +50,8 @@ def draw_heatmap(user_name: str, name_map: str, data_set: pd.DataFrame, image_so
 ##        Y = np.append(Y, Y_dat[i])
 ##        Z = np.append(Z, (Z_dat[i]))
 
-    xi = np.linspace(0, x_dim,200)
-    yi = np.linspace(y_dim, 0,200)
+    xi = np.linspace(0, x_dim,300)
+    yi = np.linspace(y_dim, 0,300)
 
     grid = np.array([[0]*len(xi)]*len(yi))
 
@@ -64,7 +64,7 @@ def draw_heatmap(user_name: str, name_map: str, data_set: pd.DataFrame, image_so
     zi_old=grid
 
     # apply a gaussian filter from the scipy library, the sigma is based on if all users are selected or just one
-    zi = gaussian_filter(zi_old, sigma=4)
+    zi = gaussian_filter(zi_old, sigma=6)
 
     max_zi = 0
     for i in range(len(zi)):
@@ -93,15 +93,21 @@ def draw_heatmap(user_name: str, name_map: str, data_set: pd.DataFrame, image_so
 
     p.add_layout(color_bar, 'right')
     
-    # add extra label on the right of the color bar
-    p.add_layout(LinearAxis(axis_label="Fixation Duration", major_tick_line_color = None, minor_tick_line_color = None, major_label_text_color = None, axis_line_color = None), 'right')
+    color_bar_label= Label(text="Relative Fixation Duration (<- high - low ->)", x=-10, y= int(y_dim / 1.8)/2,
+                           angle=270, render_mode='canvas', text_align = 'center',
+                           angle_units='deg', x_units='screen', y_units='screen', text_font_size='14pt')
 
+    p_dummy = figure(plot_height=int(y_dim / 1.8), width=50, toolbar_location=None, min_border=0, outline_line_color=None)
+    p_dummy.add_layout(color_bar_label, 'right')
+    
     # map the original map and the data grid using the color mapper, turning it into a heatmap
     p.image_url([image_source], 0, y_dim, x_dim, y_dim)
     p.image(image=[zi], x=0, y=0, dw=x_dim, dh=y_dim, color_mapper=mapper, global_alpha=0.7)
 
+    grid_plot = gridplot([p, p_dummy], ncols=2, toolbar_location=None)
+    
     if not multiple:
-        script, div = components(p)
+        script, div = components(grid_plot)
         return [script, div]
     else:
-        return p
+        return grid_plot
