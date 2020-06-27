@@ -19,6 +19,7 @@ from Transition_graph import draw_transition_graph
 from Gazestripes_bokeh import draw_gaze_stripes
 from AOI_rivers_bokeh import draw_AOI_rivers
 from Heat_Gaze_comb_bokeh import draw_heat_gaze_comb
+from AOI_stimulus_bokeh import draw_AOI_stimulus
 
 
 def draw_all_plots(user_name: str, name_map: str, check_vis, num_AOIs, data_set, string_folder):
@@ -57,7 +58,9 @@ def draw_all_plots(user_name: str, name_map: str, check_vis, num_AOIs, data_set,
             else:
                 aoiriv = draw_AOI_rivers(user_name, name_map, num_AOIs, data_set, True)
                 vis.append(aoiriv)
-               
+        if "AOI Stimulus" in check_vis:
+            AOI_stimulus = draw_AOI_stimulus(user_name, name_map, num_AOIs, data_set, image_source, True)
+            vis.append(AOI_stimulus)               
         grid = gridplot(vis, ncols=1, plot_width=int(x_dim / 2.5), plot_height=int(y_dim / 2.5))
 
         script, div = components(grid)

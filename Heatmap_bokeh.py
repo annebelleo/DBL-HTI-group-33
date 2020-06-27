@@ -51,9 +51,14 @@ def draw_heatmap(user_name: str, name_map: str, data_set: pd.DataFrame, image_so
 ##        Y = np.append(Y, Y_dat[i])
 ##        Z = np.append(Z, (Z_dat[i]))
 
-    xi = np.linspace(0, x_dim,300)
-    yi = np.linspace(y_dim, 0,300)
+    if user_name == 'ALL':
+        xi = np.linspace(0, x_dim,300)
+        yi = np.linspace(y_dim, 0,300)
 
+    else:
+        xi = np.linspace(0, x_dim,200)
+        yi = np.linspace(y_dim, 0,200)
+    
     grid = np.array([[0]*len(xi)]*len(yi))
 
     for x in range(len(X_dat)):
@@ -65,7 +70,10 @@ def draw_heatmap(user_name: str, name_map: str, data_set: pd.DataFrame, image_so
     zi_old=grid
 
     # apply a gaussian filter from the scipy library, the sigma is based on if all users are selected or just one
-    zi = gaussian_filter(zi_old, sigma=6)
+    if user_name == 'ALL':
+        zi = gaussian_filter(zi_old, sigma=6)
+    else:
+        zi = gaussian_filter(zi_old, sigma=3)
 
     max_zi = 0
     for i in range(len(zi)):

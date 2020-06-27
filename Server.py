@@ -25,7 +25,7 @@ TRANSLATE = {'KÃ¶ln': 'Köln', 'BrÃ¼ssel': 'Brüssel', 'DÃ¼sseldorf': 'Dü
 DF_DATA.replace(TRANSLATE, regex=True, inplace=True)
 
 # The visualization methods we support in this app.
-LIST_VIS_ID = ["Data table", "Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes", "AOI Rivers", "All tools"]
+LIST_VIS_ID = ["Data table", "Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes", "AOI Rivers", "AOI Stimulus", "All tools"]
 
 @app.route("/", methods=["POST", "GET"])
 def home():
@@ -58,7 +58,6 @@ def home():
             img_loc = 'static/stimuli/'
 
         # Draw all plots with the session data.
-        print(session["VisID"])
         graph = draw_all_plots(session["UserID"], session["MapID"], session["VisID"], session["AOInum"], data, img_loc) #currently doesn't pass multiple plots
 
         return render_template("home.html", session=session, LISTS=dropdown, Graph=graph)
@@ -117,4 +116,4 @@ def upload():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
