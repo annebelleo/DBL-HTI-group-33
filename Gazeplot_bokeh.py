@@ -91,6 +91,8 @@ def draw_gazeplot(user_name: str, name_map: str, data_set: pd.DataFrame, image_s
                          text='index', source=new_source, text_color='black', render_mode='canvas')
         ax.add_layout(label)
 
+    ax.title.text = 'Gaze Plot'
+    
     if not multiple:
         script, div = components(ax)
         return [script, div]
