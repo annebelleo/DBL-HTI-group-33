@@ -64,7 +64,7 @@ def draw_AOI_stimulus(user_name, map_name, num_AOIs, data_set: pd.DataFrame, ima
         ax.add_layout(label)
 
     
-    ax.title.text = ' AOI Locations'
+    ax.title.text = 'AOI Locations'
     
     if not multiple:
         script, div = components(ax)
