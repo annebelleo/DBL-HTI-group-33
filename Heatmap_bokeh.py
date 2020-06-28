@@ -115,6 +115,8 @@ def draw_heatmap(user_name: str, name_map: str, data_set: pd.DataFrame, image_so
 
     grid_plot = gridplot([p, p_dummy], ncols=2, toolbar_location=None)
     
+    p.title.text = 'Heatmap'
+    
     if not multiple:
         script, div = components(grid_plot)
         return [script, div]
