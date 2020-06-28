@@ -65,6 +65,8 @@ def draw_gaze_stripes(user_name: str, name_map: str, data_set: pd.DataFrame, ima
         imarray = np.array(im)
         fig.image_rgba(image=[imarray], x=0, y=0, dw=amount_images, dh=1)
 
+    fig.title.text = 'Gaze Stripes'
+    
     if not multiple:
         script, div = components(fig)
         return [script, div]
