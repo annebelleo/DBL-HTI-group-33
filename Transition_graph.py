@@ -97,7 +97,7 @@ def draw_transition_graph(user_name: str, name_map: str, data_set: pd.DataFrame,
         """
 
     # define plot features
-    plot = figure(title="Transition Graph " + name_map, x_range=(-1.1, 1.1), y_range=(-1.1, 1.1),
+    plot = figure(x_range=(-1.1, 1.1), y_range=(-1.1, 1.1),
                   tools=[HoverTool(tooltips=[("AOI", "@index")]), BoxZoomTool(), ResetTool(),
                          TapTool(), BoxSelectTool(), PointDrawTool(), SaveTool()],
                   tooltips=TOOLTIPS,  # custom defined html code
@@ -153,6 +153,8 @@ def draw_transition_graph(user_name: str, name_map: str, data_set: pd.DataFrame,
     plot.ygrid.visible = False
     
     plot.renderers.append(graph_renderer)  # append graph renderer to the plot
+    
+    plot.title.text = 'Transition Graph'
     
     # display graph on web page
     if not multiple:
