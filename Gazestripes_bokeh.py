@@ -59,7 +59,7 @@ def draw_gaze_stripes(user_name: str, name_map: str, data_set: pd.DataFrame, ima
         fig = figure(plot_width=25 * amount_images, plot_height=25,
                     x_range=Range1d(0, amount_images, bounds="auto"), y_range=Range1d(0, amount_images, bounds="auto"),
                     x_axis_label="Time (order of fixations)", y_axis_label="User",
-                    title='Gaze stripes user ' + user_name + ' map ' + name_map, tools=TOOLS)
+                    tools=TOOLS)
 
         im = images.convert("RGBA")
         imarray = np.array(im)
