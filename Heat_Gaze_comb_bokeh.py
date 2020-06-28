@@ -152,6 +152,8 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
 
     grid_plot = gridplot([p, p_dummy], ncols=2, toolbar_location=None)
     
+    grid_plot.title.text = 'Heatmap + Gaze Plot'
+    
     if not multiple:
         script, div = components(grid_plot)
         return [script, div]
