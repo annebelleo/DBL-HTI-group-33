@@ -44,13 +44,6 @@ def draw_heatmap(user_name: str, name_map: str, data_set: pd.DataFrame, image_so
     x_dim = im.size[0]
     y_dim = im.size[1]
 
-##    # make numpy arrays from the coordinates and duration (in order to make the grid of data)
-##    X, Y, Z, = np.array([]), np.array([]), np.array([])
-##    for i in range(len(X_dat)):
-##        X = np.append(X, X_dat[i])
-##        Y = np.append(Y, Y_dat[i])
-##        Z = np.append(Z, (Z_dat[i]))
-
     if user_name == 'ALL':
         xi = np.linspace(0, x_dim,300)
         yi = np.linspace(y_dim, 0,300)
@@ -98,6 +91,7 @@ def draw_heatmap(user_name: str, name_map: str, data_set: pd.DataFrame, image_so
 
     # add a color bar which shows the user which color is mapped to which fixation duration
     color_bar = ColorBar(color_mapper=mapper, formatter=PrintfTickFormatter(),
+                         major_tick_line_color = None, major_label_text_color = None,
                          location=(0, 0), background_fill_alpha=0.5)
 
     p.add_layout(color_bar, 'right')

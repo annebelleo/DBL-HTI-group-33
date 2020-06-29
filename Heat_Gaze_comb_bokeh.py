@@ -47,8 +47,13 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
     x_dim = im.size[0]
     y_dim = im.size[1]
 
-    xi = np.linspace(0, x_dim,300)
-    yi = np.linspace(y_dim, 0,300)
+    if user_name == 'ALL':
+        xi = np.linspace(0, x_dim,300)
+        yi = np.linspace(y_dim, 0,300)
+
+    else:
+        xi = np.linspace(0, x_dim,200)
+        yi = np.linspace(y_dim, 0,200)
 
     grid = np.array([[0]*len(xi)]*len(yi))
 
@@ -61,7 +66,10 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
     zi_old=grid
 
     # apply a gaussian filter from the scipy library, the sigma is based on if all users are selected or just one
-    zi = gaussian_filter(zi_old, sigma=6)
+    if user_name == 'ALL':
+        zi = gaussian_filter(zi_old, sigma=6)
+    else:
+        zi = gaussian_filter(zi_old, sigma=3)
 
     max_zi = 0
     for i in range(len(zi)):
@@ -148,7 +156,7 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
     p_dummy.add_layout(color_bar_label, 'right')
 
     # map the original map and the data grid using the color mapper, turning it into a heatmap
-    p.image(image=[zi], x=0, y=0, dw=x_dim, dh=y_dim, color_mapper=mapper, global_alpha=0.6)
+    p.image(image=[zi], x=0, y=0, dw=x_dim, dh=y_dim, color_mapper=mapper, global_alpha=0.7)
 
     grid_plot = gridplot([p, p_dummy], ncols=2, toolbar_location=None)
     
