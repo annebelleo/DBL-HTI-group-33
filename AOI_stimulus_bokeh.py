@@ -12,13 +12,13 @@ TRANSLATE = {'KÃ¶ln': 'Köln', 'BrÃ¼ssel': 'Brüssel', 'DÃ¼sseldorf': 'Dü
 DF_DATA.replace(TRANSLATE, regex=True, inplace=True)
 
 
-from HelperFunctions import find_AOIs
+from HelperFunctions import find_AOIs, get_data_user
 
 
 def draw_AOI_stimulus(user_name, map_name, num_AOIs, data_set: pd.DataFrame, image_source, multiple: False):
     num_AOIs = int(num_AOIs)
-
-    df_AOI = find_AOIs(map_name, num_AOIs, data_set)
+    
+    df_AOI = find_AOIs(map_name, num_AOIs, get_data_user(user_name, map_name, data_set))
 
     # filter out all data that belongs to the chosen user(s)
     data = df_AOI[df_AOI['StimuliName'] == map_name]
@@ -46,18 +46,25 @@ def draw_AOI_stimulus(user_name, map_name, num_AOIs, data_set: pd.DataFrame, ima
     for i in AOIs:
         data = df_AOI[df_AOI['AOI'] == i]
 
-        minX = data["MappedFixationPointX"].min()
-        maxX = data["MappedFixationPointX"].max()
-        minY = data["MappedFixationPointY"].min()
-        maxY = data["MappedFixationPointY"].max()
+        sum_x = 0
+        sum_y = 0
+        count = 0
+        for j in data['MappedFixationPointX']:
+            count += 1
+            sum_x += j
 
-        x = ((maxX-minX)/ 2)+minX
-        y = ((maxY-minY)/ 2)+minY
+        for k in data['MappedFixationPointY']:
+            sum_y += k
 
-        minX = x - 60
-        maxX= x + 60
-        minY = y - 60
-        maxY = y + 60
+        x = sum_x/count
+        y = sum_y/count
+
+        img_size = 100
+        
+        minX = x - img_size 
+        minY = y - img_size
+        maxX = x + img_size
+        maxY = y + img_size
 
         ax.line([minX, minX, maxX, maxX, minX],[minY, maxY, maxY, minY, minY], line_width = 4, line_color = 'black') 
         label = Label(x=x-15, y=y+23, text = str(i), text_color='black', text_font_size = '17pt')

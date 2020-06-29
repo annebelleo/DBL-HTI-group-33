@@ -272,20 +272,23 @@ def get_cropped_image_AOI(data, AOI, name_map, image_source):
         img = Image.fromarray(im)
         
     if img.mode in ("RGBA", "P"):
-        img = img.convert("RGB")    
+        img = img.convert("RGB")
 
-    minX = data["MappedFixationPointX"].min()
-    maxX = data["MappedFixationPointX"].max()
-    minY = data["MappedFixationPointY"].min()
-    maxY = data["MappedFixationPointY"].max()
+    sum_x = 0
+    sum_y = 0
+    count = 0
+    for j in data['MappedFixationPointX']:
+        count += 1
+        sum_x += j
 
-    diffX = maxX - minX
-    diffY = maxY - minY
+    for k in data['MappedFixationPointY']:
+        sum_y += k
+
+    x = sum_x/count
+    y = sum_y/count
 
     img_size = 200
-
-    x = minX + (diffX / 2) - (img_size / 2)
-    y = minY + (diffY / 2) - (img_size / 2)
+    
     w = x + img_size
     h = y + img_size
 
