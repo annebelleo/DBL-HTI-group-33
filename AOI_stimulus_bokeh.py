@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 from bokeh.models import Label
-from bokeh.plotting import figure, show
+from bokeh.plotting import figure
 
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
 DF_DATA = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)

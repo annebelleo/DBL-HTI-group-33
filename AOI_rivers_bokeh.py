@@ -1,12 +1,8 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-from bokeh.plotting import figure, show
 from bokeh.embed import components
 from bokeh.palettes import d3
-from bokeh.plotting import figure, output_file, show
-
-from HelperFunctions import find_AOIs, findClusters, normalize_time, aggregate_time, get_data_map
+from bokeh.plotting import figure
+from HelperFunctions import aggregate_time
 
 
 def draw_AOI_rivers(user_name, map_name, num_AOIs, data_set: pd.DataFrame, multiple=False):

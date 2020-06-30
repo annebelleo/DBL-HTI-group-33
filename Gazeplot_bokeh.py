@@ -8,7 +8,7 @@ from bokeh.plotting import ColumnDataSource, figure, show
 from bokeh.embed import components
 
 # 'library' created by the team to help with he processing of the data
-from HelperFunctions import get_array_fixations, random_color, get_source, get_data_user
+from HelperFunctions import random_color, get_source, get_data_user
 
 
 def draw_gazeplot(user_name: str, name_map: str, data_set: pd.DataFrame, image_source: str, multiple=False):

@@ -1,16 +1,13 @@
 # import libraries
-import pandas as pd
 import matplotlib.pyplot as plt
 import gc
 import numpy as np
 from PIL import Image
-from bokeh.models import LabelSet
-from bokeh.plotting import ColumnDataSource, figure, show
 from bokeh.layouts import gridplot
 from bokeh.embed import components
 
 # 'library' created by the team to help with he processing of the data
-from HelperFunctions import get_array_fixations, get_x_fixation, random_color
+from HelperFunctions import get_x_fixation
 
 from Data_bokeh import draw_dataframe
 from Gazeplot_bokeh import draw_gazeplot

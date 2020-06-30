@@ -4,7 +4,7 @@ import os
 import re
 import datetime
 import matplotlib.pyplot as plt
-from PIL import Image, ImageOps
+from PIL import Image
 import random
 import math
 from bokeh.plotting import ColumnDataSource

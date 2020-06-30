@@ -1,11 +1,7 @@
 # import libraries
 import pandas as pd
-import matplotlib.pyplot as plt
-from PIL import Image
-from bokeh.models import LabelSet, Select
-from bokeh.plotting import ColumnDataSource, figure
-from bokeh.models.widgets import DataTable, DateFormatter, TableColumn
-from bokeh.layouts import column
+from bokeh.plotting import ColumnDataSource
+from bokeh.models.widgets import DataTable, TableColumn
 from bokeh.embed import components
 
 # 'library' created by the team to help with he processing of the data

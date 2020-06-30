@@ -3,15 +3,15 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
-from scipy.interpolate import griddata
+
 from scipy.ndimage import gaussian_filter
-from bokeh.plotting import ColumnDataSource, figure, show
-from bokeh.models import PrintfTickFormatter, Label, Range1d, HoverTool, ColorBar, LinearAxis, LinearColorMapper, LabelSet, CDSView, GroupFilter, FixedTicker
+from bokeh.plotting import figure
+from bokeh.models import Label, Range1d, HoverTool, ColorBar, LinearColorMapper, CDSView, GroupFilter
 from bokeh.embed import components
 from bokeh.layouts import gridplot
 
 # 'library' created by the team to help with he processing of the data
-from HelperFunctions import get_x_fixation, get_source, get_y_fixation, get_duration_fixation, get_data_map, get_array_fixations, random_color, get_data_user
+from HelperFunctions import get_x_fixation, get_source, get_y_fixation, get_duration_fixation, random_color
 
 np.set_printoptions(threshold=sys.maxsize)
 
