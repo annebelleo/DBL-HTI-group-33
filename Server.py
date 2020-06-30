@@ -113,7 +113,7 @@ def upload():
         # submit an empty part without filename
         if file_ds.filename == '' or file_st.filename == '':
             flash('No selected file')
-            return redirect(request.url)
+            return redirect(r5equest.url)
         if file_ds and file_st:
             chars = "0123456789"
             date = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-")
@@ -139,4 +139,4 @@ def upload():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

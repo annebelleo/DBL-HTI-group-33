@@ -301,7 +301,6 @@ def normalize_time(map_name, num_AOIs, data_set):
     df_AOI = find_AOIs(map_name, num_AOIs, data_set)
     df_AOI = df_AOI.sort_values('Timestamp')
     users = df_AOI['user'].unique()
-    df_AOI = df_AOI[['Timestamp', 'FixationDuration', 'user', 'AOI']]
     grouped_user = df_AOI.groupby('user')
 
     df_norm = pd.DataFrame(columns=['Time', 'user', 'AOI'])
@@ -328,29 +327,25 @@ def normalize_time(map_name, num_AOIs, data_set):
 
 def aggregate_time(map_name, num_AOIs, data_set):
     df_norm = normalize_time(map_name, num_AOIs, data_set)
-    df = pd.DataFrame(df_norm['Time'])
 
-    for i in range(1, num_AOIs + 1):
-        df[i] = 0
+    df = pd.DataFrame(0, index = range(len(df_norm)), columns = ['Time']+['AOI_{0}'.format(i) for i in range(1, num_AOIs + 1)])
 
     for i in range(len(df)):
         AOI = df_norm.loc[i, 'AOI']
-        df.loc[i, AOI] = 1
+        df.loc[i, 'AOI_{0}'.format(AOI)] = 1
 
-    for i in range(1, num_AOIs + 1):
-        df = df.rename(columns={i: 'AOI_{0}'.format(i)})
+    df['Time'] = df_norm['Time']
 
     step = 50
-    max = df_norm['Time'].max()
-    min = df_norm['Time'].min()
-    s = math.ceil((max - min) / step)
+    max_norm = df_norm['Time'].max()
+    min_norm = df_norm['Time'].min()
+    s = math.ceil((max_norm - min_norm) / step)
     df_agg = pd.DataFrame(columns=df.columns.to_list())
+
     df_agg.loc[0, 'Time'] = 0
-
     for i in range(1, s + 1):
-        df_agg.loc[i, 'Time'] = df_agg.loc[i - 1, 'Time'] + step
+        df_agg.loc[i, 'Time'] = int(df_agg.loc[i - 1, 'Time'] + step)
 
-    df_agg['Time'] = df_agg[['Time']].astype(int)
     count = 0
     i = 0
 
