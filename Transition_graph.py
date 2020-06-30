@@ -43,6 +43,8 @@ def draw_transition_graph(user_name: str, name_map: str, data_set: pd.DataFrame,
     else:
         A = 0.2 * A
 
+    A[A<1.5]=0
+    
     # convert matrix to representation of graph
     G = nx.from_numpy_matrix(np.matrix(A), create_using=nx.DiGraph)
 
@@ -142,10 +144,9 @@ def draw_transition_graph(user_name: str, name_map: str, data_set: pd.DataFrame,
         else:
             intersectX = intersection2[0]
             intersectY = intersection2[1]
-
-        plot.add_layout(
-            Arrow(line_alpha=0, end=VeeHead(fill_color="#b3b3b3", line_color="#b3b3b3", line_width=W['weight']),
-                  x_start=pos[S][0], y_start=pos[S][1], x_end=intersectX, y_end=intersectY))
+                
+        plot.add_layout(Arrow(line_alpha=0, end=VeeHead(fill_color="#b3b3b3",line_color="#b3b3b3", line_width=W['weight']),
+                        x_start=pos[S][0], y_start=pos[S][1], x_end=intersectX, y_end=intersectY))
 
     # remove axis and gridlines
     plot.axis.visible = False

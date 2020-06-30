@@ -287,12 +287,14 @@ def get_cropped_image_AOI(data, AOI, name_map, image_source):
     x = sum_x/count
     y = sum_y/count
 
-    img_size = 200
-    
-    w = x + img_size
-    h = y + img_size
+    img_size = 100
+   
+    minX = x - img_size 
+    minY = y - img_size
+    maxX = x + img_size
+    maxY = y + img_size
 
-    area = (x, y, w, h)
+    area = (minX, minY, maxX, maxY)
     cropped_img = img.crop(area)
     return cropped_img
 
