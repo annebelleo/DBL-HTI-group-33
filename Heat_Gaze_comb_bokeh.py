@@ -15,10 +15,6 @@ from HelperFunctions import get_x_fixation, get_source, get_y_fixation, get_dura
 
 np.set_printoptions(threshold=sys.maxsize)
 
-FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
-df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
-
-
 def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, image_source: str, multiple=False):
     """
     This function creates a heatmap, based on the input data, from either one or all users and from one map.
@@ -31,7 +27,7 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
     """
 
     source = get_source(user_name, name_map, data_set)
-    
+
     # separately get the data from the fixation coordinates and duration
     X_dat = get_x_fixation(user_name, name_map, data_set)
     Y_dat = get_y_fixation(user_name, name_map, data_set)
@@ -82,7 +78,7 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
     mapper = LinearColorMapper(palette="Turbo256", low=0, high=max_zi)
 
     # Tools and tooltips that define the extra interactions
-    
+
     hover = HoverTool(names=["line", "circle", "li", "ci"])
     TOOLS = "wheel_zoom,zoom_in,zoom_out,box_zoom,reset,save,box_select"
     TOOLTIPS = [
@@ -91,26 +87,26 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
         ("fixation time", "@FixationDuration"),
         ("user", "@user")
     ]
-    
-    
+
+
 
     # create a figure in which the heatmap can be displayed
     p = figure(plot_width=int(x_dim / 1.8), plot_height=int(y_dim / 1.8), x_range=[0, x_dim],
                y_range=[0, y_dim], tools=[TOOLS,HoverTool(names=["line", "circle", "li", "ci"])], tooltips=TOOLTIPS,
                sizing_mode='scale_both')
-    
+
     p.xaxis.visible = False
     p.yaxis.visible = False
-    p.grid.grid_line_width = 0    
-    
+    p.grid.grid_line_width = 0
+
     p.image_url([image_source], 0, y_dim, x_dim, y_dim)
 
     p.extra_y_ranges = {"gaze": Range1d(start=y_dim, end=0)}
-    
+
     if user_name == 'ALL':
         view1 = CDSView(source=source, filters=[GroupFilter(column_name='StimuliName',
                                                             group=name_map)])
-        
+
         p.line('MappedFixationPointX', 'MappedFixationPointY', color='black', source=source,
                alpha=0.5, view=view1, name = "li", y_range_name="gaze")
         for i in data_set.user.unique():
@@ -140,7 +136,7 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
         # draw each fixation
         p.circle('MappedFixationPointX', 'MappedFixationPointY', color='magenta', size='fix_time_scaled',
                   source=source, view=view3, alpha=1, name = 'circle', y_range_name="gaze")
-    
+
     # add a color bar which shows the user which color is mapped to which fixation duration
     color_bar = ColorBar(color_mapper=mapper, location=(0, 0), background_fill_alpha=1,
                          major_tick_line_color = None, major_label_text_color = None,
@@ -159,9 +155,9 @@ def draw_heat_gaze_comb(user_name: str, name_map: str, data_set: pd.DataFrame, i
     p.image(image=[zi], x=0, y=0, dw=x_dim, dh=y_dim, color_mapper=mapper, global_alpha=0.7)
 
     grid_plot = gridplot([p, p_dummy], ncols=2, toolbar_location=None)
-    
+
     p.title.text = 'Heatmap + Gaze Plot'
-    
+
     if not multiple:
         script, div = components(grid_plot)
         return [script, div]

@@ -1,7 +1,5 @@
 import pandas as pd
-
 import numpy as np
-
 from bokeh.plotting import figure
 from bokeh.embed import components
 from bokeh.models import Range1d
@@ -9,9 +7,6 @@ from bokeh.models import Range1d
 
 # 'library' created by the team to help with he processing of the data
 from HelperFunctions import get_data_map, get_array_fixations, get_cropped_images_gazestripe
-
-FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
-df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
 
 
 def draw_gaze_stripes(user_name: str, name_map: str, data_set: pd.DataFrame, image_source: str, multiple=False):

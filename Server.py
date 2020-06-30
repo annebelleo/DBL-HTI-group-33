@@ -76,8 +76,12 @@ def home():
             img_loc = 'static/stimuli/'
 
         # Draw all plots with the session data.
-        graph = draw_all_plots(session["UserID"], session["MapID"], session["VisID"], session["AOInum"], data,
-                               img_loc)  # currently doesn't pass multiple plots
+        delta_start = datetime.datetime.now()
+        graph = draw_all_plots(session["UserID"], session["MapID"], session["VisID"],
+                               session["AOInum"], data, img_loc)
+        delta_end = datetime.datetime.now()
+        print(session["VisID"])
+        print("Delta:", delta_end - delta_start)
 
         return render_template("home.html", session=session, LISTS=dropdown, Graph=graph)
     else:  # request.method == "GET"

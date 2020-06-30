@@ -14,9 +14,6 @@ from HelperFunctions import get_x_fixation, get_y_fixation, get_duration_fixatio
 
 np.set_printoptions(threshold=sys.maxsize)
 
-FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
-df_data = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
-
 
 def draw_heatmap(user_name: str, name_map: str, data_set: pd.DataFrame, image_source: str, multiple=False):
     """

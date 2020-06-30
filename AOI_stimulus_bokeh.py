@@ -5,13 +5,6 @@ from PIL import Image
 from bokeh.models import Label
 from bokeh.plotting import figure
 
-FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
-DF_DATA = pd.read_csv(FIXATION_DATA, encoding='latin1', delim_whitespace=True)
-TRANSLATE = {'KÃ¶ln': 'Köln', 'BrÃ¼ssel': 'Brüssel', 'DÃ¼sseldorf': 'Düsseldorf', 'GÃ¶teborg': 'Göteborg',
-             'ZÃ¼rich': 'Zürich'}
-DF_DATA.replace(TRANSLATE, regex=True, inplace=True)
-
-
 from HelperFunctions import find_AOIs, get_data_user
 
 
