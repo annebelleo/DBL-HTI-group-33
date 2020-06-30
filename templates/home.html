@@ -7,6 +7,20 @@
   <title>Eye Movement Visualization Tool</title>
 </head>
 
+<style>
+.helpicon {
+    color:#fff;
+    background-color:#000000;
+    width:12px;
+    height:12px;
+    display:inline-block;
+    border-radius:100%;
+    font-size:10px;
+    text-align:center;
+    text-decoration:none;
+}
+</style>
+
 <body>
   <div class="#b2dfdb teal lighten-4" style="float:left; width: 35%; height: 100%">
     <header>
@@ -73,7 +87,7 @@
           </select>
         </div>
 
-        <label class="black-text">Visualization</label>
+        <label class="black-text">Visualization<a title="For more information on what each visualization displays, visit the help page" class="helpicon">?</a></label>
         <div class="input-field col s12 m6">
           <select class="icons" name="VisID" multiple>
             <option id="Data Table" value="Data Table" data-icon="static/data_table.png" class="left">Data Table (standalone option only)</option>
@@ -82,11 +96,11 @@
             <option id="Heatmap + Gaze Plot" value="Heatmap + Gaze Plot" data-icon="static/heat_gaze.png" class="left">Static Visual Attention Map + Gaze Plot</option>
             <option id="Transition Graph" value="Transition Graph" name="VisID" data-icon="static/transition_graph.png" class="left">Transition Graph</option>
             <option id="Gaze Stripes" value="Gaze Stripes" data-icon="static/gaze_stripes.png" class="left">Gaze Stripes</option>
-            <option id="AOI Stimulus" value="AOI Stimulus" data-icon="static/AOI_stimulus.png" class="left">AOI Stimulus</option>
+            <option id="AOI Stimulus" value="AOI Stimulus" data-icon="static/AOI_stimulus.png" class="left">AOI Map</option>
             <option id="AOI Rivers" value="AOI Rivers" data-icon="static/AOI_rivers.png" class="left">AOI Rivers (all users only)</option>
           </select>
         </div>
-        <label class="black-text">Number of AOIs</label>
+        <label class="black-text">Number of AOIs<a title="Adjust the number of Areas Of Interest (AOIs) applied to the Transition Graph, AOI map and AOI rivers. Note: The Transition Graph may show fewer AOIs in case of isolated nodes." class="helpicon">?</a></label>
         <p class="range-field">
           <input type="range" name="AOInum" id="test" min="3" max="15" value = "5" />
         </p>
