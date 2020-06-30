@@ -15,9 +15,15 @@
           <a href="{{url_for('help')}}">Help</a>
         </div>
     </header>
+
     <div style="padding: 10px; align-items: center;">
       <form action="" method="post" style="display: initial">
         <p>Click<a href="{{url_for('upload')}}"> here </a> to upload data instead.</p>
+      {% if session["custom"] %}
+      <p>Custom Dataset found and loaded</p>
+      {% else %}
+      <p>No custom Dataset found, Using sample dataset.</p>
+      {% endif %}
         <br>
         <label class="black-text">Stimulus</label>
         <div class="input-field col s12">

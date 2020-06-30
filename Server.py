@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, request, session, redirect, url_for
+from flask import Flask, flash, render_template, request, session, redirect
 from werkzeug.utils import secure_filename
 import random as random
 import pandas as pd
@@ -15,7 +15,7 @@ from HelperFunctions import drop_down_info, cleanup_temp_files
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = '/static/TEMP'
 UPLOAD_FOLDER = 'static/TEMP/'
-app.secret_key = "pPAQaAI4lte5d8Hwci1i"
+app.secret_key = "f37ae97e5c82a986c02a8839e92ac45a"
 
 # Read the Fixation data, This should become a non static part of the code.
 FIXATION_DATA = 'static/all_fixation_data_cleaned_up.csv'
@@ -35,9 +35,13 @@ def home():
 
     try:  # to read a user provide dataset
         data = pd.read_csv(session["dataset"], encoding='latin1', delim_whitespace=True)
+        session["custom"] = True
     except:
         data = DF_DATA
-    finally:  # puplate the drop down menus with the appropriate information.
+        session["custom"] = False
+        for i in ("dataset", "stimuli", "MapID", "UserID", "VisID", "AOInum"):
+            session.pop(i, False)
+    finally:  # populate the drop down menus with the appropriate information.
         dropdown = drop_down_info(LIST_VIS_ID, data)
 
     if request.method == "POST":
@@ -46,7 +50,7 @@ def home():
             try:
                 session[ID] = request.form[ID]
             except:
-                return render_template("home.html", session=[], LISTS=dropdown)
+                return render_template("home.html", session=session, LISTS=dropdown)
 
         # We want the list version of VisID instead of a string version.
         # The string version above is enough to check that the data is present
@@ -62,7 +66,7 @@ def home():
 
         return render_template("home.html", session=session, LISTS=dropdown, Graph=graph)
     else:
-        return render_template("home.html", session=[], LISTS=dropdown,
+        return render_template("home.html", session=session, LISTS=dropdown,
                                Graph=["Please fill out all of the information on the left.", ""])
 
 
@@ -116,4 +120,4 @@ def upload():
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
