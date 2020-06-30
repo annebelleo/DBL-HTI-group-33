@@ -40,15 +40,6 @@
             {% endif %}
           </select>
         </div>
-
-        <!-- Switch -->
-        <div class="switch">
-          <label class="black-text">
-            Grayscale
-            <input type="checkbox" name="grayscale">
-            <span class="lever"></span>
-        </div>
-        <br>
         <label class="black-text">User</label>
         <div class="input-field col s12">
           <select name="UserID">
@@ -92,10 +83,7 @@
   </div>
 
   <div style="float: right; width: 65%; height: 100%; text-align:center; justify-content: center; align-items: center; overflow: scroll; vertical-align: middle">
-    <div id="panel" style="margin:20px">
-      <!-- <a value="color" class="#b2dfdb teal lighten-4 lighten-5 btn"></a>
-      <a value="grayscale" class="#b2dfdb teal lighten-4 lighten-5 btn"></a> -->
-    </div>
+
     <div style="display: inline-block;">
       {% if Graph %}
       {{ Graph[0] | safe }} {{ Graph[1] | safe  }}
