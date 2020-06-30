@@ -17,13 +17,19 @@
     </header>
 
     <div style="padding: 10px; align-items: center;">
-      <form action="" method="post" style="display: initial">
+
         <p>Click<a href="{{url_for('upload')}}"> here </a> to upload data instead.</p>
       {% if session["custom"] %}
-      <p>Custom Dataset found and loaded</p>
+      <p>
+          <form action="" method="post" style="display: initial">
+        <input type="hidden" id="del_req" name="del_req" value={{True}}>
+          Custom Dataset found and loaded.
+      Remove Custom Datset from server by clicking <input type="submit" value="HERE" />. </p>
+        </form>
       {% else %}
       <p>No custom Dataset found, Using sample dataset.</p>
       {% endif %}
+    <form action="" method="post" style="display: initial">
         <br>
         <label class="black-text">Stimulus</label>
         <div class="input-field col s12">

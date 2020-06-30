@@ -4,6 +4,8 @@ import random as random
 import pandas as pd
 import datetime
 import zipfile
+import os
+import shutil
 
 # visualization methods.
 from AllPlots_bokeh import draw_all_plots
@@ -25,13 +27,25 @@ TRANSLATE = {'KÃ¶ln': 'Köln', 'BrÃ¼ssel': 'Brüssel', 'DÃ¼sseldorf': 'Dü
 DF_DATA.replace(TRANSLATE, regex=True, inplace=True)
 
 # The visualization methods we support in this app.
-LIST_VIS_ID = ["Data table", "Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes", "AOI Rivers", "AOI Stimulus", "All tools"]
+LIST_VIS_ID = ["Data table", "Gazeplot", "Heatmap", "Transition graph", "Gaze Stripes", "AOI Rivers", "AOI Stimulus",
+               "All tools"]
+
 
 @app.route("/", methods=["POST", "GET"])
 def home():
     """
     :return: The web page to be rendered.
     """
+    try:
+        session["del_req"] = bool(request.form["del_req"])
+    except:
+        session["del_req"] = False
+
+    if request.method == "POST" and session["del_req"] == True:
+        os.remove(session["dataset"])
+        os.remove(session["stimuli"] + ".zip")
+        shutil.rmtree(session["stimuli"])
+        session["del_req"] = False
 
     try:  # to read a user provide dataset
         data = pd.read_csv(session["dataset"], encoding='latin1', delim_whitespace=True)
@@ -62,10 +76,11 @@ def home():
             img_loc = 'static/stimuli/'
 
         # Draw all plots with the session data.
-        graph = draw_all_plots(session["UserID"], session["MapID"], session["VisID"], session["AOInum"], data, img_loc) #currently doesn't pass multiple plots
+        graph = draw_all_plots(session["UserID"], session["MapID"], session["VisID"], session["AOInum"], data,
+                               img_loc)  # currently doesn't pass multiple plots
 
         return render_template("home.html", session=session, LISTS=dropdown, Graph=graph)
-    else:
+    else:  # request.method == "GET"
         return render_template("home.html", session=session, LISTS=dropdown,
                                Graph=["Please fill out all of the information on the left.", ""])
 
