@@ -18,26 +18,38 @@
             upload your own data, which will change the map and user options.
         </p>
         <b>Stimulus</b>
-        <p>These are the stimuli you can choose from.</p>
+        <p>The available stimuli used in the eye movement data.</p>
+		
+		<p> For the sample data from the course, the following snippets in the stimuli name indicate the following: </p>
         <ul class="collection">
-            <li class="collection-item">01: color, 01b: grayscale</li>
-            <li class="collection-item">S1 vs S2: the location of the target on the map. </li>
+            <li class="collection-item">Specifies whether the stimuli map is in color (01) or in grayscale (01b).</li>
+            <li class="collection-item">Identifies two unique tasks (S1 and S2) with different starting points and targets on the map.</li>
         </ul>
-        <p>We are still working on using the slider to display a grayscale map.</p>
         <b>User</b>
-        <p>These are the users from the dataset that data was collected from.</p>
+        <p>The available users in the eye movement data.</p>
+		
         <b>Visualization</b>
-        <p>You can choose which method to display. Note that AOI Rivers only works for all users while Data Table only works for a single user.</p>
+        <p>The available methods with which the eye movement data can be visualized.</p>
+		<ul> Notes:
+			<li>- The Data Table only works for a single user. </li>
+			<li>- The AOI Rivers only works for all users. </li>
+		</ul>
+		
         <b>Number of AOIs</b>
-        <p>This determines how many AOIs are used, which applies to the transition graph and the AOI rivers.</p>
-        <b>Visualisation methods</b>
+        <p>The number of Areas Of Interest (AOIs) are applied to the Transition Graph, AOI map and AOI rivers.</p>
+		<ul> Notes:
+			<li>- The Transition Graph may show fewer AOIs by removed nodes from the visualization weak or no edges attached to it.</li>
+		</ul>
+		
+        <b>Visualization methods</b>
         <p>Data table: The data table method produces a table that can be sorted, ascending and descending, by each variable. The data table cannot be displayed in combination with other visualizations.</p>
-        <p>Gazeplot: The gazeplot method shows the chosen stimulus with the saccades, as lines, and fixations, as circles, plotted onto it. The size of the circles represent the relative fixation duration.</p>
-        <p>Static Visual Attention Map (Heat Map): The static visual attention map is a map that displays the relative fixation duration putting a color filter over the stimulus. Blue areas are not fixated on at all and red areas are fixated on the most.</p>
-        <p>Static Visual Attention Map + Heat Map: This map shows the stimulus with the gaze plot and heatmap plotted over it.</p>
-        <p>Transition Graph: The transition graph method displays a graph in which each node represents an area of interest and each edge represents the relation between to AOIs. The size of the arrow represents how much participants shift from the one AOI to the other.</p>
-        <p>Gaze Stripes: The gaze stripes method shows each of the fixations on the stimulus of a user ordered as a one long stripe.</p>
-        <p>AOI Rivers: The AOI rivers give a plot in which the AOIs are all represented as a colored stripe and the thickness of the stripe in a particular moment in time is the total number of unique users fixated on that area at that time. This visualization can only be displayed for all users. </p>
+        <p>Gaze Plot: The gazeplot method plots the saccades as lines and fixations as circles on the stimulus. The size of the circles represent the relative fixation duration.</p>
+        <p>Static Visual Attention Map (Heat Map): The static visual attention map is a heat map that indicates the relative fixation duration with colors on the stimulus. The colors range from red, areas that are fixated on the most to blue, areas that fixated on the least.</p>
+        <p>Static Visual Attention Map + Heat Map: A visualization combining the Static Visual Attenion Map and the Gaze Plot in one graph.</p>
+        <p>Transition Graph: The transition graph method is a weighted directed graph in which each node represents an area of interest and each edge represents the strength of transitions between the AOIs. The size of each edge represents how much participants relatively shift from one AOI to the other.</p>
+        <p>Gaze Stripes: The Gaze Stripes displays strips of images that show fixations of users in sequential order.</p>
+        <p>AOI Map: The AOI Map displays AOIs on the stimulus map by means of the k-nearest neighbour algorithm. It is particularly useful to display in combination with the Transition Graph and AOI Rivers.</p>
+        <p>AOI Rivers: The AOI rivers illustrate a plot in which the AOIs are represented as a so-called river, where its thickness at a particular moment in time is the total number of unique users fixated on that area over time. The visualization can only be displayed for all users, where time is normalized. </p>
         <footer></footer>
     </div>
 </body>
