@@ -18,7 +18,8 @@ def draw_AOI_rivers(user_name, map_name, num_AOIs, data_set: pd.DataFrame, multi
     highest_stack = df_plot.sum(axis=1).max()
     p = figure(tools=TOOLS, y_axis_location=None,
                x_range=(int(df_plot.head(1).index.to_list()[0]), int(df_plot.tail(1).index.to_list()[0])),
-               y_range=(0, highest_stack))
+               y_range=(0, highest_stack),
+               sizing_mode='scale_both')
     p.grid.minor_grid_line_color = '#eeeeee'
     p.xgrid.visible = False
 

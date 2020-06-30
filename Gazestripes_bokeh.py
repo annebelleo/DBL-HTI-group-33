@@ -26,7 +26,8 @@ def draw_gaze_stripes(user_name: str, name_map: str, data_set: pd.DataFrame, ima
         fig = figure(plot_width=25 * max_amount_images, plot_height=25 * len(ListUser),
                      x_range=Range1d(0, max_amount_images, bounds="auto"), y_range=Range1d(0, len(ListUser), bounds="auto"),
                      x_axis_label="Time (order of fixations)", y_axis_label="User",
-                     title='Gaze stripes all users map ' + name_map, tools=TOOLS)
+                     title='Gaze stripes all users map ' + name_map, tools=TOOLS,
+                     sizing_mode='scale_both')
         fig.xgrid.visible = False
         fig.ygrid.visible = False
 
