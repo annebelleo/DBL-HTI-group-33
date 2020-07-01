@@ -31,7 +31,6 @@
     </header>
 
     <div style="padding: 10px; align-items: center;">
-
         <p>Click<a href="{{url_for('upload')}}"> here </a> to upload data instead.</p>
       {% if session["custom"] %}
       <p>
@@ -44,8 +43,8 @@
       <p>No custom dataset found. The website is currently using a sample dataset.</p>
       {% endif %}
     <form action="" method="post" style="display: initial">
-        <br>
-        <label class="black-text">Stimulus</label>
+ 
+        <label class="black-text"><b>Stimulus</b></label>
         <div class="input-field col s12">
           <select name="MapID">
 
@@ -66,7 +65,7 @@
             {% endif %}
           </select>
         </div>
-        <label class="black-text">User</label>
+        <label class="black-text"><b>User</b></label>
         <div class="input-field col s12">
           <select name="UserID">
             {% if session %}
@@ -87,7 +86,7 @@
           </select>
         </div>
 
-        <label class="black-text">Visualization<a title="For more information on what each visualization displays, visit the help page" class="helpicon">?</a></label>
+        <label class="black-text"><b>Visualization </b><a title="Select the visualizations to be plotted on the right. For more information on what each visualization displays, visit the help page." class="helpicon">?</a></label>
         <div class="input-field col s12 m6">
           <select class="icons" name="VisID" multiple>
             <option id="Data Table" value="Data Table" data-icon="static/data_table.png" class="left">Data Table (standalone option only)</option>
@@ -100,10 +99,13 @@
             <option id="AOI Rivers" value="AOI Rivers" data-icon="static/AOI_rivers.png" class="left">AOI Rivers (all users only)</option>
           </select>
         </div>
-        <label class="black-text">Number of AOIs<a title="Adjust the number of Areas Of Interest (AOIs) applied to the Transition Graph, AOI map and AOI rivers. Note: The Transition Graph may show fewer AOIs in case of isolated nodes." class="helpicon">?</a></label>
+		<label class ="black-text" style="font-size:10;"> Selecting all visualizations at once could lead to a memory error <label>
+		<br><br>
+        <label class="black-text"><b>Number of AOIs </b><a title="Adjust the number of Areas Of Interest (AOIs) applied to the Transition Graph, AOI map and AOI rivers. Note: The Transition Graph may show fewer AOIs in case of isolated nodes." class="helpicon">?</a></label>
         <p class="range-field">
           <input type="range" name="AOInum" id="test" min="3" max="15" value = "5" />
         </p>
+		<label class ="black-text" style="font-size:10;"> The Transition Graph may show fewer AOIs in case of isolated nodes </label> <br> <br>
         <input type="submit" value="submit" />
     </div>
   </div>
