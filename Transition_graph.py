@@ -13,11 +13,10 @@ from bokeh.palettes import Spectral4
 from HelperFunctions import get_adjacency_matrix, find_AOIs, get_cropped_image_AOI
 import sympy.geometry as sp
 
-
 # draw a figure showing the transition graph for one map:
 def draw_transition_graph(user_name: str, name_map: str, data_set: pd.DataFrame, image_source: str, NUM_AOIS, multiple=False):
     # read in user input of desired top AOI's to be displayed in transition graph
-    NUM_AOIS = int(NUM_AOIS)  # num_AOIs is defined for now
+    NUM_AOIS = int(NUM_AOIS)
 
     # run AOI algorithm
     df_AOI = find_AOIs(name_map, NUM_AOIS, data_set)
@@ -51,7 +50,7 @@ def draw_transition_graph(user_name: str, name_map: str, data_set: pd.DataFrame,
     # remove nodes without neigbours, including node 0
     iso_nodes = list(nx.isolates(G))
     for n in iso_nodes:
-        G.remove_node(n)  # removes node 0, which does not have any edges
+        G.remove_node(n)
 
     # define list of existing nodes and edges
     node_list = list(G.nodes)
@@ -86,7 +85,7 @@ def draw_transition_graph(user_name: str, name_map: str, data_set: pd.DataFrame,
         graph_renderer.node_renderer.data_source.data['imgs'].append(
             AOI_image_b64)  # save base64-encoded strings to nodes
 
-    # define custom tooltips behaviour when hovering over nodes
+    # define custom tooltips behavior when hovering over nodes
     TOOLTIPS = """
         <div>
             <div>
