@@ -109,6 +109,7 @@ def draw_transition_graph(user_name: str, name_map: str, data_set: pd.DataFrame,
     circleRadius = 0.075
     graph_renderer.node_renderer.glyph = Circle(radius=circleRadius, fill_color=Spectral4[0])
     graph_renderer.node_renderer.selection_glyph = Circle(size=circleRadius, fill_color=Spectral4[2])
+    graph_renderer.node_renderer.nonselection_glyph = Circle(size=circleRadius, fill_color="#c1d2d9", fill_alpha=1)
     graph_renderer.node_renderer.hover_glyph = Circle(size=circleRadius, fill_color=Spectral4[1])
 
     # customise edges
