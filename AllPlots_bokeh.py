@@ -8,7 +8,6 @@ from bokeh.embed import components
 
 # 'library' created by the team to help with he processing of the data
 from HelperFunctions import get_x_fixation
-
 from Data_bokeh import draw_dataframe
 from Gazeplot_bokeh import draw_gazeplot
 from Heatmap_bokeh import draw_heatmap

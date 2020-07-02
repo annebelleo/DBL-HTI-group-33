@@ -1,25 +1,19 @@
 # Eye Movement Visualization Tool
+# DBL HTI Group 33
 
 Welcome to our visualization tool! If you want the run the Flask server locally, follow the next steps.
-1. Download the FULL GitHub repository using the green "clone or download" button.  
-2. If you have already installed pip and Flask, open the command prompt/terminal on your computer and navigate to the folder where the tool is located (it should have the same name as this repository.) Then, run Server.py using `python Server.py` or other Python execution method.  
-3. Open the webpage on http://127.0.0.1:5000/ in your preferred browser.
+1. Extract the zip file.   
+2. Install the python libraries Flask, bokeh, matplotlib, pandas, networkx, sympy, networkx 
+3. open the command prompt/terminal on your computer and navigate to the folder where the tool is located (it should have the same name as this repository.) Then, run Server.py using `python Server.py` or other Python execution method.  
+4. Open the webpage on http://127.0.0.1:5000/ in your preferred browser.
+5. for help on the tool itself go to the help page. 
 
-## File structure:
-**root:**  
-`Server.py`: This is the main python file. It links the HTML files in templates to the python files.  
-`README.md`: File you are looking at now, containing information about the entire repository.  
-files with "bokeh": The visualization methods that utilize the Bokeh library, making them interactive. Also applies for Transition_graph.py.  
-`HelperFunctions.py`: allows the visualization methods to use functions that make the production of the visualization more efficient.  
 
-**Templates:** Here are the HTML pages stored that can be used by the flask server.  
-`home.html`: Homepage of the website.  
-`help.html`: Page containing usage instructions for the web interface of the tool. 
+**Root Folder**
+This contains 
+`server.py` This is the main server file that will start the website
+`/static` This folder contains the images that the website needs
+`/static/TEMP` This folder contains the temp files from uploaded users.
+`/templates` This folder holds the html files for the websirve.
+`*.py` the root folder contains a lot op python files that are used by server.py for the creation of the visualization.
 
-**Static:** this is where the CSS & images are stored that can be used by the server.  
-`stimuli`: all the subway maps provided by the course  
-`all_fixation_data_cleaned_up.csv`: main dataset that contains data pertaining the eye movement on the stimuli. This was provided by the course.  
-`cars.csv`: test data file to ensure the code properly runs  
-`main.css`: styling sheet for the web design
-
-**Code snippets visualization tools:** tools that are still in progress.
