@@ -41,8 +41,9 @@ def draw_transition_graph(user_name: str, name_map: str, data_set: pd.DataFrame,
         A = 5 * A
     else:
         A = 0.2 * A
+        A[A < 1.5] = 0
 
-    A[A<1.5]=0
+
     
     # convert matrix to representation of graph
     G = nx.from_numpy_matrix(np.matrix(A), create_using=nx.DiGraph)

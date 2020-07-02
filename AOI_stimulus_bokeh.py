@@ -4,7 +4,6 @@ import numpy as np
 from PIL import Image
 from bokeh.models import Label
 from bokeh.plotting import figure
-
 from HelperFunctions import find_AOIs, get_data_user
 
 
@@ -60,8 +59,8 @@ def draw_AOI_stimulus(user_name, map_name, num_AOIs, data_set: pd.DataFrame, ima
         maxY = y + img_size
 
         ax.line([minX, minX, maxX, maxX, minX],[minY, maxY, maxY, minY, minY], line_width = 4, line_color = 'black') 
-        label = Label(x=x-15, y=y+23, text = str(i), text_color='black', text_font_size = '17pt')
-        ax.add_layout(label)
+        #label = Label(x=x-15, y=y+23, text = str(i), text_color='black', text_font_size = '17pt')
+        #ax.add_layout(label)
 
     
     ax.title.text = 'AOI Locations'
